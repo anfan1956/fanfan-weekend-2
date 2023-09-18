@@ -7,3 +7,5 @@ archive
 .vscode
 www*
 __py*
+
+*__py*
