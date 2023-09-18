@@ -1,7 +1,8 @@
 from app import app
 from app.functions import menu, dt_time_max, form, art_display, set_dates, finish_date
 from app.functions import goods, inv_set, the_totals, calculate_webOrder, key_value
-from app.Payments import pmt_link
+from app.functions import  delivery_data
+from app.Payments import pmt_link, order_status_site
 from app.send_sms import sms
 from app.mails import fanfan_send_mail
 from app.data import sql_query as s, sql_list, sql_fetch_list
@@ -12,7 +13,7 @@ from random import randint
 parent = "/static/images/parent/"
 sms_messages = True
 sms_messages = False
-full = True
+full = False
 
 
 @app.route("/about")
@@ -549,3 +550,69 @@ def deliveryData():
                 print(f"deliverTo: {deliverTo}")
                 results = data[1]
     return results
+
+
+@app.route("/delivery", methods=['GET', 'POST'])
+@app.route("/delivery/<ticketid>", methods=['GET', 'POST'])
+def delivery(ticketid=None):
+    print(f'request method: "{request.method}", path: "{request.path}"')
+    print(ticketid)
+    del_data = ticketid if ticketid is None else delivery_data(ticketid)
+
+    content = {
+            "title": "Доставка",
+            "menu": menu(),
+            "del_data": del_data
+            }
+    print(f"delivery data: {delivery_data(ticketid)}")
+    if request.method == 'POST':
+        f = request.form
+        # method = list(f.keys())[-1]
+        # print(f"method:  {method}")
+        args = ['address', 'ticketid', 'fio', 'phone']
+        # ниже  - чтобы не переделывать sql процедуру, немного по индийски
+        args_2 = ['ticketid', 'fio', 'phone', 'address']
+        d = {a: request.form.get(a) for a in args}
+        # print(d)
+        new_ticketid = d['ticketid']
+        phone = d['phone']
+        d['phone'] = phone.replace(" ", "").replace("(", "").replace(")", "").replace("'", "").replace("+", "").replace("-", "")[-10:]
+        val = ""
+        for a in args:
+            val += "'" + d[a] + "', "
+        val = val[:-2]
+        val_2 = ""
+        for a in args_2:
+            val_2 += "'" + d[a] + "', "
+        val_2 = val_2[:-2]
+        print(val_2)
+        sql = "set nocount on; declare @note varchar(max); "
+        sql = sql + f"exec web.delivery_register {val}, @note output; select @note;"
+        print(sql)
+        note = s(sql).strip("[]")
+        note = json.loads(note)
+        print(note, type(note))
+        if 'fail' in note.keys():
+            new_ticketid = ticketid if note['fail'] == 'logid does not exist' else new_ticketid
+            content = {
+                    # 'failed_ticket': new_ticketid,
+                    'result': 'abort',
+                    'menu': menu()
+            }
+            print(content['result'])
+            return redirect(url_for('delivery', ticketid=new_ticketid))
+        return redirect(url_for('main'))
+    return render_template("delivery.html", **content)
+
+
+@app.route('/orderPayment', methods=['POST', 'GET'])
+def paymentTrace():
+    print(request.path)
+    result = request.method
+    if request.method == "POST":
+        data = request.get_json()
+        result = 'it worked'
+        result = jsonify(result)
+        response = order_status_site(data)
+        print(response, ' - in /orderPayment Flask ')
+    return result

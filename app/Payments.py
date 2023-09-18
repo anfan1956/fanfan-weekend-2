@@ -11,7 +11,7 @@ import asyncio
 url = 'https://payment.alfabank.ru/payment/rest/register.do'
 token = 'nb9vb7d5g14af89m84n3vqohhb'
 # returnUrl = 'http://fanfan.store:8082/promo?trace?'
-returnUrl = 'http://10.0.0.7:5001/promo?trace?'
+returnUrl = 'http://127.0.0.1:8000/promo?trace?'
 # returnUrl = 'http://fanfan.store:8082/basket?trace?'
 
 
@@ -190,7 +190,6 @@ def order_status(args):
 
 
 def order_status_site(args):
-
     print('initialising order_status procedure')
     orderid = args["orderNumber"]
     seed = orderid.split("-")[0]
@@ -209,7 +208,6 @@ def order_status_site(args):
         return
     # print(status)
     SUBJECT = 'checking order status'
-
     if status == 2:
         mes = 'Проведена полная авторизация суммы заказа ' + seed
         print(mes)
@@ -217,11 +215,9 @@ def order_status_site(args):
         pmtAmount = float(res['paymentAmountInfo']['totalAmount']/100)
         pmt_string = f"'{pmtType}:{pmtAmount}:АЛЬФА-БАНК'"
         # print(pmt_string)
-
         sql = f"declare @r int, @cancel bit = 'False', @orderid varchar(max) = '{seed}', @note varchar(max), @pmtStr varchar(max) = {pmt_string}; " \
               f"if @@TRANCOUNT>0 rollback transaction; " \
               f"exec @r = web.order_action_p @orderid =@orderid, @cancel = @cancel, @note = @note output, @pmtStr= @pmtStr; select @r, @note;"
-
         print(sql)
         r_string = f(sql)
         print(r_string)
@@ -255,7 +251,6 @@ def order_status_site(args):
             s_message = 'procedure returned error'
             print(s_message)
             return s_message
-
     elif status == 0:
         sql = f"set nocount on; exec web.reservation_state {int(seed)};"
         response = s(sql)
@@ -263,12 +258,10 @@ def order_status_site(args):
         if response == 'cancelled':
             s_message = response
             return s_message
-
         mes = 'Заказ ' + seed + ' зарегистрирован, но не оплачен;'
         print(mes)
         time.sleep(5)
         return order_status(args)
-
     elif status == 6:
         mes = 'Авторизация заказа ' + seed + ' отклонена.'
     # print(mes)

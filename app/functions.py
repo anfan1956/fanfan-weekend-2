@@ -217,3 +217,11 @@ def key_value(key, my_dict):
     value = [my_dict[b] for b in my_dict if b == key]
     return value[0] if len(value) == 1 else None
 
+
+def delivery_data(arg):
+    result = None
+    if arg is not None:
+        sql = f"select web.ticket_address_({arg})"
+        result = json.loads(s(sql))[0] if s(sql) is not None else None
+    return result
+
