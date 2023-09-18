@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% block content %}
+{{ super() }}
+<link rel="stylesheet" href="/static/CSS/promo.css">
+<link rel="stylesheet" href="/static/CSS/catalog.css">
+
+<div class="info-wrap">
+    <div class="site-info">
+        <ul>
+            <div class="get-code">
+                <li class="si-list">Здесь представлены товары с дополнительной скидкой по промокоду.</li>
+                <button class="button" id="btn-get-promo">получить промокод</button>
+            </div>
+            <li class="si-list">Для того, чтобы купить другие модели товара, перейдите в раздел “Каталог”.</li>
+            <li class="si-list">Выберите модель товара, затем цвет и размер</li>
+        </ul>
+    </div>
+    <div class="info">
+        <div id="message" class="message"></div>
+        <script>
+            const date = '{{title}}'
+            let mes = document.querySelector("#message")
+            mes.innerText = date
+            if (date == 'Сейчас нет промо-акций') {
+
+                window.stop()
+                setTimeout(() => {
+                    window.location.replace('/main')
+                }, 15000)
+            } else {
+                html = mes.innerHTML
+                mes.innerHTML = "Промо-акция заканчивается "
+                mes.innerHTML += date
+            }
+        </script>
+        <!-- <p class="promo-info">Получите дополнительные скидки по промокоду!</p> -->
+    </div>
+</div>
+<section class="main">
+    <div class="sidebar" id="sidebar-main">
+        SIDEBAR
+    </div>
+    <div class="products">
+        <div class="container">
+            <p class="criteria promo"></p>
+            <div class="wrapper">
+                {% for a in goods %}
+                <div class="cell">
+                    <p class="brand-title">
+                        {{a.бренд}},
+                        <span style="
+                    text-transform:lowercase;
+                    font-weight:300;
+                    ">{{a.категория}}</span>
+                    </p>
+                    <a href="/product2/{{a.модель}}?discount">
+                        <img class="image" src="{{parent}}{{ a.модель }}/540/{{a.фото}}">
+                    </a>
+                    {% if a.скидка > 0 %}
+                    <div class="discount">
+                        - {{ "{:,.0%}".format(a.скидка) }}
+                    </div>
+                    {% endif %}
+                    <div class="promo-discount">
+                        промо: {{ a.промо }}
+                    </div>
+                    <p class="details">{{a.категория}}, мод: {{a.модель}}</p>
+                    <p class="details">арт: {{a.артикул}}</p>
+                    <p class="details">
+                        {% if (a.скидка > 0) %}
+                        скидка:{{a.скидка_str}},
+                        {% endif %}
+                        промо:{{a.промо}}</p>
+                    <p class="details">цена:
+                        <span style="text-decoration-line: line-through;">{{a.цена}} </span>
+                        <span style="color:red;font-size: 16px;">&nbsp;&nbsp; {{ a.final}} руб!</span>
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
+    crossorigin="anonymous"></script>
+<script src="/static/JS/promo.js"></script>
+{% endblock %}
+{% block footer %}
+{{ super() }}
+{% endblock %}

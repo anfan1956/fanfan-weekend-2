@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% block content %}
+{{ super() }}
+
+<section class="main">
+    <div class="sidebar hidden" id="sidebar-main">
+        SIDEBAR
+    </div>
+    <div class="products">
+        <h4 class="h1">Последние Поступления</h4>
+        {% for date in dates %}
+        <div class="container">
+            <p class="criteria">{{date}}</p>
+            <div class="wrapper">
+
+                {% for a in articles %}
+                {% if date == a.дата %}
+                <div class="cell">
+                    <p class="brand-title">
+                        {{ a.бренд }},
+                        <span style="
+                        text-transform:lowercase;
+                        font-weight:300;
+                        ">{{a.категория}}</span>
+                    </p>
+                    <a href="/product2/{{a.модель}}">
+                        <img class="image" src="{{parent}}{{ a['модель'] }}/540/{{a.фото}}">
+                    </a>
+                    <p class="details">арт: {{ a.артикул }}</p>
+                    <p class="details">модель: {{ a.модель }}</p>
+                    <p class="details">цена: {{ a.цена }}</p>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        {% endblock %}
+    </div>
+</section>
+
+{% block footer %}
+{{ super() }}
+{% endblock %}
+
+</html>

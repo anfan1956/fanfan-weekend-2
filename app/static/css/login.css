@@ -1,0 +1,83 @@
+.auth {
+  display: inline-flex;
+  flex-direction: column;
+  /* color: rgb(54, 54, 54); */
+  /* background-color: rgb(136, 136, 136); */
+  /* border: 1px solid red; */
+}
+
+.button,
+.button-green {
+  width: fit-content;
+}
+.button.back-to-shop {
+  display: none;
+  background-color: green;
+}
+.email-group {
+  display: none;
+}
+.input {
+}
+.input.email {
+  /* background-color: green; */
+  width: 26.5rem;
+}
+.flash {
+  display: flex;
+  /* background-color: red; */
+  width: fit-content;
+  flex-direction: column;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 16px;
+}
+.flash.success {
+  background-color: rgb(91, 182, 91);
+  color: white;
+}
+.flash.error {
+  background-color: red;
+  color: white;
+}
+.form-container,
+.form-container-mail {
+  display: flex;
+  /* display: none; */
+  gap: 1rem;
+  padding: 1rem 2rem;
+  color: white;
+  background-color: red;
+  border-radius: 4px;
+  box-shadow: 2px 2px 2px grey;
+}
+.form-container-mail {
+  display: flex;
+  background-color: #a0db00;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 300;
+}
+.form-label.italic {
+  font-style: italic;
+  font-size: 12px;
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  /* display: block; */
+  position: fixed;
+  top: 50%;
+  left: 30%;
+  /* border: 3px solid #f1f1f1; */
+  z-index: 9;
+}
+span.area-code {
+  display: inline-block;
+  padding-top: 0;
+  margin-bottom: 0.5rem;
+  width: 26.8rem;
+}

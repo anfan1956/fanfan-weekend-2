@@ -1,0 +1,137 @@
+html,
+body,
+.main {
+  height: 100%;
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  background: transparent;
+}
+.brands-cats {
+  font-weight: 300;
+  padding: 0.5rem;
+  cursor: pointer;
+  text-transform: capitalize;
+  margin: 0.4rem;
+  font-size: 10px;
+}
+.bc {
+  background: #774711;
+}
+.brands-cats:hover {
+  background: #50300c;
+  width: 80%;
+}
+.container {
+  /* float: left; */
+  position: absolute;
+  left: 0;
+  overflow: scroll;
+  width: 100%;
+}
+
+.filter {
+  padding: 0.5rem;
+  width: 8rem;
+  cursor: pointer;
+}
+
+.filters-show,
+.filters {
+  /* background: rgb(223, 253, 253);
+  background: linear-gradient(to right, rgb(210, 255, 255), rgb(247, 255, 254)); */
+  width: 100%;
+  height: auto;
+  position: absolute;
+  top: 10%;
+  left: -100%;
+  transition: 0.3s ease;
+}
+.filters-show {
+  left: 0px;
+  z-index: 99;
+  background: #6b400f;
+  color: white;
+  border-bottom-right-radius: 75px 75px;
+}
+.heading-brand,
+.heading-cat {
+  margin-top: 1rem;
+  text-transform: uppercase;
+  padding: 0.4rem;
+  font-weight: 400;
+  font-size: 12px;
+  height: auto;
+  /* background: rgb(223, 253, 253); */
+  background: #6b400f;
+  border-bottom-right-radius: 75px 75px;
+}
+
+.sidebar {
+  position: relative;
+  /* float: left; */
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: left; */
+  width: 50%;
+  height: auto;
+}
+.sort-order {
+  display: flex;
+  margin: 0.5rem;
+}
+.sort-form {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+@media (min-width: 992px) {
+  .brands-cats {
+    font-size: 14px;
+    padding: 0.1rem;
+  }
+  .bc {
+    background: rgb(198, 255, 255);
+  }
+  .brands-cats:hover {
+    background: rgb(255, 254, 186);
+  }
+  .filter {
+    display: block;
+  }
+  .filters-show {
+    background: rgb(223, 253, 253);
+    background: linear-gradient(
+      to right,
+      rgb(210, 255, 255),
+      rgb(247, 255, 254)
+    );
+    color: black;
+  }
+  .heading-brand,
+  .heading-cat {
+    margin-top: 1rem;
+    text-transform: uppercase;
+    padding: 0.4rem;
+    font-weight: 400;
+    font-size: 12px;
+    height: auto;
+    background: rgb(223, 253, 253);
+  }
+  .filters,
+  .container {
+    position: static;
+  }
+  .sort-order {
+    margin-top: 1rem;
+  }
+  .sidebar {
+    width: 25%;
+    height: auto;
+  }
+  .sort-label {
+    width: 20%;
+  }
+}

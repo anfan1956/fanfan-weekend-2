@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% block content %}
+{{ super() }}
+<link rel="stylesheet" href="/static/css/catalog.css">
+
+<div class="sort-order">
+    <!-- <label for="criteria-select" class="sort-label">сортировать по:</label> -->
+    <select name="criteria" id="criteria-select" onchange="sort_by_cat()" class="sort-form">
+        <option value="">-- сортировать --</option>
+        <option value="бренд">бренду</option>
+        <option value="категория">категории</option>
+        <option value="price-asc">цене, вверх</option>
+        <option value="price-desc">цене, вниз</option>
+        <option value="novelty">по новизне</option>
+        <option value="discount">по скидкам</option>
+    </select>
+    <button class="filter">Фильтры</button>
+</div>
+<section class="main">
+    <div class="sidebar" id="sidebar-catalog">
+        <div class="filters">
+            <div class="heading-brand">
+                <h2 class="bc">бренды</h2>
+                {% for b in brands %}
+                <p class="brands-cats">{{ b }}</p>
+                {% endfor %}
+            </div>
+            <div class="heading-cat">
+                <h2 class="bc">категории</h2>
+                {% for c in cats %}
+                <p class="brands-cats">{{ c }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="container" id="container">
+        {% for brand in brands %}
+        <p class="criteria">{{brand}}</p>
+        <div class="wrapper" id="wrap-products">
+            {% for a in articles %}
+            {% if brand == a.бренд %}
+            <div class="cell">
+                <p class="brand-title">
+                    {{ a.бренд }},
+                    <span style="
+                    text-transform:lowercase;
+                    font-weight:300;
+                    ">{{a.категория}}</span>
+                </p>
+                <!-- below is a reference to original -->
+                <!-- <a href="/product/{{a.модель}}">  -->
+                <a href="/product2/{{a.модель}}">
+                    <img class="image" src="{{parent}}{{ a['модель'] }}/540/{{a.фото}}">
+                </a>
+                {% if a.скидка > 0 %}
+                <div class="discount">
+                    - {{ "{:,.0%}".format(a.скидка) }}
+                </div>
+                {% endif %}
+                {% if a.промо_скидка > 0 %}
+                <div class="promo-discount">
+                    - {{ "{:,.0%}".format(a.промо_скидка) }} smth
+                </div>
+                {% endif %}
+
+                <p class="details">артикул: {{ a.артикул }}</p>
+                <p class="details">модель: {{ a.модель }}</p>
+                <p class="details">цена: {{ a.цена }}</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        let p = '{{articles}}'
+        let parent = '{{parent}}'
+    </script>
+    <script src="/static/js/catalog.js"></script>
+
+    {% endblock %}
+</section>
+{% block footer %}
+{{ super() }}
+{% endblock %}
+
+</html>

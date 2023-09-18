@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+{{ super() }}
+<link rel="stylesheet" href="/static/CSS/shops.css">
+
+<div class="product-container">
+    <h1>Адреса и время работы магазинов</h1>
+    <div class="card mb-4">
+        <div class="card-title">
+            <h3>Магазин Weekend</h3>
+        </div>
+        <div class="card-body">
+            <p><b><i class="bi bi-geo-alt-fill"></i> Адрес:</b> МКАД, ТК Crocus City Mall, 1 этаж, вторая линия<br>
+                <b><i class="bi bi-telephone-fill"></i> Телефон:</b> + 7 495 902 00 42<br>
+                <b><i class="bi bi-clock-fill"></i> Режим работы:</b> c 10 утра до 10 вечера
+            </p>
+            <script type="text/javascript" charset="utf-8" async
+                src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A84568750bdefc1486d6702c4e385774631f1a5c94b88028a13f3102e34467708&amp;width=100%25&amp;height=300&amp;lang=ru_RU&amp;scroll=true">
+                </script>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-title">
+            <h3>Магазин ФАНФАН</h3>
+        </div>
+        <div class="card-body">
+            <p><b><i class="bi bi-geo-alt-fill"></i> Адрес:</b> МКАД, ТК Crocus City Mall, 1 этаж, вторая линия<br>
+                <b><i class="bi bi-telephone-fill"></i> Телефон:</b> + 7 495 902 71 30<br>
+                <b><i class="bi bi-clock-fill"></i> Режим работы:</b> c 10 утра до 10 вечера
+            </p>
+            <script type="text/javascript" charset="utf-8" async
+                src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Aa56f6cfc82770488b9f949a0d6c08c7c6ce23215aa9ea0af7d56eaa268020180&amp;width=100%25&amp;height=400&amp;lang=ru_RU&amp;scroll=true">
+                </script>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="card-title">
+            <h3>Магазин ФАНФАН</h3>
+        </div>
+        <div class="card-body">
+            <p><b><i class="bi bi-geo-alt-fill"></i> Адрес:</b> Барвиха, ТК Дримхаус, 1 этаж<br>
+                <b><i class="bi bi-telephone-fill"></i> Телефон:</b> + 7 495 902 76 20<br>
+                <b><i class="bi bi-clock-fill"></i> Режим работы:</b> с 11 утра до 10 вечера
+            </p>
+            <script type="text/javascript" charset="utf-8" async
+                src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A8b2d57c4a8633764b397f28cec7c06f1712062cc621d24c29fd92aa7b2a1895e&amp;width=100%25&amp;height=400&amp;lang=ru_RU&amp;scroll=true">
+                </script>
+        </div>
+    </div>
+
+
+</div>
+
+
+{% endblock %}

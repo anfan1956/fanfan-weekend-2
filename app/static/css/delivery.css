@@ -1,0 +1,138 @@
+.btn-delivery {
+  background: rgb(48, 137, 253);
+  padding: 0.25rem 2.5rem 0.25rem 2.5rem;
+  color: white;
+  border-radius: 4px;
+  margin-left: 0.2rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  border: solid 1px rgb(196, 196, 196);
+  box-shadow: 1px 1px 1px rgb(196, 196, 196);
+
+  /* 
+  padding: 6px 24px;
+  background: #e7fdc0;
+  border-radius: 3px;
+  */
+}
+
+.cell-delivery {
+  /* display: flex; */
+  position: relative;
+  width: 100%;
+  /* border: 1px solid navy; */
+  align-items: center;
+  cursor: pointer;
+  margin: 0.7rem;
+}
+.cell-delivery.mobile {
+  display: none;
+}
+.delivery-image {
+  display: block;
+  width: 60%;
+  margin: auto;
+
+  /* margin-top: 2%; */
+}
+.form.first-row {
+  margin-top: 1rem;
+}
+.form {
+  background: rgb(235, 235, 235);
+  margin-top: 1.5rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+  /* padding-left: 0.5rem;
+  padding-right: 1rem; */
+}
+.form-control {
+  /* border: none; */
+  padding: 0.3rem 0.5rem;
+  /* padding-left: 0.5rem; */
+  margin: 0.3rem auto;
+}
+#phone.form-control {
+  border: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+.form-control.input {
+  background-color: green;
+}
+
+.lbl-2 {
+  display: block;
+  /* padding: 0.1rem; */
+  padding-top: 0.5rem;
+}
+.lbl-2.alert {
+  display: none;
+  background-color: rgb(252, 163, 163);
+  padding: 0.5rem;
+  font-weight: 500;
+}
+.product-delivery {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 1rem;
+  gap: 1rem;
+  /* padding-left: 2rem; */
+  align-items: center;
+  /* background: aquamarine; */
+}
+.ticket {
+  /* margin-top: 2rem; */
+  /* background: red; */
+}
+@media (min-width: 992px) {
+  .product-delivery {
+    margin-top: 2rem;
+  }
+  .cell-delivery.mobile {
+    display: flex;
+  }
+
+  .product-delivery {
+    display: grid;
+    position: relative;
+    grid-template-columns: 1fr 1fr;
+    margin: 10px 0;
+    gap: 1rem;
+    align-items: center;
+    padding-left: 0;
+    background: none;
+  }
+}
+.blue,
+.green,
+.red,
+.sand {
+  padding: 0.2rem 1rem;
+  font-weight: 500;
+  font-size: 14px;
+  border-style: solid;
+  border-width: 1px;
+  box-shadow: 2px 2px 2px 2px rgba(207, 207, 207, 0.5);
+}
+.blue {
+  background-color: #cddfee;
+  color: #2f86c9;
+  border-color: #46a8f5;
+}
+.green {
+  background-color: #b2ffe3;
+  color: #269e72;
+  border-color: #2eb886;
+}
+.red {
+  background-color: #ffd7d5;
+  color: #cc534a;
+  border-color: #f66358;
+}
+.sand {
+  background-color: #fcf8c1;
+  color: #777224;
+  border-color: #777224;
+}

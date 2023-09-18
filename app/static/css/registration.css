@@ -1,0 +1,46 @@
+.auth-login {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+  gap: 1rem;
+}
+
+.btn {
+  display: inline-block;
+  width: fit-content;
+  padding: 0.2rem 2rem;
+  margin-top: 1rem;
+}
+
+.comment {
+  font-style: italic;
+  font-size: 14px;
+  padding-bottom: 0.5rem;
+}
+
+.email-code {
+  /* display: none; */
+}
+
+.email-wrap {
+  /* margin-top: 1rem; */
+}
+
+.email-group,
+.phone-group {
+  display: flex;
+  gap: 2rem;
+  padding-top: 1rem;
+}
+#lbl-email-code,
+#lbl-sms {
+  margin-left: 2rem;
+}
+
+.label {
+  display: block;
+}
+
+.list {
+  /* display: none; */
+}

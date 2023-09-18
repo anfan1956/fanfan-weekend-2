@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- <link rel="stylesheet" href="../static/CSS/basket.css"> -->
+<link rel="stylesheet" href="{{url_for('static', filename='/css/basket.css')}}">
+
+{{ super() }}
+
+<div class="confirmation-message">
+    <h1>Вы покупаете:
+    </h1>
+    <ul>
+        <li> количество штук: <span id="buy-qty">4</span> </li>
+        <li> на сумму: <span id="buy-amount">1 254 руб</span> </li>
+    </ul>
+    <div class="confirmation-buttons">
+        <button class="conf-button green" id="make-payment">Перейти к оплате</button>
+        <button class="conf-button blue" id="cancel">вернуться в корзину</button>
+    </div>
+</div>
+
+
+<div class="product-container">
+    <div class="basket-product">
+        {% if basket_content %}
+        <h1>Корзина: {{basket_content}}</h1>
+        {% else %}
+        <div id="orders" class="cell-basket">
+
+            <div>
+                <div class="message blue">nothing </div>
+                <table class="table">
+                    <h1>Содержимое корзины</h1>
+                    <tr class="table-row">
+                        {% for header in headers %}
+                        <th class="table-cell">{{header}}</th>
+                        {% endfor %}
+                        <!-- <th class="table-cell">изменить</th> -->
+                        <th class="table-cell">отметить</th>
+                    </tr>
+                    {% for d in data %}
+                    <tr class="table-row">
+                        {% for i in d %}
+                        {% if loop.index <9 %} <td class="table-cell">
+                            {% if d[i] != '0%' %}
+                            {{d[i]}}
+                            {% else %}
+                            <span style="margin-left: 1rem;">
+                                -
+                            </span>
+                            {% endif %}
+                            </td>
+                            {% elif loop.index == 9 %}
+                            <td class="number">
+                                <span class="minus">-</span>
+                                <input class="counter" type="text" value="{{d[i]}}" />
+                                <span class="plus">+</span>
+                            </td>
+                            {% else %}
+                            <td class="table-digit">
+                                {{d[i]}}
+                            </td>
+                            {% endif %}
+                            {% endfor %}
+
+                            <td class="table-cell">
+                                <!-- <input type="checkbox" class="basket-checkbox" onclick="calculateSelected()"> -->
+                                <input type="checkbox" class="basket-checkbox">
+                            </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="totals">
+                <div class="total">
+                    <h1>Стоимость товара в корзине:</h1>
+                    <h1><span class="span-totals" id="total">100 руб</span></h1>
+                </div>
+                <div class="total">
+                    <h1>Штук:</h1>
+                    <h1><span class="span-totals" id="qty"></span></h1>
+                </div>
+                <div class="total">
+                    <h1>К оплате:</h1>
+                    <h1><span class="span-totals" id="toPay">100 руб</span>
+                    </h1>
+                </div>
+            </div>
+            <div class="buttons-area">
+                <button class="button blue" type="button" id="select-all" onclick="selectAll()">
+                    отметить все &#x2714;
+                </button>
+                <button class="button sand" type="button" id="clear-selected" onclick="clearSelected()">
+                    снять &#x2714;
+                </button>
+                <button class="button green" type="button" id="buy-selected" onclick="flashConfirmation()">
+                    купить &#x2714;
+                </button>
+                <button class="button red" type="button" id="remove-selected" onclick="removeSelected()">
+                    удалить &#x2714;
+                </button>
+            </div>
+            <div>
+                <form id="addr" name="addr" class="addr">
+                    <h1>Доставка</h1>
+                    <div class="custom-select">
+                        <select name="delivery" id="delivery" onchange="deliveryAction()">
+                            <option value="choose address">-- выбрать или добавить адрес доставки --
+                            </option>
+                            <option value="pickup-18">самовывоз: ТК "Дрим Хаус, магазин "ФАНФАН""</option>
+                            <option value="pickup-25">самовывоз: ТК "Крокус Сити Молл", магазин "ФАНФАН"</option>
+                            <option value="pickup-27">самовывоз: ТК "Крокус Сити Молл", магазин "WEEKEND"</option>
+                            <option value="new-address">добавить адрес</option>
+                            {% if addrData %}
+                            {% for a in addrData %}
+                            <option value="{{a.spotid}}">{{a.address_string}}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div>
+                        <h1 class="address-warning">адрес доставки не выбран</h1>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="cell-basket">
+            <div class="basket">
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
+    crossorigin="anonymous"></script>
+<script>
+</script>
+
+<script src="/static/js/basket.js"></script>
+<script src="/static/js/index.js"></script>
+
+{% endblock %}
+// !!! Do not delete the script. It traces the payment
+<script>
+    var trace = window.location.search.split('&orderId')[0].split('?')
+    console.log(trace);
+    let Order = new Object()
+    let orderid = trace[2]
+    console.log(orderid);
+    if (trace[1] = 'trace') {
+        let basket = document.getElementById("orders")
+        let order = document.getElementById("orderid")
+        order.innerHTML = "orderid: " + orderid
+        basketHtml = '<h3>' + 'here will come the button'
+        basketHtml += '<button id = "button" class = "pmt-link">' + "оплатить заказ"
+        basket.innerHTML += basketHtml
+        let button = document.getElementById("button");
+        button.addEventListener('click', pmtLinkSend)
+        // pmtLinkSend()
+    }
+    function pmtLinkSend(e) {
+        console.log('lost payment link');
+
+        // e.preventDefault();
+        $.post('/postmethod', {
+            javascript_data: orderid
+        })
+        // window.location.href = "http://fanfan.store:8082/promo"
+    }
+</script>

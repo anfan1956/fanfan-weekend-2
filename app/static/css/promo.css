@@ -1,0 +1,61 @@
+.get-code {
+  display: flex;
+  padding: 1rem 0;
+  font-weight: 500;
+  gap: 1rem;
+  /* border: 1px solid red; */
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem auto 0.3rem;
+  font-size: 12px;
+  gap: 0.3rem;
+  /* width: 80%; */
+  background: lightgoldenrodyellow;
+  border: 1px solid red;
+}
+.message {
+  /* width: 50%; */
+  display: inline-block;
+  margin: auto;
+  color: red;
+  text-align: center;
+}
+
+.promo-info {
+  /* display: block; */
+  margin: auto;
+  padding: 0rem 1rem 0.5rem;
+  background: lightgoldenrodyellow;
+  text-align: center;
+}
+.criteria.promo {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .criteria.promo {
+    display: inherit;
+  }
+  .info {
+    width: max-content;
+    padding: 1rem 2rem 1rem 2rem;
+    margin: 1rem auto 0.3rem;
+    font-size: 20px;
+  }
+  .info-wrap {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+  }
+  .promo-info {
+    padding: 0.5rem 1rem 0.5rem;
+  }
+  .si-list {
+    list-style-type: none;
+    font-size: 16px;
+    margin-top: 0.3rem;
+  }
+}
