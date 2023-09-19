@@ -323,8 +323,16 @@ function calculateTotals () {
     //iterate through each row in the table
     $('tr').each(function (index) {
       $price = parseInt(
-        $(this).find('td').eq(5).text().trim('\n').replaceAll(',', '')
+        $(this)
+          .find('td')
+          .eq(5)
+          .text()
+          .trim('\n')
+          .replaceAll(',', '')
+          .replaceAll(' ', '')
       )
+      // console.log($price)
+
       let fmt = $price.toLocaleString(undefined, { maximumFractionDigits: 0 })
       $(this).find('td').eq(5).text(fmt)
       $qty = $(this).find('.counter').val()
