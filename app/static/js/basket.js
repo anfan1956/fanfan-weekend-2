@@ -316,7 +316,7 @@ function removePhoto () {
 // this function iterates throug the rows of a table and returns total
 function calculateTotals () {
   $(function () {
-    let region = 'us'
+    let region = 'en-US'
     var sum = 0
     var pieces = 0
     var sumChecked = 0
@@ -328,7 +328,7 @@ function calculateTotals () {
       )
       // console.log($price)
 
-      let fmt = $price.toLocaleString(undefined, { maximumFractionDigits: 0 })
+      let fmt = $price.toLocaleString(region, { maximumFractionDigits: 0 })
       $(this).find('td').eq(5).text(fmt)
       $qty = $(this).find('.counter').val()
       $promo = parseFloat($(this).find('td').eq(7).text().trim('\n'))
