@@ -323,13 +323,8 @@ function calculateTotals () {
     //iterate through each row in the table
     $('tr').each(function (index) {
       $price = parseInt(
-        $(this)
-          .find('td')
-          .eq(5)
-          .text()
-          .replaceAll(',', '')
-          .replaceAll(' ', '')
-          .trim('\n')
+        $(this).find('td').eq(5).text().replaceAll(',', '').replaceAll(' ', '')
+        // .trim('\n')
       )
       // console.log($price)
 
