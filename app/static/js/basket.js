@@ -327,9 +327,9 @@ function calculateTotals () {
           .find('td')
           .eq(5)
           .text()
-          .trim('\n')
           .replaceAll(',', '')
           .replaceAll(' ', '')
+          .trim('\n')
       )
       // console.log($price)
 
