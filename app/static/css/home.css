@@ -12,9 +12,12 @@ a {
 }
 .page-layout {
   display: flex;
-  background-color: antiquewhite;
+  background-color: var(--mainBack);
 }
 
+.first-page {
+  margin-top: 0.5rem;
+}
 .prev,
 .next {
   width: 20px;
@@ -29,6 +32,11 @@ a {
   position: relative;
   margin: 40px;
   /* overflow: auto; */
+}
+.general {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-indent: 2rem;
 }
 .slide {
   width: 400px;

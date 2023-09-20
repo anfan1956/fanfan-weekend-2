@@ -23,7 +23,7 @@ $(document).ready(function () {
 var slDuration = 5000
 var slideTimer = void 0
 
-function autoContinue () {
+function autoContinue (arg = 'continue') {
   nextSlide()
   setTimeout(autoContinue, slDuration)
 }
@@ -37,7 +37,7 @@ function nextSlide () {
     nextImg = $('.slider').first()
   }
   setTimeout(function () {
-    slideImg.removeClass('active', 1000).css('z-index', -10)
-    nextImg.addClass('active', 1000).css('z-index', 10)
+    slideImg.removeClass('active').css('z-index', -10)
+    nextImg.addClass('active').css('z-index', 10)
   }, slDuration)
 }
