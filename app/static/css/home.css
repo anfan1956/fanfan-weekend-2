@@ -1,0 +1,45 @@
+a {
+  color: #fff;
+  text-decoration: none;
+}
+.slider.active {
+  display: inline-block;
+  border: solid 1px red;
+}
+.prev,
+.next {
+  width: 20px;
+  height: 20px;
+  float: left;
+  cursor: pointer;
+}
+.container {
+  width: 540px;
+  margin: 40px;
+  overflow: auto;
+}
+.slide {
+  width: 400px;
+  height: 600px;
+}
+
+.slider {
+  display: none;
+  width: auto;
+  height: 600px;
+}
+
+.slider-inner {
+  width: 400px;
+  position: relative;
+  overflow: hidden;
+  float: left;
+  padding: 3px;
+}
+.slider-outer {
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  gap: 2rem;
+  width: 400px;
+}

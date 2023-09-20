@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+{{ super() }}
+
+
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous">
+        </script>
+    <link rel="stylesheet" href="../static/css/home.css">
+    <script src=" ../static/js/home.js"></script>
+    <title>about</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="slider-inner">
+            <div class="slider active">
+                <h1>Kristinsen Du Nord</h1>
+                <img class="slide" src="../static/images/slider/kdn1.jpg">
+            </div>
+            <div class="slider">
+                <h1>Kristinsen Du Nord</h1>
+                <img class="slide" src="../static/images/slider/kdn2.jpg">
+            </div>
+            <div class="slider">
+                <h1>Kristinsen Du Nord</h1>
+                <img class="slide" src="../static/images/slider/kdn3.jpg">
+            </div>
+            <div class="slider">
+                <h1>Aeronautica Militare</h1>
+                <img class="slide" src="../static/images/slider/AM.jpg">
+            </div>
+        </div>
+        <div class="slider-outer">
+            <img src="../static/images/slider/left.png" alt="prev" class="prev">
+            <img src="../static/images/slider/right.png" alt="next" class="next">
+        </div>
+    </div>
+
+
+
+</body>
+
+
+
+{% endblock %}

@@ -16,16 +16,16 @@ sms_messages = False
 full = False
 
 
-@app.route("/about")
-def about():
+@app.route("/home")
+def home():
     content = {"title": "про ФанФан и Weekend", "menu": menu()}
     # print(content['menu'])
     # abort(404)
-    return render_template('about.html', **content)
+    return render_template('home.html', **content)
 
 
 @app.route('/')
-def home():
+def landing():
     # return '<h1> Hi, it is home</h1>'
     return redirect(url_for("promo"))
 

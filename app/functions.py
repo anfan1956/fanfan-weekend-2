@@ -15,11 +15,12 @@ def replace_keys(dct, mapping):
 
 
 def menu():
-    menu = [{"name": "Главная", "url": "/main"},
+    menu = [
+            {"name": "О нас", "url": "/home"},
+            {"name": "Главная", "url": "/main"},
             {"name": "Промо", "url": "/promo"},
             {"name": "Каталог", "url": "/catalog"},
             {"name": "Магазины", "url": "/shops"},
-            # {"name": "Клуб", "url": "/about"},
             {"name": "Логин", "url": "/login2"},
             {"name": "Вход", "url": "/register"},
             {"name": "Корзина", "url": "/basket"},
