@@ -20,7 +20,7 @@ $(document).ready(function () {
   autoContinue()
 })
 
-var slDuration = 8000
+var slDuration = 5000
 var slideTimer = void 0
 
 function autoContinue () {
@@ -30,12 +30,14 @@ function autoContinue () {
 
 function nextSlide () {
   clearInterval(slideTimer)
+  var slideImg = $('.active')
+  var nextImg = slideImg.next()
+  if (nextImg.length) {
+  } else {
+    nextImg = $('.slider').first()
+  }
   setTimeout(function () {
-    let slideImg = $('.active')
-    let nextImg = slideImg.next()
-    if (nextImg.length) {
-    } else nextImg = $('.slider').first()
-    slideImg.removeClass('active', 2000).css('z-index', -10)
-    nextImg.addClass('active', 3000).css('z-index', 10)
+    slideImg.removeClass('active', 1000).css('z-index', -10)
+    nextImg.addClass('active', 1000).css('z-index', 10)
   }, slDuration)
 }
