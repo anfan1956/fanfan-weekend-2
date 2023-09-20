@@ -10,3 +10,4 @@ __py*
 
 *__py*
 *test.html
+app/templates/test.html
