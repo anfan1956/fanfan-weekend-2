@@ -8,9 +8,9 @@ $(document).ready(function () {
   let menuItem
   menu = menu.replaceAll('&#39;', '"')
   menu = JSON.parse(menu)
-  console.log(menu)
+  // console.log(menu)
   thisPath = location.pathname //.split('/')[1]
-  console.log(thisPath)
+  // console.log(thisPath)
   menu.forEach(element => {
     if (element.url == thisPath) {
       menuItem = element.name
@@ -21,6 +21,17 @@ $(document).ready(function () {
       $(this).addClass('active-menu')
     }
   })
+  let phone = objCookies().phone
+
+  if (phone == undefined) {
+    console.log('phone is not defined')
+    $('.item-menu-right').css('display', 'none')
+  } else {
+    phone = phoneString(phone)
+    $('#incognito').css('display', 'none')
+    $('.item-menu-right').show().text(phone)
+    // console.log(objCookies().phone)
+  }
 })
 
 const form_glob = document.querySelector('.auth-promo')
@@ -49,4 +60,21 @@ function checkCookies () {
   if ('promo' in Keys == false) {
     form_glob.style.display = 'block'
   }
+}
+
+function thePhone (arg) {
+  let tp = arg
+    .replaceAll(' ', '')
+    .replaceAll('-', '')
+    .replace(/^8/, '')
+    .replace(/^\+7/, '')
+    .replaceAll('(', '')
+    .replaceAll(')', '')
+  return tp
+}
+
+function phoneString (arg) {
+  let ni = '+7-' + thePhone(arg).replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')
+  return ni
+  //   console.log(ni)
 }

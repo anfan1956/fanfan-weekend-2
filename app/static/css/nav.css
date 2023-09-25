@@ -1,4 +1,5 @@
 :root {
+  --activeMenu: #e7ffc0;
   --blueBack: #dbedfc;
   --blueForgr: #2f86c9;
   --greenBack: #b2ffe3;
@@ -18,8 +19,12 @@
 a:link {
   text-decoration: none;
 }
-a.item-menu {
+a.item-menu,
+a.item-menu-right {
   color: rgb(214, 214, 214);
+}
+.item-menu-right {
+  float: right;
 }
 footer {
   height: 50px;
@@ -60,8 +65,14 @@ header > .top a.menu_icon:hover i {
 .active-menu {
   text-decoration: underline double !important;
   /* background: #273017; */
-  color: #e7ffc0 !important;
+  color: var(--activeMenu) !important;
   /* background: red; */
+}
+#incognito {
+  width: 10%;
+  /* height: 100%; */
+  cursor: pointer;
+  float: right;
 }
 .item-menu:hover {
   text-decoration: underline;
@@ -109,7 +120,7 @@ nav.menu {
 nav.menu > a {
   text-decoration: none;
   width: 100px;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 700;
   display: block;
   padding: 5px;
@@ -214,7 +225,7 @@ nav.menu > a {
     /* width: 70%; */
     align-items: center;
     justify-content: baseline;
-    gap: 3rem;
+    gap: 2rem;
     margin-left: 1.5rem;
     margin-top: 0;
     /* color: white; */
@@ -228,7 +239,7 @@ nav.menu > a {
     display: flex;
     /* width: 70%; */
     align-items: center;
-    justify-content: end;
+    justify-content: right;
     margin-right: 1.5rem;
   }
   nav.menu {
@@ -283,7 +294,7 @@ nav.menu > a {
     z-index: 1000;
   }
   header {
-    font-size: 16px;
+    font-size: 14px;
     background: #f8de86;
   }
 }

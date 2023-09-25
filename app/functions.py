@@ -17,12 +17,12 @@ def replace_keys(dct, mapping):
 def menu():
     menu = [
             {"name": "О нас", "url": "/home"},
-            {"name": "Главная", "url": "/main"},
+            {"name": "Поступления", "url": "/main"},
             {"name": "Промо", "url": "/promo"},
             {"name": "Каталог", "url": "/catalog"},
             {"name": "Магазины", "url": "/shops"},
-            {"name": "Логин", "url": "/login2"},
-            {"name": "Вход", "url": "/register"},
+            # {"name": "Логин", "url": "/login2"},
+            {"name": "Личный кабинет", "url": "/register"},
             {"name": "Корзина", "url": "/basket"},
             # {"name": "Доставка", "url": "/delivery"} #  В меню не показывать, только по вызову
             ]

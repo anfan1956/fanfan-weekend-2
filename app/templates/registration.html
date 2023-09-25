@@ -1,49 +1,71 @@
 {% extends 'base.html' %}
 {% block content %}
 {{ super() }}
-<p>testing registration forms</p>
 
 <link rel="stylesheet" href="/static/CSS/registration.css">
->
 
-<div class="product-container">
+
+<div class="form-container">
     <div class="row">
-        <h1>The Form</h1>
-
-        <form class="auth-login">
-            <div class="phone-group">
-                <div class="phone-wrap">
-                    <label class="label" for="phone" id="lbl-phone">Ваш телефон </label>
-                    <input type="tel" name="phone" id="phone" placeholder="000 000 00 00">
-                </div>
-                <div class="sms-wrap">
-                    <label class="label" for="sms-code" id="lbl-sms">код из смс</label>
-                    <input type="number" name="sms-code" id="sms-code">
-                </div>
-            </div>
-            <div class="email-group">
-                <div class="email-wrap">
-                    <label class="label" for="email" id="lbl-email">электронная почта</label>
-                    <input type="email" name="email" id="email">
-                </div>
-                <div class="email-code-wrap">
-                    <label class="label" for="email-code" id="lbl-email-code">код из email</label>
-                    <input type="number" name="email-code" id="email-code">
-                    <label for="email-code" class="comment" id="lbl-email-code2">при изменении электронной почты</label>
-                </div>
-            </div>
-            <ul class="list">
-                <p>это поле должно быть заполнено, если:</p>
-                <!-- <li class="comment"> вам нужен элетронный чек</li>
-                <li class="comment">или вы хотите</li> -->
-                <input type="checkbox" id="receipt" name="receipt" value="">
-                <label for="receipt">вам нужен элетронный чек</label><br>
-                <input type="checkbox" id="promo" name="promo" value="">
-                <label for="promo">вы хотите получать извещения о распродажах и акциях</label><br>
-            </ul>
-            <button type="button" class="btn" id="btn1" onclick="sendInfo()">отправить</button>
-        </form>
+        <h1>
+            ВЫ НЕ АВТОРИЗОВАНЫ
+        </h1>
+        <h2>
+            Авторизуйтесь по телефону, для того, чтобы
+        </h2>
+        <ul class="authorize">
+            <li>размещать и оплачивать заказы</li>
+            <li>регистрировать адрес доставки</li>
+            <li>класть товар в корзину</li>
+            <li>получать промокоды на специальные акции и распродажи</li>
+        </ul>
     </div>
+
+
+    <form class="auth-login">
+        <div class="phone-group">
+            <div class="phone-wrap">
+                <label class="label" for="phone" id="lbl-phone">Ваш телефон </label>
+                <div class="phone-input">
+                    <span class="area-code">+7
+                        <input class="input" type="tel" name="phone" id="phone" placeholder="(000) 000-00-00">
+                    </span>
+                    <button class="change" type="submit" onclick="resetPhoneCoockie()"> изменить </button>
+                </div>
+                <button type="button" class="btn" id="btn1" onclick="sendInfo()">Отправить</button>
+            </div>
+
+            <div class="sms-wrap">
+                <label class="label" for="sms-code" id="lbl-sms">код из смс</label>
+                <input class="input" type="number" name="sms-code" id="sms-code">
+                <button type="button" class="btn" id="btn2" onclick="sendInfo()">Отправить</button>
+            </div>
+        </div>
+        <div class="email-group">
+            <div class="email-wrap">
+                <label class="label" for="email" id="lbl-email">электронная почта</label>
+                <div class="mail-input">
+                    <input class="input" type="email" name="email" id="email">
+                    <button class="change" type="button" id="change-mail">изменить</button>
+                </div>
+                <button type="button" class="mail-submit" id="mail-submit">отправить</button>
+            </div>
+            <div class="email-code-wrap">
+                <label class="label" for="email-code" id="lbl-email-code">код из email</label>
+                <input class="input" type="number" name="email-code" id="email-code">
+                <button type="button" class="btn" id="btn3">отправить</button>
+            </div>
+        </div>
+        <ul class="list">
+            <p>это поле должно быть заполнено, если:</p>
+            <!-- <li class="comment"> вам нужен элетронный чек</li>
+                <li class="comment">или вы хотите</li> -->
+            <input type="checkbox" id="receipt" name="receipt" value="">
+            <label for="receipt">вам нужен элетронный чек</label><br>
+            <input type="checkbox" id="promo" name="promo" value="">
+            <label for="promo">вы хотите получать извещения о распродажах и акциях</label><br>
+        </ul>
+    </form>
 </div>
 
 

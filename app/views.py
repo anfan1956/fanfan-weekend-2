@@ -86,6 +86,7 @@ def register():
         response = {}
         data = request.get_json()
         phone = data.get('phone')
+        requestMail = data.get('requestMail')
         phone_mail_confirmation = data.get('phone_mail_confirmation')
         if phone_mail_confirmation:
             phone_mail_confirmation = re.sub(r"(^8)|(\+7)|[\s\-\(\)]", '', phone_mail_confirmation)
@@ -108,12 +109,19 @@ def register():
                     sms(phone, sms_mes)
                 response["code"] = sms_mes
                 response["mode"] = 1
+                if requestMail:
+                    sql = f"select cust.customer_mail('{phone}')"
+                    print(sql)
+                    q_result = s(sql)
+                    response["email"] = q_result
+                    response["mode"] = 2
                 results = jsonify(response)
             else:
                 sql = f"select top 1 smsCode from web.sms_log where phone = '{phone}' order by logid desc"
                 sms_msg = str(s(sql))
                 print(sms_msg)
-                if sms_enter == sms_msg:
+                if sms_enter == sms_msg or requestMail:
+                    print(requestMail, ': requestMail')
                     Session = request.cookies.get('Session')
                     print(f"Session: {Session}")
                     sql = f"set nocount on; declare @note varchar(max); exec web.promoAllStyles_p {phone}, @note output; select @note"

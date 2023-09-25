@@ -1,88 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+        <script "text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script "text/javascript" src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sizes</title>
     <style>
-        .container-sizes {
-            /* border: 1px solid red; */
-            display: inline-flex;
-            align-items: center;
-            justify-content: left;
-        }
-
-        .column,
-        .left {
-            width: 2rem;
-            display: inline-flex;
-            flex-direction: column;
-            margin: 1rem 5rem 1rem 1rem;
-            padding: 0.5rem;
-            gap: 1rem;
-            align-items: left;
-        }
-
-        .right {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: start;
-            align-items: flex-end;
-            /* border: 1px solid blue; */
-        }
-
-        .column {
-
-            /* border: 1px solid grey; */
-            border-radius: 2px;
-            background-color: rgb(236, 236, 236);
-            width: 1.5rem;
-            margin-left: 0;
-            margin-right: 0.0rem;
-            gap: 1rem;
-        }
-
-        .sizes {
-            margin: auto;
+        .contain {
+            margin: 2rem;
         }
     </style>
-</head>
 
-<body>
-
-    <div class="container-sizes">
-        <div class="left">
-            <div class="qaunts">Размеры</div>
-            <div class="qaunts">Количество</div>
-        </div>
-        <div class="right">
-            <div class="column">
-                <div class="sizes">fjhs</div>
-                <div class="sizes">qty</div>
-            </div>
-            <div class="column">
-                <div class="sizes">sz</div>
-                <div class="sizes">qty</div>
-            </div>
-            <div class="column">
-                <div class="sizes">sz</div>
-                <div class="sizes">qty</div>
-            </div>
-            <div class="column">
-                <div class="sizes">sz</div>
-                <div class="sizes">qty</div>
-            </div>
-            <div class="column">
-                <div class="sizes">sz</div>
-                <div class="sizes">qty</div>
-            </div>
-            <div class="column">
-                <div class="sizes">sz</div>
-                <div class="sizes">qty</div>
-            </div>
+    <div class="contain">
+        <div class="slider">
+            <div><img src="https://picsum.photos/id/10/600/400" title="A Beautiful Landscape"></div>
+            <div><img src="https://picsum.photos/id/20/600/400" title="Stationery on Table"></div>
+            <div><img src="https://picsum.photos/id/30/600/400" title="A Coffee Mug"></div>
         </div>
     </div>
-</body>
-
-</html>
+    <div class="contain">
+        <div class="slider">
+            <div><img src="https://picsum.photos/id/30/600/400" title="A Coffee Mug"></div>
+            <div><img src="https://picsum.photos/id/10/600/400" title="A Beautiful Landscape"></div>
+            <div><img src="https://picsum.photos/id/20/600/400" title="Stationery on Table"></div>
+        </div>
+    </div>
+    <script>
+        $('.slider').bxSlider({
+            autoControls: true,
+            auto: true,
+            pager: true,
+            slideWidth: 600,
+            mode: 'fade',
+            captions: true,
+            speed: 1000
+        });
+    </script> -->
