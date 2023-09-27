@@ -1,7 +1,9 @@
+span.email-span,
 span.area-code {
   padding-bottom: 1rem;
   width: 70%;
 }
+
 .auth-login {
   display: flex;
   flex-direction: column;
@@ -16,6 +18,7 @@ span.area-code {
   display: inline-block;
   width: fit-content;
   padding: 0.2rem 2rem;
+  margin-left: 0.2rem;
   margin-top: 1rem;
 }
 .change {
@@ -40,7 +43,7 @@ span.area-code {
   /* flex-direction: column; */
 }
 .email-code-wrap {
-  display: none;
+  display: flex;
   flex-direction: column;
 }
 
@@ -53,9 +56,13 @@ span.area-code {
 .form-container {
   background-color: rgb(226, 242, 252);
   padding: 2rem;
+  padding-bottom: 10rem;
   font-size: 18px;
 }
-
+h1.prefs {
+  margin: 0;
+  margin-bottom: 1rem;
+}
 .input {
   /* margin: 0; */
   padding-bottom: 1rem;
@@ -64,13 +71,14 @@ span.area-code {
   /* background: transparent; */
   /* border: none; */
 }
-#lbl-email-code {
+/* #lbl-email-code {
 }
 #lbl-sms {
   margin-left: 2rem;
-}
+} */
 .label {
   display: block;
+  font-size: 16px;
 }
 #email.input {
   width: 70%;
@@ -78,6 +86,10 @@ span.area-code {
 
 li {
   padding-bottom: 0.2rem;
+}
+.list {
+  width: 70%;
+  font-size: 14px;
 }
 .email-wrap,
 .phone-wrap {
@@ -90,8 +102,14 @@ li {
   display: flex;
   justify-content: space-between;
 }
+.mail-prefs {
+  margin-top: 2rem;
+  display: flex;
+  width: 50%;
+  justify-content: space-between;
+}
 .mail-submit {
-  display: none;
+  display: flex;
   width: fit-content;
   margin-top: 1rem;
   margin-left: 0.2rem;
@@ -101,10 +119,10 @@ li {
   font-size: 14px;
   background-color: var(--greenBack);
 }
-#sms-code {
+/* #sms-code {
   margin: 0;
   width: 70%;
-}
+} */
 .sms-wrap {
   display: flex;
   flex-direction: column;

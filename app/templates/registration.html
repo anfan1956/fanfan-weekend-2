@@ -21,13 +21,12 @@
         </ul>
     </div>
 
-
     <form class="auth-login">
         <div class="phone-group">
             <div class="phone-wrap">
                 <label class="label" for="phone" id="lbl-phone">Ваш телефон </label>
                 <div class="phone-input">
-                    <span class="area-code">+7
+                    <span class="area-code" id="phone-span">+7
                         <input class="input" type="tel" name="phone" id="phone" placeholder="(000) 000-00-00">
                     </span>
                     <button class="change" type="submit" onclick="resetPhoneCoockie()"> изменить </button>
@@ -45,7 +44,9 @@
             <div class="email-wrap">
                 <label class="label" for="email" id="lbl-email">электронная почта</label>
                 <div class="mail-input">
-                    <input class="input" type="email" name="email" id="email">
+                    <span class="area-code" id="email-span">
+                        <input class="input" type="email" name="email" id="email">
+                    </span>
                     <button class="change" type="button" id="change-mail">изменить</button>
                 </div>
                 <button type="button" class="mail-submit" id="mail-submit">отправить</button>
@@ -72,5 +73,6 @@
 
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
     crossorigin="anonymous"></script>
-<script src="/static/js/registration.js"></script>
+<!-- <script src="/static/js/registration.js"></script> -->
+<script src="/static/js/register2.js"></script>
 {% endblock %}

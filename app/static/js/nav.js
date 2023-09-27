@@ -24,7 +24,7 @@ $(document).ready(function () {
   let phone = objCookies().phone
 
   if (phone == undefined) {
-    console.log('phone is not defined')
+    // console.log('phone is not defined')
     $('.item-menu-right').css('display', 'none')
   } else {
     phone = phoneString(phone)

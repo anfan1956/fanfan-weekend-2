@@ -25,7 +25,6 @@ $(document).ready(function () {
     sendInfo()
   })
 })
-var btn_1 = document.querySelector('#btn1')
 var smsWrap = document.querySelector('.sms-wrap')
 var emailWrap = document.querySelector('.email-wrap')
 var emailCodeWrap = document.querySelector('.email-code-wrap')
@@ -86,13 +85,17 @@ function changeMode (mode, data) {
       $('#incognito').hide()
       $('.item-menu-right').show().text(phoneString(phone))
       $('.row').hide()
-      $('.area-code').text(phoneString(phone))
+      $('#phone-span').text(phoneString(phone))
+      console.log(data.email, ' data.email')
+
       $('#btn1').hide()
       $('.change').show()
       smsWrap.style.display = 'none'
       emailWrap.style.display = ''
       list.style.display = ''
-      emailInput.value = data.email
+      console.log(data.email, ' data.email2')
+      $('#email-span').text(data.email)
+      // emailInput.value = data.email
       break
     case 3:
       break

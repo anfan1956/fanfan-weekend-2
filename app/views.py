@@ -78,6 +78,82 @@ def basket():
     return render_template('basket.html', **content)
 
 
+@app.route("/register2", methods=['POST', 'GET'])
+def register2():
+    print(f"method: {request.method}, path: {request.path}")
+    results = None
+    if request.method == 'POST':
+        # dt = dt_time_max()
+        response = {}
+        data = request.get_json()
+        mode = data.get('mode')
+        phone = data.get('phone')
+        requestMail = data.get('requestMail')
+        if mode == 0:
+            sql = f"set nocount on; declare @r int; exec @r = web.smsGenerate '{phone}'; select @r"
+            sms_mes = str(s(sql))
+            print(sms_mes)
+            response['sms-code'] = sms_mes
+            results = jsonify(response)
+            if sms_messages:
+                sms(phone, sms_mes)
+        elif mode == 2:
+            dt = dt_time_max()
+            sms_entered = data.get('sms_entered')
+            sql = f"select top 1 smsCode from web.sms_log where phone = '{phone}' order by logid desc"
+            sms_msg = str(s(sql))
+            if sms_msg == sms_entered or requestMail:
+                sql = f"select cust.customer_mail('{phone}')"
+                q_result = s(sql)
+                print(q_result)
+                response["email"] = q_result
+                response['mode'] = mode
+                Session = str(uuid.uuid4())
+                results = make_response(jsonify(response))
+                results.set_cookie("phone", phone, expires=dt)
+                results.set_cookie("Session", Session, expires=dt)
+            else:
+                response['error'] = "wrong code"
+                response['mode'] = 0
+                results = jsonify(response)
+        elif mode == 3:
+            email_new = data.get('email')
+            sql = f"set nocount on; declare @r int; exec @r = web.emailGenerate '{email_new}'; select @r"
+            code = str(s(sql))
+            print(code)
+            argv = {'code': code, 'To': email_new}
+            emai_sent = fanfan_send_mail(**argv)
+            response["mode"] = mode
+            results = jsonify(response)
+        elif mode == 4:
+            email_new = data.get('email')
+            emailCode = data.get('code')
+            sql = f"select top 1 emailCode from web.email_log where email = '{email_new}' order by logid desc"
+            # print(f"sql: {sql}")
+            email_msg = str(s(sql))
+            print(email_msg)
+            if email_msg == emailCode:
+                notes = True  # set temporarily will have to update with buttons later
+                sql = f"exec cust.email_update '{phone}' , '{email_new}' , '{notes}'"
+                print(sql)
+                result = s(sql)  # ______________________________________________________________________________________
+                print(f"email update result: {result}")  # __________________________________________________________
+                response['mode'] = mode
+                results = jsonify(response)
+        elif mode == 5:
+            if len(phone) != 10:
+                response['error'] = 'неверно указан телефон'
+            else:
+                jsonData = json.dumps(data)
+                print(jsonData)
+                sql = f"exec cust.prefs_update '{jsonData}'"
+                print(s(sql))
+                response['updated'] = True
+            results = jsonify(response)
+        print(results)
+    return results
+
+
 @app.route("/register", methods=['POST', 'GET'])
 def register():
     print(f"method: {request.method}, path: {request.path}")
@@ -175,7 +251,8 @@ def register():
                     response['mode'] = 4
                     results = jsonify(response)
             return results
-    return render_template('registration.html', menu=menu(), form=form())
+    # return render_template('registration.html', menu=menu(), form=form())
+    return render_template('register2.html', menu=menu(), form=form())
 
 
 @app.route("/main")
