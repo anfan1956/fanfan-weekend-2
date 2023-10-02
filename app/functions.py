@@ -22,7 +22,7 @@ def menu():
             {"name": "Каталог", "url": "/catalog"},
             {"name": "Магазины", "url": "/shops"},
             # {"name": "Логин", "url": "/login2"},
-            {"name": "Личный кабинет", "url": "/register"},
+            {"name": "Личный кабинет", "url": "/register2"},
             {"name": "Корзина", "url": "/basket"},
             # {"name": "Доставка", "url": "/delivery"} #  В меню не показывать, только по вызову
             ]
@@ -52,8 +52,11 @@ def form():
     return my_form
 
 
-def art_display(route, months):
-    sql = f"select inv.arrivals_json({months}, default, default )"
+def art_display(route, months, old=True):
+    if old:
+        sql = f"select inv.arrivals_json({months}, default, default )"
+    else:
+        sql = f"select inv.arrivals2_json({months}, default, default )"
     f_articles = json.loads(s(sql))
     arrivals = []
     match route:
@@ -184,6 +187,8 @@ def calculate_webOrder(js, products=None):
     if no product submitted, returns only total
     {'qty': 0, 'amount': 0, 'total': 5}
     """
+    # print('js: ', js, '\n')
+    # print('products: ', products)
     qty = 0
     amount = 0
     mapping = {
@@ -203,6 +208,7 @@ def calculate_webOrder(js, products=None):
                         f = 1
                         break
                 if f == 0:
+                    print(product['discount'], type(product['discount']))
                     amount += int(product['qty']) * int(product['price'])*(1 - float(product['discount']))*(1 - float(product['promo']))
                     qty += int(product['qty'])
     total = sum([int(j['количество']) for j in js])
@@ -226,3 +232,17 @@ def delivery_data(arg):
         result = json.loads(s(sql))[0] if s(sql) is not None else None
     return result
 
+
+if __name__ == '__main__':
+    data = [
+        {'phone': '9167834248', 'Session': '386d32d4-94b0-49e6-aeaa-d18e146d9e86', 'pickupid': '18', 'orderTotal': 18474.75, 'procName': 'ON_SITE RESERVATION'},
+        {'styleid': '19628', 'color': 'RED', 'size': 'XL', 'price': '29325', 'discount': '', 'promo': '37', 'qty': 1, 'total': 18474.75}]
+
+    bs = [
+        {'марка': '120% LINO', 'модель': 19628, 'категория': 'РУБАШКА', 'цвет': 'RED', 'размер': 'XL', 'цена': 29325.0, 'скидка': 0.0, 'промо': 0.37, 'количество': 1, 'всего': '', 'наличие': 1, 'photo': '_M3Q9882_c1.jpg'},
+        {'марка': 'AERONAUTICA MILITARE', 'модель': 19996, 'категория': 'ТОЛСТОВКА КАП.', 'цвет': 'VERDE MILITARE 39282', 'размер': 'L', 'цена': 28900.0, 'скидка': 0.0, 'промо': 0.72, 'количество': 1, 'всего': '', 'наличие': 1,
+         'photo': '_M3Q0433.jpg'},
+        {'марка': 'JAMES PERSE', 'модель': 9574, 'категория': 'ФУТБОЛКА', 'цвет': 'ALUMINIUM', 'размер': '2', 'цена': 21675.0, 'скидка': 0.0, 'промо': 0.0, 'количество': 2, 'всего': '', 'наличие': 3, 'photo': '_M3Q8891.jpg'}
+        ]
+
+    calculate_webOrder(bs, data)

@@ -14,7 +14,7 @@ h1 {
 .address-warning {
   display: flex;
   font-weight: bold;
-  padding: 0 1rem;
+  padding: 0 0rem;
 }
 .basket {
   /* outline: solid 2px red; */
@@ -63,18 +63,20 @@ h1 {
 }
 .custom-select {
   background-color: var(--redBack);
-  width: 60%;
-  padding: 1rem;
+  width: auto;
+  padding: 1rem 1rem;
+  margin: 0;
   border-radius: 4px;
   border: 1px solid #d6d5ca;
 }
 .custom-select select {
   display: flex;
-  padding: 0.3rem;
+  padding: 0.5rem;
   font-style: italic;
 }
 .delivery {
-  padding: 0.5rem;
+  border: 2px black solid;
+  margin: 0 auto;
 }
 .select-selected {
   background-color: dodgerblue;

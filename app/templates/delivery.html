@@ -19,9 +19,12 @@
                 </div>
                 <div class="form">
                     <div class="phone-wrap">
-                        <label class="label" for="phone" id="lbl-phone">Телефон получателя</label>
-                        <input class="form-control" type="tel" name="receiver_phone" id="phone"
-                            placeholder="000 000 00 00">
+                        <!-- <label class="label" for="phone" id="lbl-phone">Телефон получателя</label> -->
+                        <label class="lbl-2" for="phone" id="lbl-phone">Телефон получателя</label>
+                        <span>+7
+                            <input class="form-control" type="tel" name="receiver_phone" id="phone"
+                                placeholder="(000) 000 00 00">
+                        </span>
                     </div>
 
                 </div>
@@ -63,6 +66,7 @@
 </script>
 
 <script src="/static/js/delivery2.js"></script>
+<script src="/static/js/index.js"></script>
 
 <script>
     $("#address").suggestions({

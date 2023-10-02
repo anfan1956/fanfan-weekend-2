@@ -1,40 +1,81 @@
+import smtplib
+import ssl
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
+import os, sys
+import json
 
 
-
-def the_totals(js, product=None):
-    mapping = ['модель', 'цвет', 'размер']
-    q = 0
-    if 'корзина' not in js[0]:
-        if product is not None:
-            vals = list(product.values())
-            # Create new dictionary by iterating over both newkeys and vals
-            product = {k: v for k, v in zip(mapping, vals)}
-            for j in js:
-                f = 0
-                for p in product.keys():
-                    if j[p] != product[p]:
-                        f = 1
-                        break
-                if f == 0:
-                    q = j['количество']
-        total = sum([int(j['количество']) for j in js])
-        totals = {
-            "this": q,
-            "total": total
-        }
+def fanfan_send_mail(args):
+    if len(sys.argv) > 1:
+        arg = args.split(",")
+        args_dict = {a.split(": ")[0]: a.split(": ")[1] for a in arg}
+        # for key in args_dict:
+        #     print(key, ": ", args_dict[key])
     else:
-        totals = {"this": q, "total": 0}
-    return totals
+        args_dict = json.loads(args)
+
+    # print(args_dict, type(args_dict))
+    smtp_server = 'smtp.gmail.com'
+    smtp_port = 587
+    smtp_pass = os.environ.get('fanfan_smtp')
+    # smtp_pass = 'shzbalwjuqgbuwce'
+    gmail = 'fanfan.weekend@gmail.com'
+    message = MIMEMultipart('mixed')
+    message['From'] = 'fanfan.sales <{sender}>'.format(sender=gmail)
+    for i in range(2):
+        prop = list(args_dict.items())[i][0]
+        message[prop] = args_dict[prop]
+        # print(f' i = {i}, {message[prop]}')
+
+    # print(args_dict['msg_content'])
+    msg_content = args_dict['msg_content']
+
+    body = MIMEText(msg_content, 'html')
+    message.attach(body)
+    attachmentPath = args_dict['attachmentPath']
+
+    try:
+        with open(attachmentPath, "rb") as attachment:
+            p = MIMEApplication(attachment.read(), _subtype="pdf")
+            p.add_header('Content-Disposition', "attachment; filename= %s" % attachmentPath.split("\\")[-1])
+            message.attach(p)
+    except Exception as e:
+        print(str(e))
+
+    msg_full = message.as_string()
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.ehlo()
+        server.starttls(context=context)
+        server.ehlo()
+        server.login(gmail, smtp_pass)
+        server.sendmail(gmail,
+                        message['TO'].split(";") +
+                        (message['CC'].split(";") if message['CC'] else []),
+                        msg_full)
+
+        server.quit()
+        return "email sent successfully"
 
 
+if len(sys.argv) == 1:
+    subject = 'emailing actual order 5'
+    content = '<h2>Hello there! <br></h2><p>I am testing real pdf files</p>\n'
+    sPath = "Z:\\Управление предприятием\\accounting\\web_sales\\77769.pdf"
+    argv = {
+        'To': 'af.fanfan.2012@gmail.com',
+        # 'CC': None,
+        'Subject': subject,
+        'msg_content': content,
+        'attachmentPath': sPath
+        }
+    argv = json.dumps(argv)
+else:
+    argv = sys.argv[1]
 
-# basket = [
-#     {'марка': '120% LINO', 'модель': 19628, 'категория': 'РУБАШКА', 'цвет': 'RED', 'размер': 'XL', 'цена': 29325.0, 'скидка': 0.0, 'промо': 0.37, 'количество': 1, 'всего': '', 'наличие': 1, 'photo': '_M3Q9882_c1.jpg'},
-#     {'марка': 'JAMES PERSE', 'модель': 13530, 'категория': 'ФУТБОЛКА', 'цвет': 'PLATOON', 'размер': '2', 'цена': 19125.0, 'скидка': 0.0, 'промо': 0.0, 'количество': 1, 'всего': '', 'наличие': 1, 'photo': '_M3Q8887.jpg'},
-#     {'марка': 'JAMES PERSE', 'модель': 13530, 'категория': 'ФУТБОЛКА', 'цвет': 'WHITE', 'размер': '3', 'цена': 19125.0, 'скидка': 0.0, 'промо': 0.0, 'количество': 2, 'всего': '', 'наличие': 7, 'photo': '_M3Q8887_4.jpg'}
-#     ]
-basket = [{"корзина":"Пустая"}]
-
-product = {'styleid': 19628, 'color': 'ANGEL', 'size': 'XXL', 'qty': '1'}
-
-print(the_totals(basket, product))
+if __name__ == '__main__':
+    # print(argv, type(argv))
+    print(fanfan_send_mail(argv))

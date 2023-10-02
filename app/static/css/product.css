@@ -1,7 +1,7 @@
-body {
+/* body {
   padding-bottom: 40rem;
   position: relative;
-}
+} */
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
@@ -133,10 +133,15 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .btn-one-wrap {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
+  /* grid-template-columns: 1fr 1fr; */
   gap: 0.5rem;
   margin-bottom: 0.6rem;
+}
+.buttons-all-wrap {
+  display: flex;
+  gap: 1rem;
 }
 .button,
 .button-promo,
@@ -151,18 +156,14 @@ input[type="number"]::-webkit-outer-spin-button {
   cursor: pointer;
 }
 .button-promo2 {
-  display: none;
-  display: block;
-  width: 100%;
+  /* display: none; */
+  display: inline-block;
+  height: fit-content;
+  padding: 0.4rem 2.5rem;
+  /* width: 100%; */
   /* position: relative; */
   /* z-index: 1000; */
-  background: #b60db6;
-}
-
-.callbut-mini-phone {
-  /* position: absolute;
-  top: -42rem;
-  left: -20rem; */
+  background: var(--promo);
 }
 
 .js-callme-modal-1.callmebutton3 {
@@ -454,10 +455,6 @@ span.area-code input {
 }
 
 @media (min-width: 992px) {
-  body {
-    /* background: red; */
-    padding-top: 120px;
-  }
   .alert {
     /* width: 50%; */
     left: 25%;
@@ -514,7 +511,7 @@ span.area-code input {
   .basket-button {
     background-color: rgb(48, 137, 253);
     font-size: 12px;
-    padding: 0.4rem 0.5rem;
+    padding: 0.4rem 3.5rem;
     width: 100%;
     border-radius: 4px;
     color: white;
@@ -728,19 +725,7 @@ span.area-code input {
     justify-content: start;
     /* align-items: space-between; */
   }
-  li {
-    /* list-style-type: none; */
-    /* padding-left: 0.5em;
-    padding-right: 0.1em; */
-  }
-  /* li:before {
-    font-size: 0.8em;
-    padding-left: 0.5em;
-    content: " \2666";
-    display: inline-block;
-    /* height: 1rem;   or px or em or whatever */
-  /* width: 0.5rem; /* or whatever space you want*/
-  /* }  */
+
   .one-click {
     display: flex;
     flex-direction: column;

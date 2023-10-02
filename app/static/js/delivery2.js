@@ -1,3 +1,19 @@
+$(document).ready(function () {
+  $('#phone').blur(function (e) {
+    let phone = thePhone($(this).val())
+    console.log(phone, phone.length)
+
+    if (phone.length != 10) {
+      flashMessage('неправильный формат телефона', false, flashTime)
+      $(this).val('').focus()
+      return
+    } else {
+      $(this).val(phoneString(phone))
+    }
+    console.log(phone)
+  })
+})
+var flashTime = 2000
 var Cook = getCookies()
 console.log(Cook)
 
@@ -22,11 +38,6 @@ function addressAction () {
   addrData = getAddressData()
   console.log(addrData)
   deliveryActions(addrData)
-  //   promissed = deliveryActions(addrData)
-  //   promissed.done(function (data) {
-  //     // document.querySelector('#toPay').innerHTML = data.toPay
-  //     console.log(data)
-  //   })
 }
 function getAddressData () {
   let data = []

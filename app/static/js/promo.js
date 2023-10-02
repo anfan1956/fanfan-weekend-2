@@ -1,6 +1,6 @@
 let trace = window.location.search.split('&orderId')[0].split('?')
-console.log(trace)
 let Order = new Object()
+
 let promo_button = document.querySelector('#btn-get-promo')
 let currentLocation = window.location.pathname
 
@@ -37,10 +37,7 @@ if (trace[1] == 'trace') {
 
 promo_button.addEventListener('click', function () {
   console.log('get promo!')
-
-  document.cookie = 'currentLocation = ' + currentLocation + ';path=/'
-  console.log(document.cookie, ' just created')
-  window.location.href = '/register' /* + currentLocation*/
+  window.location.href = '/register2' /* + currentLocation*/
 })
 
 function tracePayment (args) {

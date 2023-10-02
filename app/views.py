@@ -1,10 +1,10 @@
 from app import app
 from app.functions import menu, dt_time_max, form, art_display, set_dates, finish_date
 from app.functions import goods, inv_set, the_totals, calculate_webOrder, key_value
-from app.functions import  delivery_data
+from app.functions import delivery_data
 from app.Payments import pmt_link, order_status_site
 from app.send_sms import sms
-from app.mails import fanfan_send_mail
+from app.mails import fanfan_send_mail, mail_pmt_link, mail_sales_receipt
 from app.data import sql_query as s, sql_list, sql_fetch_list
 from flask import render_template, redirect, request, url_for, make_response, jsonify, flash, abort
 import json, re, uuid
@@ -36,7 +36,7 @@ def basket():
     content = {"title": "КОРЗИНА", "menu": menu()}
     phone = request.cookies.get('phone')
     if not phone:
-        res = make_response(redirect(url_for('register', menu=menu())))
+        res = make_response(redirect(url_for('register2', menu=menu())))
         res.set_cookie("currentLocation", request.path)
         return res
     sql = f"select web.delivery_addr_js_('{phone}')"
@@ -53,13 +53,12 @@ def basket():
     sql = f"select web.basketContent_('{phone}')"
     print(f"sql:  {sql}")
     data = s(sql)
-    # print(f"from web.basketContent sql :{data}")
     data = json.loads(data)
     data_0 = data[0]
+    print(data_0)
     basket_content = data_0.get('корзина')
     sql = f"select cust.basket_totals_json('{phone}')"
     print(sql)
-    # print(f"sql for basket totals response: {s(sql)}")
     basket_totals = json.loads(s(sql))[0]
     totals = basket_totals.get('итого')
     # print(basket_totals, type(basket_totals), f" итого: {totals}")
@@ -70,188 +69,106 @@ def basket():
         content['data'] = data
         if basket_totals:
             content['totals'] = basket_totals
-        # else:
-        #     content['totals'] = 0
     else:
         content['basket_content'] = basket_content
-        # print(f"Корзина: {basket_content}")
     return render_template('basket.html', **content)
 
 
 @app.route("/register2", methods=['POST', 'GET'])
 def register2():
-    print(f"method: {request.method}, path: {request.path}")
-    results = None
     if request.method == 'POST':
-        # dt = dt_time_max()
-        response = {}
-        data = request.get_json()
-        mode = data.get('mode')
-        phone = data.get('phone')
-        requestMail = data.get('requestMail')
-        if mode == 0:
-            sql = f"set nocount on; declare @r int; exec @r = web.smsGenerate '{phone}'; select @r"
-            sms_mes = str(s(sql))
-            print(sms_mes)
-            response['sms-code'] = sms_mes
-            results = jsonify(response)
-            if sms_messages:
-                sms(phone, sms_mes)
-        elif mode == 2:
-            dt = dt_time_max()
-            sms_entered = data.get('sms_entered')
-            sql = f"select top 1 smsCode from web.sms_log where phone = '{phone}' order by logid desc"
-            sms_msg = str(s(sql))
-            if sms_msg == sms_entered or requestMail:
-                sql = f"select cust.customer_mail('{phone}')"
-                q_result = s(sql)
-                print(q_result)
-                response["email"] = q_result
-                response['mode'] = mode
-                Session = str(uuid.uuid4())
-                results = make_response(jsonify(response))
-                results.set_cookie("phone", phone, expires=dt)
-                results.set_cookie("Session", Session, expires=dt)
-            else:
-                response['error'] = "wrong code"
-                response['mode'] = 0
-                results = jsonify(response)
-        elif mode == 3:
-            email_new = data.get('email')
-            sql = f"set nocount on; declare @r int; exec @r = web.emailGenerate '{email_new}'; select @r"
-            code = str(s(sql))
-            print(code)
-            argv = {'code': code, 'To': email_new}
-            emai_sent = fanfan_send_mail(**argv)
-            response["mode"] = mode
-            results = jsonify(response)
-        elif mode == 4:
-            email_new = data.get('email')
-            emailCode = data.get('code')
-            sql = f"select top 1 emailCode from web.email_log where email = '{email_new}' order by logid desc"
-            # print(f"sql: {sql}")
-            email_msg = str(s(sql))
-            print(email_msg)
-            if email_msg == emailCode:
-                notes = True  # set temporarily will have to update with buttons later
-                sql = f"exec cust.email_update '{phone}' , '{email_new}' , '{notes}'"
-                print(sql)
-                result = s(sql)  # ______________________________________________________________________________________
-                print(f"email update result: {result}")  # __________________________________________________________
-                response['mode'] = mode
-                results = jsonify(response)
-        elif mode == 5:
-            if len(phone) != 10:
-                response['error'] = 'неверно указан телефон'
-            else:
-                jsonData = json.dumps(data)
-                print(jsonData)
-                sql = f"exec cust.prefs_update '{jsonData}'"
-                print(s(sql))
-                response['updated'] = True
-            results = jsonify(response)
-        print(results)
-    return results
-
-
-@app.route("/register", methods=['POST', 'GET'])
-def register():
-    print(f"method: {request.method}, path: {request.path}")
-    if request.method == 'POST':
-        dt = dt_time_max()
-        response = {}
-        data = request.get_json()
-        phone = data.get('phone')
-        requestMail = data.get('requestMail')
-        phone_mail_confirmation = data.get('phone_mail_confirmation')
-        if phone_mail_confirmation:
-            phone_mail_confirmation = re.sub(r"(^8)|(\+7)|[\s\-\(\)]", '', phone_mail_confirmation)
-        sms_enter = data.get('sms_enter')
-        email = data.get('email')
-        email_new = data.get('email_new')
-        emailCode = data.get('emailCode')
-        data = f"'{json.dumps(data)}'"
-        print(data)
-        if phone:
-            phone = re.sub(r"(^8)|(\+7)|[\s\-\(\)]", '', phone)
-            print(phone)
-            if len(phone) != 10:
-                return redirect(request.path)
-            if not sms_enter:
+        print(f"method: {request.method}, path: {request.path}")
+        results = None
+        if request.method == 'POST':
+            response = {}
+            data = request.get_json()
+            print(data)
+            mode = data.get('mode')
+            phone = data.get('phone')
+            requestMail = data.get('requestMail')
+            deleteEmail = data.get('deleteEmail')
+            if mode == 0:
                 sql = f"set nocount on; declare @r int; exec @r = web.smsGenerate '{phone}'; select @r"
                 sms_mes = str(s(sql))
                 print(sms_mes)
+                response['sms-code'] = sms_mes
+                results = jsonify(response)
                 if sms_messages:
                     sms(phone, sms_mes)
-                response["code"] = sms_mes
-                response["mode"] = 1
-                if requestMail:
-                    sql = f"select cust.customer_mail('{phone}')"
-                    print(sql)
-                    q_result = s(sql)
-                    response["email"] = q_result
-                    response["mode"] = 2
-                results = jsonify(response)
-            else:
+            elif mode == 2:
+                if deleteEmail:
+                    sql = f"cust.email_delete '{phone}'"
+                    results = jsonify(s(sql))
+                dt = dt_time_max()
+                sms_entered = data.get('sms_entered')
                 sql = f"select top 1 smsCode from web.sms_log where phone = '{phone}' order by logid desc"
                 sms_msg = str(s(sql))
-                print(sms_msg)
-                if sms_enter == sms_msg or requestMail:
-                    print(requestMail, ': requestMail')
-                    Session = request.cookies.get('Session')
-                    print(f"Session: {Session}")
+                if sms_msg == sms_entered or requestMail:
+                    print(sms_entered, sms_msg)
                     sql = f"set nocount on; declare @note varchar(max); exec web.promoAllStyles_p {phone}, @note output; select @note"
                     result = s(sql)
                     print(result)
                     if sms_messages:
                         sms(phone, result)
-                    promocode = re.findall(r'\d{6}', result)[0]
+                    promo = re.findall(r'\d{6}', result)[0]
                     sql = f"select cust.customer_mail('{phone}')"
-                    print(sql)
                     q_result = s(sql)
                     print(q_result)
+                    sql = f"select cust.customer_prefs ('{phone}')"
+                    prefs = json.loads(s(sql))[0]
+                    for p in prefs:
+                        response[p] = prefs[p]
+                    sql = f"select cust.customer_mail('{phone}')"
+                    print(sql)
+                    response['promo'] = promo
                     response["email"] = q_result
-                    response["mode"] = 2
-                    print(response)
+                    response['mode'] = mode
                     Session = str(uuid.uuid4())
                     results = make_response(jsonify(response))
                     results.set_cookie("phone", phone, expires=dt)
-                    results.set_cookie("promo", promocode, expires=dt)
+                    results.set_cookie("promo", promo, expires=dt)
                     results.set_cookie("Session", Session, expires=dt)
-                    return results
+
                 else:
-                    response = {"error": "неверный код"}
-                results = jsonify(response)
-            return results
-        if email_new:
-            if not emailCode:
-                print(f"email must be working: {email_new}")
-                flash("На вашу почту отправлен код подтверждения.", category="success")
+                    response['error'] = "wrong code"
+                    response['mode'] = 0
+                    results = jsonify(response)
+            elif mode == 3:
+                email_new = data.get('email')
                 sql = f"set nocount on; declare @r int; exec @r = web.emailGenerate '{email_new}'; select @r"
                 code = str(s(sql))
                 print(code)
                 argv = {'code': code, 'To': email_new}
                 emai_sent = fanfan_send_mail(**argv)
-                response["mode"] = 3
-                print(f'"{emai_sent}": response to verification email')
+                response["mode"] = mode
                 results = jsonify(response)
-                # return results
-            else:
+            elif mode == 4:
+                email_new = data.get('email')
+                emailCode = data.get('code')
                 sql = f"select top 1 emailCode from web.email_log where email = '{email_new}' order by logid desc"
-                print(f"sql: {sql}")
+                # print(f"sql: {sql}")
                 email_msg = str(s(sql))
                 print(email_msg)
                 if email_msg == emailCode:
-                    notes = True    # set temporarily will have to update with buttons later
-                    sql = f"exec cust.email_update '{phone_mail_confirmation}' , '{email_new}' , '{notes}'"
+                    notes = True  # set temporarily will have to update with buttons later
+                    sql = f"exec cust.email_update '{phone}' , '{email_new}' , '{notes}'"
                     print(sql)
                     result = s(sql)  # ______________________________________________________________________________________
                     print(f"email update result: {result}")  # __________________________________________________________
-                    flash("Ваша почта подтверждена", category="success")
-                    response['mode'] = 4
+                    response['mode'] = mode
                     results = jsonify(response)
-            return results
-    # return render_template('registration.html', menu=menu(), form=form())
+            elif mode == 5:
+                if len(phone) != 10:
+                    response['error'] = 'неверно указан телефон'
+                else:
+                    jsonData = json.dumps(data)
+                    print(jsonData)
+                    sql = f"exec cust.prefs_update '{jsonData}'"
+                    print(s(sql))
+                    response['updated'] = True
+                results = jsonify(response)
+            # print(results)
+        return results
     return render_template('register2.html', menu=menu(), form=form())
 
 
@@ -302,7 +219,7 @@ def product2(styleid):
 
 @app.route('/catalog')
 def catalog():
-    articles = art_display('/catalog', 0)
+    articles = art_display('/catalog', 0, False)
     brands = sorted({a['бренд'] for a in articles})
     cats = sorted({a['категория'] for a in art_display('/catalog', 0)})
     content = {"title": "Каталог товаров",
@@ -319,18 +236,15 @@ def shops():
     phone = '9167834248'
     cookies = dict(request.cookies)
     print(cookies)
-    if not request.cookies.get('phone'):
-        # res = make_response(render_template("shops.html", title="Адреса магазинов", menu=menu()))
-        res = make_response(redirect(url_for("shops", title="Адреса магазинов", menu=menu())))
-        res.set_cookie('phone', phone)
-        return res, 302
-    else:
-        res = make_response("Value of phone is {}".format(request.cookies.get('phone')))
-        print(res)
-        # return res
-    # res = make_response(f"setting a cookie")
-    # res.set_cookie("logged", "2222", 10)
-    # res.set_cookie("phone", phone, 3)
+    # if not request.cookies.get('phone'):
+    #     # res = make_response(render_template("shops.html", title="Адреса магазинов", menu=menu()))
+    #     res = make_response(redirect(url_for("shops", title="Адреса магазинов", menu=menu())))
+    #     # res.set_cookie('phone', phone)
+    #     return res, 302
+    # else:
+    #     res = make_response("Value of phone is {}".format(request.cookies.get('phone')))
+    #     print(res)
+
     return render_template("shops.html", title="Адреса магазинов", menu=menu())
 
 
@@ -463,7 +377,7 @@ def sortcode_qty():
         elif procName == 'sizeQuantities':
             data = js_string[1]
             # print(response)
-            # print(f"print for proc sizeQuantities: {type(data)} {data}")
+            print(f"print for proc sizeQuantities: {type(data)} {data}")
             res = the_totals(response, data)
             # print(res)
             return res
@@ -512,30 +426,33 @@ def basket_actions():
                 return res
             return res
         if action in ['ON_SITE RESERVATION']:
-            # order = json.dumps(data)
             order = f"'{json.dumps(data)}'"
-            # print(f"order ON_SITE RESERVATION: {order}")
             sql = f"select web.basketContent_('{phone}')"
-            # print(sql)
             basketContent = json.loads(s(sql))
-            # print(f"basketContent: {basketContent}, next step is the proc:")
-            # print('\n', f"type basketContent: {type(basketContent)}, type data: {type(data)}")
             orderTotals = calculate_webOrder(basketContent, data)
-            # print(orderTotals['amount'] == orderTotal, ": checking if th order goods are still avail")
             if orderTotals['amount'] == orderTotal:
                 sql = f"exec web.reservation_json {order}"
-                print(sql)
                 result = json.loads(s(sql))
                 pmtPars = result[0].get('pmtPars')
                 pmtPars = f"'{full}', {pmtPars}"
-                print(f"pmtPars:  {pmtPars}")
+                print(f"pmtPars:  {pmtPars}", type(pmtPars))
+                orderid = pmtPars.split(", ")[1]
+                print(orderid, type(orderid))
                 sql = f"select web.pmt_str_params_({pmtPars}, next value for web.ordersSequence)"
                 print(f"sql: {sql}")
                 result = s(sql)
                 print(f"result = s(sql) pmtStr parameters: {result}")
                 pmtPars = json.loads(result)[0]
-                print(f"pmtPars from 'oneClick': {pmtPars}")
+
                 link = pmt_link(pmtPars)
+                sql = f"select cust.customer_mail('{phone}')"
+                email = s(sql)
+                arg = {
+                    "To": email,
+                    "link": link,
+                    "orderid": orderid
+                }
+                mail_pmt_link(**arg)
                 result = jsonify(link)
                 return result
             else:
@@ -547,6 +464,7 @@ def basket_actions():
 
 @app.route('/oneClick', methods=['POST', 'GET'])
 def oneClick():
+    print(f"method: {request.method}, path: {request.path}")
     # some hard coding is done
     # to change when appropriate, wait_minutes, pickupShopid
     if request.method == "POST":
@@ -573,16 +491,30 @@ def oneClick():
                     f"{pickupShopid}; select @note note, @r orderid;"
             # print(sql_2)
             result = sql_fetch_list(sql_2)
-            jsdata = str(result[1]) + ", 900"  # hardcoding 900 seconds ______________________________________________________
+            orderid = result[1]
+            jsdata = str(orderid) + ", 900"  # hardcoding 900 seconds ______________________________________________________
+
             jsdata = f"'{full}', {jsdata}"
+            print(jsdata, ': jsdata')
             sql = f"select web.pmt_str_params_({jsdata}, next value for web.ordersSequence)"
             # print(f"sql: {sql}")
             result = s(sql)
             # print(f"result = s(sql): {result}")
             pmtPars = json.loads(result)[0]
-            # print(f"pmtPars from 'oneClick': {pmtPars}")
             link = pmt_link(pmtPars)
+
             result = jsonify(link)
+            if sms_messages:
+                s_message = 'ссылка на оплату: ' + link
+                sms(phone, s_message)
+            sql = f"select cust.customer_mail('{phone}')"
+            email = s(sql)
+            arg = {
+                "To": email,
+                "link": link,
+                "orderid": orderid
+            }
+            mail_pmt_link(**arg)
             return result
 
 
@@ -693,11 +625,18 @@ def delivery(ticketid=None):
 @app.route('/orderPayment', methods=['POST', 'GET'])
 def paymentTrace():
     print(request.path)
-    result = request.method
+    # result = request.method
     if request.method == "POST":
         data = request.get_json()
         result = 'it worked'
         result = jsonify(result)
         response = order_status_site(data)
         print(response, ' - in /orderPayment Flask ')
+        arg = {
+            'orderid': '78454 - to be supplied',
+            'To': 'buh@fanfan.pro',
+            'content': 'order paid',
+            'fiscal num': 'to be supplied'
+        }
+        mail_sales_receipt(**arg)
     return result

@@ -170,7 +170,7 @@ function removeSelected () {
   promissed.done(function (data) {
     console.log(data)
     if (data.success) {
-      flashMessage('товар удален', true)
+      flashMessage('товар удален из корзины', true)
       console.log(data)
       setTimeout(() => {
         location.reload(true)
@@ -181,22 +181,33 @@ function removeSelected () {
 }
 
 function selected (action) {
+  ;(pcsSelected = 0), (totalSelected = 0)
   let obj1 = []
-  pcsSelected = 0
-  totalSelected = 0
   checks.forEach(function (item) {
     if (item.checked) {
-      var obj = {}
+      let obj = {}
       el = item.closest('tr')
       for (let i = 0; i < h_length; i++) {
         if (fields.includes(headers[i])) {
-          obj[headers[i]] = el.children.item(i).innerText.replaceAll(',', '')
+          obj[headers[i]] = el.children
+            .item(i)
+            .innerText.replaceAll('%', '')
+            .replaceAll(',', '')
+            .replaceAll('-', '')
         }
       }
+
       let qty = parseInt(el.children.item(8).children[1].value)
       obj.qty = qty
+      console.log(qty, 'obj.qty')
+      obj.discount = obj.discount / 100
+      obj.promo = obj.promo / 100
       obj.total = qty * obj.price * (1 - obj.discount) * (1 - obj.promo)
+      console.log(obj.total)
+
       totalSelected += obj.total
+      console.log(totalSelected, ' iter totalSelected')
+
       pcsSelected += qty
       obj1.push(obj)
     }
@@ -206,7 +217,6 @@ function selected (action) {
       error: 'nothing selected'
     }
   }
-  // console.log(total)
   console.log(pcsSelected, totalSelected)
   return obj1
 }
@@ -320,21 +330,23 @@ function calculateTotals () {
     var sum = 0
     var pieces = 0
     var sumChecked = 0
+    let discount, promo
     //iterate through each row in the table
     $('tr').each(function (index) {
       $price = parseInt(
         $(this).find('td').eq(5).text().replaceAll(',', '').replaceAll(' ', '')
-        // .trim('\n')
       )
-      // console.log($price)
-
       let fmt = $price.toLocaleString(region, { maximumFractionDigits: 0 })
       $(this).find('td').eq(5).text(fmt)
       $qty = $(this).find('.counter').val()
-      $promo = parseFloat($(this).find('td').eq(7).text().trim('\n'))
+
+      discount = parseFloat($(this).find('td').eq(6).text().trim('\n'))
+      discount = isNaN(discount) ? 0 : discount / 100
+      promo = parseFloat($(this).find('td').eq(7).text().trim('\n'))
+      promo = isNaN(promo) ? 0 : promo / 100
       $checked = $(this).find('.basket-checkbox').is(':checked')
-      if ($.isNumeric($price) && $.isNumeric($promo)) {
-        let delta = $price * $qty * (1 - $promo)
+      if ($.isNumeric($price) && $.isNumeric(promo) && $.isNumeric(discount)) {
+        let delta = $price * $qty * (1 - promo) * (1 - discount)
         let deltaChecked = $checked ? delta : 0
         let piecesChecked = $checked ? $qty : 0
         let fmt = delta.toLocaleString(region, {
@@ -394,16 +406,47 @@ function submitChanges () {
     }
   })
   console.log(newObj)
-  // $.ajax({
-  //   type: 'POST',
-  //   url: '/basket_actions',
-  //   data: JSON.stringify(obj),
-  //   contentType: 'application/json',
-  //   dataType: 'json',
-  //   success: function (data) {
-  //     console.log(data)
-  //     document.querySelector('#toPay').innerHTML = data.toPay
-  //   }
-  // })
-  // })
+}
+
+function flashConfirmation () {
+  let spotid, pickupid
+  let region = 'us'
+  let inv = selected()
+  console.log(inv)
+
+  console.log(
+    inv,
+    'flashConfirmation, function "selected()"',
+    pcsSelected,
+    totalSelected
+  )
+  if (inv.error) {
+    flashMessage('Нужно отметить то, что вы хотите купить', false)
+    return
+  }
+  let delivery = $('#delivery option:selected')
+  if (delivery.val() == 'choose address') {
+    flashMessage('нужно выбрать способ доставки')
+    return
+  }
+  $('#buy-amount').text(
+    totalSelected.toLocaleString(region, {
+      maximumFractionDigits: 0
+    })
+  )
+  $('#buy-qty').text(pcsSelected)
+
+  $('.confirmation-message').slideDown(250)
+  $('#cancel').click(function () {
+    $('.confirmation-message').slideUp(250)
+  })
+  $('#make-payment').click(function () {
+    $('.confirmation-message').slideUp(500)
+    if ($.isNumeric(delivery.val())) {
+      spotid = delivery.val()
+    } else {
+      pickupid = delivery.val().split('-')[1]
+    }
+    buySelected(inv, spotid, pickupid, totalSelected)
+  })
 }

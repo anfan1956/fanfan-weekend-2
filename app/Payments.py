@@ -87,7 +87,7 @@ def order_id(args):
         order_confirmation_message = 'заказ №' + seed + ', оплата:  ' + link
         sms(args_phone, order_confirmation_message)
     return_message = {"subject": SUBJECT, 'body': message}
-    # print(return_message)
+    print(return_message, " : return message from order_id procedure")
     s_message = json.dumps(return_message, ensure_ascii=False)
     mail(s_message)
     if key != 'errorCode':
@@ -220,7 +220,7 @@ def order_status_site(args):
               f"exec @r = web.order_action_p @orderid =@orderid, @cancel = @cancel, @note = @note output, @pmtStr= @pmtStr; select @r, @note;"
         print(sql)
         r_string = f(sql)
-        print(r_string)
+        print(r_string, " : return from sql query when status =2")
         if r_string[0] > 0:
             r_list = r_string[1].split('" "')
             name = r_list[0]
@@ -245,7 +245,7 @@ def order_status_site(args):
             where s.saleID={sale_id};
             select @@ROWCOUNT;"""
             result = s(sql)
-            print(result, "  - in prcedure")
+            print(result, "  - in procedure")
             return result
         else:
             s_message = 'procedure returned error'
@@ -268,6 +268,7 @@ def order_status_site(args):
     return_message = {"subject": SUBJECT, 'body': mes}
     s_message = json.dumps(return_message, ensure_ascii=False)
     mail(s_message)
+    print(s_message)
     return s_message
 
 

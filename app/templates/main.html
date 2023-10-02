@@ -2,13 +2,13 @@
 {% extends 'base.html' %}
 {% block content %}
 {{ super() }}
+<link rel="stylesheet" href="{{url_for('static', filename='/css/main.css')}}">
 
 <section class="main">
     <div class="sidebar hidden" id="sidebar-main">
         SIDEBAR
     </div>
     <div class="products">
-        <!-- <h4 class="h1">Последние Поступления</h4> -->
         {% for date in dates %}
         <div class="container">
             <p class="criteria">{{date}}</p>

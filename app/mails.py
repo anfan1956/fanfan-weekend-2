@@ -40,12 +40,71 @@ def fanfan_send_mail(**args):
         return "email sent successfully"
 
 
+def mail_sales_receipt(**args):
+    message = MIMEMultipart('mixed')
+    message['From'] = 'fanfan.sales <{sender}>'.format(sender=gmail)
+    message['Subject'] = 'чек по операции'
+    message['To'] = args['To']
+    msg_content = f"<p>{args['content']}</p> <br> <p>" \
+                  f"orderid: {args['orderid']} <br>" \
+                  f"fiscal num: {args['fiscal num']}" \
+                  f"</p>"
+
+    body = MIMEText(msg_content, 'html')
+    message.attach(body)
+
+    msg_full = message.as_string()
+    context = ssl.create_default_context()
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.ehlo()
+        server.starttls(context=context)
+        server.ehlo()
+        server.login(gmail, smtp_pass)
+        server.sendmail(gmail,
+                        message['TO'].split(";") +
+                        (message['CC'].split(";") if message['CC'] else []),
+                        msg_full)
+        server.quit()
+        return "email sent successfully"
+
+
+def mail_pmt_link(**args):
+    message = MIMEMultipart('mixed')
+    message['From'] = 'fanfan.sales <{sender}>'.format(sender=gmail)
+    message['Subject'] = 'ссылка на оплату заказа'
+    message['To'] = args['To']
+    orderid = args['orderid']
+    msg_content = f"№ заказа {orderid}: ссылка на оплату {args['link']}"
+    body = MIMEText(msg_content, 'html')
+    message.attach(body)
+
+    msg_full = message.as_string()
+    context = ssl.create_default_context()
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.ehlo()
+        server.starttls(context=context)
+        server.ehlo()
+        server.login(gmail, smtp_pass)
+        server.sendmail(gmail,
+                        message['TO'].split(";") +
+                        (message['CC'].split(";") if message['CC'] else []),
+                        msg_full)
+        server.quit()
+        return "email sent successfully"
+
+
 if __name__ == '__main__':
-    code = randint(1000, 9999)
-    to = 'alexander.n.fedorov@gmail.com'
+    content = 'Сумма: to be defined'
+    to = 'buh@fanfan.pro'
+    orderid = 38745
+
     argv = {
+        'orderid': orderid,
         'To': to,
-        'code': code
+        'content': content,
+        'fiscal num': 124545
     }
-    response = fanfan_send_mail(**argv)
+    # response = mail_pmt_link(**argv)
+    response = mail_sales_receipt(**argv)
     print(response)
+

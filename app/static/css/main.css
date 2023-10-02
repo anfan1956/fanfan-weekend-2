@@ -1,7 +1,6 @@
 body {
   font-family: Roboto, Arial;
   max-width: 1440px;
-  padding-top: 50px;
   margin: 0 auto;
 }
 
@@ -89,7 +88,7 @@ p {
   width: 100%;
 }
 .promo-discount {
-  background-color: rgb(182, 13, 182);
+  background-color: var(--promo);
   color: white;
   position: absolute;
   padding: 0.2rem;
@@ -124,9 +123,7 @@ p {
   .wrapper {
     grid-template-columns: 1fr 1fr;
   }
-  body {
-    padding-top: 50;
-  }
+
   h1 {
     margin: 0 0;
     font-size: 20px;
@@ -147,9 +144,6 @@ p {
   }
 }
 @media (min-width: 992px) {
-  body {
-    padding-top: 135px;
-  }
   .brand-title {
     margin-left: 0.5rem;
     margin-bottom: 0.5rem;

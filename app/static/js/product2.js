@@ -1,5 +1,6 @@
 var data, items, mainColor, photo, images, styleid, water, size
 var styleid, Cook, thisColor, search, alert_message, alert_general
+var flashTime = 3000
 const parent = '/static/images/parent/'
 alert_message = $('.alert-message')
 alert_general = $('.alert-general')
@@ -14,6 +15,8 @@ $(function () {
   images = data.images
   photo = data.photo
   Cook = getCookies()
+  // console.log(Cook)
+
   mainColor = getMainColor()
   for (i in items) {
     if (items[i].color == mainColor) {
@@ -22,7 +25,7 @@ $(function () {
   }
   for (let k in images) {
     if (images[k].color == mainColor) {
-      console.log(images[k].color)
+      // console.log(images[k].color)
       $('.image-icons').each(function () {
         let source = $(this).attr('src')
         let thisImage = source.split('/').slice(-1)[0]
@@ -33,6 +36,9 @@ $(function () {
       break
     }
   }
+  $('#btn-promo2').on('click', function () {
+    window.location.href = '/register2'
+  })
 })
 
 // procedure pick the color of main image from Flask rendering
@@ -74,18 +80,27 @@ function render (color, items) {
       })
     }
   })
-  promissed = getBasketContent()
-  promissed.done(function (data) {
-    // $('#this-qty').text(data.this)
-    $('#this-qty').text('')
-    $('#basket-total').text(data.total)
-    let curr_size = $('#product-selected')
-    let qtyBox = $('#quantity')
-    curr_size.removeClass('filled')
-    curr_size.val('')
-    qtyBox.removeClass('filled')
-    qtyBox.val('')
-  })
+  if (Cook.phone) {
+    $('#btn-promo2').hide()
+    promissed = getBasketContent()
+    promissed.done(function (data) {
+      // $('#this-qty').text(data.this)
+      $('#this-qty').text('')
+      $('#basket-total').text(data.total)
+      let curr_size = $('#product-selected')
+      let qtyBox = $('#quantity')
+      curr_size.removeClass('filled')
+      curr_size.val('')
+      qtyBox.removeClass('filled')
+      qtyBox.val('')
+    })
+  } else {
+    flashMessage(
+      'авторизуйтесь, чтобы получить промокод, добавлять товар в корзину, или покупать в один клик',
+      false,
+      flashTime
+    )
+  }
 }
 
 // select size and quantity for "one click" and for "add to basket"
@@ -113,9 +128,7 @@ $('.column').click(function () {
     thisColor = color
     qtyBox.val(1)
     let data = getItemData('sizeQuantities')
-
-    console.log(data, 'from getItemData')
-
+    // console.log(data, 'from getItemData')
     alreadyInBasket(data)
   }
 })
@@ -145,7 +158,6 @@ $('.color').click(function () {
 
 // change active color and main picture
 $('.image-icons').click(function () {
-  // let thisColor, img
   let source = $(this).attr('src')
   let thisImage = source.split('/').slice(-1)[0]
   $('.sizes').removeClass('size_selected')
@@ -205,7 +217,16 @@ $('.basket-buy').click(function () {
 // add to basket procedure
 $('#addBasket').click(function () {
   if (sizeSelected()) {
+    let max = $('.quantities.size_selected').text() - $('#this-qty').text()
+    let qtyAdded = $('#quantity').val()
+    if (qtyAdded > max) {
+      flashMessage('Превышено максимальное количество', false, flashTime)
+      $('#quantity').val(0)
+      return false
+    }
     let data = getItemData('insert')
+    let qty = data.qty
+    // console.log(qty, ' added to basket')
     promissed = addToBasket(data)
     promissed.done(function (data) {
       if (data.error) {
@@ -214,7 +235,7 @@ $('#addBasket').click(function () {
         // alert_general.css('display', 'flex')
         return
       } else {
-        flashMessage(`в корзину добавлено: x ед товара`, true)
+        flashMessage(`в корзину добавлено: ${qtyAdded} ед товара`, true)
         document.querySelector('#this-qty').innerHTML = data.this
         document.querySelector('#basket-total').innerHTML = data.total
       }
@@ -279,12 +300,14 @@ function getItemData (proc) {
     uuid: Cook.Session,
     procName: proc
   }
+  // console.log(user, ' from getItemdata, user')
   item = {
     styleid: styleid,
     color: thisColor,
     size: size,
     qty: $('#quantity').val()
   }
+  // console.log(item, ' from getItemdata, item')
   itemData = [user, item]
   return itemData
 }
@@ -301,6 +324,9 @@ function addToBasket (arg) {
 
 function getCookies () {
   let Cookies = {}
+  if (document.cookie == '') {
+    Cookies['cookies'] = 'no coockies'
+  }
   document.cookie.split('; ').forEach(el => {
     el = el.replaceAll('"', '')
     c = el.split('=')
@@ -333,6 +359,7 @@ function paymentLink (args) {
     dataType: 'json',
     success: function (data, state) {
       window.location.href = data
+      console.log(data)
     },
     error: function (err) {
       console.log(err.responseText, ': error ', err) // <-- printing error message to console
@@ -348,7 +375,7 @@ function alreadyInBasket (arg) {
     dataType: 'json',
     success: function (data, state) {
       data = data == 'None' ? 0 : data
-      console.log(data)
+      // console.log(data)
 
       document.querySelector('#this-qty').innerHTML = data.this
       document.querySelector('#basket-total').innerHTML = data.total

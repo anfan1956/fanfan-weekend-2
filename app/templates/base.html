@@ -22,10 +22,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/nav.css">
-    <link rel="stylesheet" href="/static/CSS/main.css">
-    <link rel="stylesheet" href="/static/CSS/product.css">
-
+    <!-- <link rel="stylesheet" href="/static/css/nav.css"> -->
+    <link rel="stylesheet" href="{{url_for('static', filename='/css/nav.css')}}">
 
     <title>{{title}}</title>
     {% endblock %}
@@ -36,7 +34,7 @@
         <div class="top">
             <a href="#" class="menu-icon"><i class="material-icons">dehaze</i></a>
         </div>
-        <div class="logo"><a href="https://fanfan.store">
+        <div class="logo"><a href="/home">
                 <img class="logo-image" src="/static/images/ФАНФАН_WEEKEND.svg" alt="">
             </a></div>
         {% block content -%}
@@ -48,11 +46,8 @@
                 {%endfor%}
             </div>
             <div class="menu-right">
-                <!-- <a class="item-menu" href="/promocode">
-                        <span style="color:white"> - %</span>Промокод</a> -->
-                <a class="item-menu-right" href="/register" id="checkout">Выйти</a>
-                <!-- <a class="item-menu-right" href="/register" id="acive-phone"></a> -->
-                <a href="/register"><img id="incognito" src="../static/images/incog6.svg"></a>
+                <a class="item-menu-right" href="/register2" id="checkout">Выйти</a>
+                <a href="/register2"><img id="incognito" src="../static/images/incog6.svg"></a>
             </div>
         </nav>
     </header>

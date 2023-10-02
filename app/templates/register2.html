@@ -14,9 +14,9 @@
             Авторизуйтесь по телефону, для того, чтобы
         </h2>
         <ul class="authorize">
+            <li>управлять товаром в корзине</li>
             <li>размещать и оплачивать заказы</li>
             <li>регистрировать адрес доставки</li>
-            <li>добавлять товар в корзину</li>
             <li>получать промокоды на специальные акции и распродажи</li>
         </ul>
     </div>
@@ -29,33 +29,40 @@
                     <span class="area-code" id="phone-span">+7
                         <input class="input" type="tel" name="phone" id="phone" placeholder="(000) 000-00-00">
                     </span>
-                    <button class="change" type="submit" id="change-phone" onclick="resetPhoneCoockie()"> изменить
-                    </button>
                 </div>
-                <button type="button" class="btn" id="btn1">отправить</button>
+                <div class="btns">
+                    <button type="button" class="btn" id="btn1">отправить</button>
+                </div>
             </div>
+            <div class="btns"><button class="change" type="button" id="change-phone"> изменить</button></div>
             <div class="sms-wrap" id="sms-wrap">
                 <label class="label" for="sms-code" id="lbl-sms">код из смс</label>
-                <input class="input" type="number" name="sms-code" id="sms-code">
-                <button type="button" class="btn" id="btn2">отправить</button>
+                <div>
+                    <input class="input" type="number" name="sms-code" id="sms-code">
+
+                    <div class="btns"><button type="button" class="btn" id="btn2">отправить</button></div>
+                </div>
             </div>
         </div>
-        <!-- <div class="email-group"> -->
+
+        <!-- email group -->
         <div class="phone-group" id="email-group">
-            <div class="email-wrap">
-                <label class="label" for="email" id="lbl-email">электронная почта</label>
+            <div class="phone-wrap">
+                <label class="label" for="email" id="lbl-email">Электронная почта</label>
                 <div class="mail-input">
-                    <input class="input" type="email" name="email" id="email">
-                    <button class="change" type="button" id="change-mail">изменить</button>
+                    <input class="e-input" type="email" name="email" id="email">
                 </div>
-                <!-- <button type="button" class="mail-submit" id="mail-submit">отправить</button> -->
-                <button type="button" class="btn" id="mail-submit">отправить</button>
+
+                <div class="btns">
+                    <button type="button" class="btn" id="mail-submit">отправить</button>
+                </div>
             </div>
+            <div class="btns"><button class="change" type="button" id="change-mail">изменить</button></div>
             <!-- <div class="email-code-wrap"> -->
             <div class="sms-wrap" id="email-code-wrap">
                 <label class="label" for="email-code" id="lbl-email-code">код из email</label>
                 <input class="input" type="number" name="email-code" id="email-code">
-                <button type="button" class="btn" id="btn3">отправить</button>
+                <div class="btns"><button type="button" class="btn" id="btn3">отправить</button></div>
             </div>
         </div>
         <!-- <div class="mail-input"> -->
@@ -78,7 +85,9 @@
                 <input type="checkbox" id="promos" name="promos" value="">
                 <label for="promos">промо-акциях</label><br>
             </div>
-            <button class="change" type="button" id="prefs">записать</button>
+            <div class="btns">
+                <button class="change" type="button" id="prefs">записать</button>
+            </div>
         </div>
         <!-- </div> -->
     </form>
@@ -88,7 +97,6 @@
 
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
     crossorigin="anonymous"></script>
-<!-- <script src="/static/js/registration.js"></script> -->
 <script src="/static/js/register2.js"></script>
 <script src="/static/js/index.js"></script>
 {% endblock %}

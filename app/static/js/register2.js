@@ -26,7 +26,9 @@
     if coockie exists then 
     2 - as if sms message is correct
 */
-var phone, mode
+var phone,
+  mode,
+  flashTime = 2000
 // var data = {}
 $(document).ready(function () {
   phone = objCookies().phone
@@ -42,10 +44,28 @@ $(document).ready(function () {
     promissed.done(function (data, state) {
       if (state == 'success') {
         $('#email').val(data.email).prop('disabled', true)
+        // console.log(data)
+        getPrefs(data)
       }
     })
   }
   selectConf(mode)
+  $('#phone').keypress(function (e) {
+    if (e.which === 13) {
+      $('#btn1').click()
+    }
+  })
+  $('#sms-code').keypress(function (e) {
+    if (e.which === 13) {
+      $('#btn2').click()
+    }
+  })
+
+  $('#change-phone').click(function () {
+    resetPhoneCoockie()
+    location.reload(true)
+  })
+
   $('#btn1').click(function () {
     phone = thePhone($('#phone').val())
     $('#phone-span').text(phoneString(phone))
@@ -55,17 +75,28 @@ $(document).ready(function () {
     ajaxData.mode = 0
     registerData(ajaxData)
   })
+
   $('#btn2').click(function () {
     ajaxData.sms_entered = $('#sms-code').val()
     ajaxData.mode = 2
-
     promissed = registerData(ajaxData)
     promissed.done(function (data, state) {
       if (state == 'success') {
+        console.log(data) //убрать после доработки
+
         if (!data.error) {
           $('#email').val(data.email).prop('disabled', true)
+          let flMessage = 'Вы авторизованы.'
+          let phoneStr = phoneString(phone)
+          $('.item-menu-right').show().text(phoneStr)
+          $('#incognito').css('display', 'none')
+          if (data.promo) {
+            flMessage += ' На ваш телефон отправлен промокод ' + data.promo
+          }
+          flashMessage(flMessage, true, flashTime)
+          getPrefs(data)
         } else {
-          flashMessage('Неверный код СМС', false, 5000)
+          flashMessage('Неверный код СМС', false, flashTime)
           setTimeout(() => {
             location.reload(true)
           }, 5000)
@@ -82,10 +113,19 @@ $(document).ready(function () {
   })
 
   $('#mail-submit').click(function () {
-    $('#email-code-wrap').show()
-    $(this).hide()
-    $('#email-code').focus()
-    promissed = registerData(changeMail())
+    if ($('#email').val() == '') {
+      $('#email').val('почта не зарегистрирована')
+      console.log(changeMail((deleteMail = true)))
+      promissed = registerData(changeMail((deleteMail = true)))
+      return
+    } else {
+      console.log('else')
+
+      $('#email-code-wrap').show()
+      $(this).hide()
+      $('#email-code').focus()
+      promissed = registerData(changeMail((deleteMail = false)))
+    }
   })
 
   $('#btn3').click(function () {
@@ -93,12 +133,12 @@ $(document).ready(function () {
     promissed.done(function (data, state) {
       if (state == 'success') {
         if (!data.error) {
-          flashMessage('почта обновлена', true, 5000)
+          flashMessage('почта обновлена', true, flashTime)
           mode = 2
           selectConf(mode)
           $('#email').prop('disabled', true)
         } else {
-          flashMessage(data.error, false, 5000)
+          flashMessage(data.error, false, flashTime)
         }
       }
     })
@@ -109,14 +149,27 @@ $(document).ready(function () {
     promissed.done(function (data, state) {
       if (state == 'success') {
         if (!data.error) {
-          flashMessage('настройки записаны', true, 5000)
+          flashMessage('настройки оповещений записаны', true, flashTime)
         } else {
-          flashMessage(data.error, false, 5000)
+          flashMessage(data.error, false, flashTime)
         }
       }
     })
   })
 })
+
+function getPrefs (arg) {
+  $('input[type=checkbox]').each(function () {
+    var d = arg.length
+    for (var d in arg) {
+      if (d == $(this).prop('name')) {
+        $(this).prop('checked', arg[d])
+        // console.log(d, arg[d])
+      }
+    }
+    // console.log($(this).prop('name'), data.promos)
+  })
+}
 
 function selectConf (mode) {
   switch (mode) {
@@ -165,11 +218,19 @@ function registerData (arg) {
   })
 }
 
-function changeMail () {
+function changeMail (deleteMail) {
+  console.log('deleteMail = ', deleteMail)
+
   let changeMailData = {
     mode: 3,
-    phone: thePhone($('#phone-span').text()),
-    email: $('#email').val()
+    phone: thePhone($('#phone-span').text())
+  }
+  if (deleteMail == false) {
+    changeMailData.email = $('#email').val()
+  } else {
+    deleteMessage = 'delete email'
+    changeMailData.mode = 2
+    changeMailData.deleteEmail = deleteMessage
   }
   return changeMailData
 }
@@ -184,14 +245,18 @@ function emailCode () {
   return emailCodeData
 }
 
-function prefsUpdate () {
+function prefsUpdate (deleteMail = false) {
   let prefData = {
-    mode: 5,
-    phone: thePhone($('#phone-span').text()),
-    receipts: $('#receipts').prop('checked'),
-    collections: $('#collections').prop('checked'),
-    sales: $('#sales').prop('checked'),
-    promos: $('#promos').prop('checked')
+    phone: thePhone($('#phone-span').text())
+  }
+  if (deleteMail == false) {
+    ;(prefData.mode = 5),
+      (prefData.receipts = $('#receipts').prop('checked')),
+      (prefData.collections = $('#collections').prop('checked')),
+      (prefData.sales = $('#sales').prop('checked')),
+      (prefData.promos = $('#promos').prop('checked'))
+  } else {
+    prefData.deleteMail = deleteMail
   }
   return prefData
 }

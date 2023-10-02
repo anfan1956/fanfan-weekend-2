@@ -1,8 +1,17 @@
+.button-promo {
+  margin: 0.3rem 2rem;
+  padding: 0.5rem 2rem;
+  height: fit-content;
+  background: var(--blueBack);
+  border: 1px solid var(--blueForgr);
+  border-radius: 4px;
+  box-shadow: 2px 2px 2px 2px rgb(235, 235, 235);
+}
 .get-code {
   display: flex;
-  padding: 1rem 0;
+  justify-content: space-between;
   font-weight: 500;
-  gap: 1rem;
+  margin-bottom: 1rem;
   /* border: 1px solid red; */
 }
 
@@ -54,7 +63,10 @@
     padding: 0.5rem 1rem 0.5rem;
   }
   .si-list {
-    list-style-type: none;
+    padding-left: 2rem;
+    font-family: Mulish;
+    font-weight: 300;
+    /* list-style-type: none; */
     font-size: 16px;
     margin-top: 0.3rem;
   }

@@ -18,7 +18,6 @@
     </div>
 </div>
 
-
 <div class="product-container">
     <div class="basket-product">
         {% if basket_content %}
@@ -27,7 +26,6 @@
         <div id="orders" class="cell-basket">
 
             <div>
-                <div class="message blue">nothing </div>
                 <table class="table">
                     <h1>Содержимое корзины</h1>
                     <tr class="table-row">
@@ -40,32 +38,32 @@
                     {% for d in data %}
                     <tr class="table-row">
                         {% for i in d %}
-                        {% if loop.index <9 %} <td class="table-cell">
-                            {% if d[i] != '0%' %}
-                            {{d[i]}}
+                        {% if loop.index in(7, 8) %} <td class="table-cell">
+                            {% if d[i] != 0 %}
+                            {{'{:.0%}'.format(d[i])}}
                             {% else %}
                             <span style="margin-left: 1rem;">
                                 -
                             </span>
                             {% endif %}
-                            </td>
-                            {% elif loop.index == 9 %}
-                            <td class="number">
-                                <span class="minus">-</span>
-                                <input class="counter" type="text" value="{{d[i]}}" />
-                                <span class="plus">+</span>
-                            </td>
-                            {% else %}
-                            <td class="table-digit">
-                                {{d[i]}}
-                            </td>
-                            {% endif %}
-                            {% endfor %}
+                        </td>
+                        {% elif loop.index == 9 %}
+                        <td class="number">
+                            <span class="minus">-</span>
+                            <input class="counter" type="text" value="{{d[i]}}" />
+                            <span class="plus">+</span>
+                        </td>
+                        {% else %}
+                        <td class="table-digit">
+                            {{d[i]}}
+                        </td>
+                        {% endif %}
+                        {% endfor %}
 
-                            <td class="table-cell">
-                                <!-- <input type="checkbox" class="basket-checkbox" onclick="calculateSelected()"> -->
-                                <input type="checkbox" class="basket-checkbox">
-                            </td>
+                        <td class="table-cell">
+                            <!-- <input type="checkbox" class="basket-checkbox" onclick="calculateSelected()"> -->
+                            <input type="checkbox" class="basket-checkbox">
+                        </td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -103,7 +101,7 @@
                 <form id="addr" name="addr" class="addr">
                     <h1>Доставка</h1>
                     <div class="custom-select">
-                        <select name="delivery" id="delivery" onchange="deliveryAction()">
+                        <select class="delivery" name="delivery" id="delivery" onchange="deliveryAction()">
                             <option value="choose address">-- выбрать или добавить адрес доставки --
                             </option>
                             <option value="pickup-18">самовывоз: ТК "Дрим Хаус, магазин "ФАНФАН""</option>
