@@ -100,6 +100,8 @@
 @media (min-width: 992px) {
   .button-promo {
     /* margin: 0.3rem 2rem; */
+    font-size: 18px;
+    color: var(--blueForgr);
     margin: 1rem auto 0.3rem;
     padding: 1rem 2rem;
     height: fit-content;

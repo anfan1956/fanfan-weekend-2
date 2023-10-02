@@ -8,7 +8,7 @@ $(document).ready(function () {
       window.location.replace('/main')
     }, flashTime)
   } else {
-    $('#message').html('Промо-акция до <br> ' + ldate)
+    $('#message').html('Промо-акция до  ' + ldate)
   }
 })
 
