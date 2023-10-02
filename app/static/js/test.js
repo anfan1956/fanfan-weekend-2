@@ -1,3 +1,4 @@
+// referense how to JSON.parse in promo.js or in catalog.js
 function thePhone (arg) {
   let tp = arg
     .replaceAll(' ', '')

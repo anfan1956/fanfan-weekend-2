@@ -12,7 +12,7 @@ from random import randint
 
 parent = "/static/images/parent/"
 sms_messages = True
-# sms_messages = False
+sms_messages = False
 full = False
 
 

@@ -27,16 +27,6 @@ p {
   font-weight: bold;
   margin: 0.5rem auto;
 }
-.cell {
-  /* display: flex; */
-  position: relative;
-  /* border: 1px solid navy; */
-  align-items: center;
-  box-shadow: inset;
-  cursor: pointer;
-  margin: 0.7rem;
-  box-shadow: 2px 2px 3px 2px #e4e4e4;
-}
 
 .container {
   margin: 0;

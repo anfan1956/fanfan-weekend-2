@@ -1,11 +1,26 @@
+$(document).ready(function () {
+  let flashTime = 10000
+  if (ldate == 'past') {
+    $('#message').text('промоакций нет')
+    window.stop()
+    flashMessage('Сейчас нет активных промоакций', false, flashTime)
+    setTimeout(() => {
+      window.location.replace('/main')
+    }, flashTime)
+  } else {
+    $('#message').html('Промо-акция до <br> ' + ldate)
+  }
+})
+
+let ldate = JSON.parse(ddata.replaceAll('&#34;', '"'))[0].last_date
+console.log(ldate)
 let trace = window.location.search.split('&orderId')[0].split('?')
 let Order = new Object()
-
 let promo_button = document.querySelector('#btn-get-promo')
 let currentLocation = window.location.pathname
 
-const Cook = new Object()
-let promo = document.cookie.split('; ')
+Cook = new Object()
+promo = document.cookie.split('; ')
 promo.forEach(element => {
   i = element.split('=')
   Cook[i[0]] = i[1]

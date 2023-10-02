@@ -1,49 +1,31 @@
-<!DOCTYPE html>
 {% extends 'base.html' %}
 {% block content %}
 {{ super() }}
 <link rel="stylesheet" href="{{url_for('static', filename='/css/promo.css')}}">
-<link rel="stylesheet" href="{{url_for('static', filename='/css/catalog.css')}}">
+<!-- <link rel="stylesheet" href="{{url_for('static', filename='/css/catalog.css')}}"> -->
 <link rel="stylesheet" href="{{url_for('static', filename='/css/nav.css')}}">
 <link rel="stylesheet" href="{{url_for('static', filename='/css/main.css')}}">
 
 <div class="info-wrap">
     <div class="site-info">
-        <div class="get-code">
-            <div>
-                <li class="si-list">На этой странице представлены товары, которые можно купить с дополнительной скидкой
-                    по промокоду.</li>
-                <li class="si-list">Для того, чтобы получить промокод, нужно зарегистрироваться по номеру телефона.
-                </li>
-                <li class="si-list"> При покупке на сайте промо-скидка будет учтена автоматически.
-                </li>
-                <li class="si-list">
-                    Вы также получите СМС сообщение с промокодом для покупки в офлайн магазине.
-                </li>
-                <li class="si-list">Чтобы купить другие модели товара, перейдите в раздел “Каталог”.</li>
-            </div>
+        <div class="message">
+            <div id="message" class="info"></div>
             <button class="button-promo" id="btn-get-promo">получить промокод</button>
         </div>
-    </div>
-    <div class="info">
-        <div id="message" class="message"></div>
-        <script>
-            const date = '{{title}}'
-            let mes = document.querySelector("#message")
-            mes.innerText = date
-            if (date == 'Сейчас нет промо-акций') {
-
-                window.stop()
-                setTimeout(() => {
-                    window.location.replace('/main')
-                }, 15000)
-            } else {
-                html = mes.innerHTML
-                mes.innerHTML = "Промо-акция заканчивается "
-                mes.innerHTML += date
-            }
-        </script>
-        <!-- <p class="promo-info">Получите дополнительные скидки по промокоду!</p> -->
+        <div class="get-code">
+            <div>
+                <!-- <li class="si-list">На этой странице представлены товары, которые можно купить с дополнительной скидкой
+                    по промокоду.</li> -->
+                <!-- <li class="si-list">Для того, чтобы получить промокод, нужно зарегистрироваться по номеру телефона.
+                </li> -->
+                <li class="si-list"> Промо-скидка будет учтена автоматически.
+                </li>
+                <li class="si-list">
+                    Промокод по СМС покупки в офлайн.
+                </li>
+                <li class="si-list">Другие модели товара в разделе “Каталог”.</li>
+            </div>
+        </div>
     </div>
 </div>
 <section class="main">
@@ -92,7 +74,14 @@
 </section>
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
     crossorigin="anonymous"></script>
-<script src="/static/JS/promo.js"></script>
+<script>
+    const ddata = '{{title}}'
+
+</script>
+
+<script src="{{url_for('static', filename='/js/promo.js')}}"></script>
+<script src="{{url_for('static', filename='/js/index.js')}}"></script>
+
 {% endblock %}
 {% block footer %}
 {{ super() }}
