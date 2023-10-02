@@ -13,3 +13,4 @@ __py*
 app/templates/test.html
 main.py
 *newtest.py
+*test.py
