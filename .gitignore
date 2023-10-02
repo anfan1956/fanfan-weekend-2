@@ -12,3 +12,4 @@ __py*
 *test.html
 app/templates/test.html
 main.py
+*newtest.py
