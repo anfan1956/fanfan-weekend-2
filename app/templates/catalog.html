@@ -54,8 +54,7 @@
                         font-weight:300;
                         ">{{a.категория}}</span>
                     </p>
-                    <!-- below is a reference to original -->
-                    <!-- <a href="/product/{{a.модель}}">  -->
+
                     <a href="/product2/{{a.модель}}">
                         <img class="image" src="{{parent}}{{ a['модель'] }}/540/{{a.фото}}">
                     </a>
@@ -82,7 +81,6 @@
                         {% else %}
                         {{ "{:,}".format(a.цена)}}
                         {% endif %}
-
                     </p>
                 </div>
                 {% endif %}
@@ -99,5 +97,3 @@
         {% endblock %}
     </section>
 </div>
-
-</html>

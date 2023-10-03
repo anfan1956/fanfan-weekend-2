@@ -82,7 +82,7 @@ p {
   color: white;
   position: absolute;
   padding: 0.2rem;
-  transform: rotate(15deg);
+  transform: rotate(-15deg);
   /* border-radius: 50%; */
   font-size: 12px;
   top: 2.5rem;

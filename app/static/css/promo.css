@@ -88,6 +88,17 @@
     gap: 0.5rem;
     margin: 0.2rem;
   }
+  .promo-discount {
+    background-color: var(--promo);
+    color: white;
+    position: absolute;
+    padding: 0.2rem 0.2rem 0.2rem 0.5rem;
+    transform: rotate(-15deg);
+    border-radius: 4px;
+    font-size: 12px;
+    top: 3.5rem;
+    left: 1rem;
+  }
   .wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;

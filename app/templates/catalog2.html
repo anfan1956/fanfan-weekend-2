@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block content %}
+{{ super() }}
+
+<link rel="stylesheet" href="{{url_for('static', filename='/css/catalog2.css')}}">
+
+<div class="sorts-filters">
+    <select name="sort" id="criteria-select" class="sort-form" onchange="sort_by_cat()">
+        <option value="">-сорт по-</option>
+        <option value="бренд">бренду</option>
+        <option value="категория">категории</option>
+        <option value="price-asc">цене, вверх</option>
+        <option value="price-desc">цене, вниз</option>
+        <option value="novelty">по новизне</option>
+        <option value="discount">по скидкам</option>
+    </select>
+    <select name="brand" id="brand" class="filter-form">
+        <option value="brand">-все марки-</option>
+        {% for b in brands %}
+        <option value="{{b}}" class="brands">{{ b }}</option>
+        {% endfor %}
+    </select>
+    <select name="category" id="category" class="filter-form-cat">
+        <option value="category">-все категории-</option>
+        {% for c in cats %}
+        <option class="cats">{{ c }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="main-frame">
+    <div class="container" id="container">
+        {% for brand in brands %}
+        <div class="brand-wrapper">
+            <p class="criteria">{{brand}}</p>
+            <div class="wrapper">
+                {% for a in articles %}
+                {% if brand == a.бренд %}
+                <div class="cell">
+                    <p class="brand-title">
+                        {{ a.бренд }},
+                        <span class="cat" style="
+                        text-transform:lowercase;
+                        font-weight:300;
+                        ">{{a.категория}}</span>
+                    </p>
+                    <a href="/product2/{{a.модель}}">
+                        <img class="image" src="{{parent}}{{ a['модель'] }}/540/{{a.фото}}">
+                    </a>
+                    {% if a.скидка > 0 %}
+                    <div class="discount">
+                        - {{ "{:,.0%}".format(a.скидка) }}
+                    </div>
+                    {% endif %}
+                    {% if a.промо_скидка > 0 %}
+                    <div class="promo-discount">
+                        - {{ "{:,.0%}".format(a.промо_скидка) }}
+                    </div>
+                    {% endif %}
+                    <p class="details">артикул: {{ a.артикул }}</p>
+                    <p class="details">модель: {{ a.модель }}</p>
+                    <p class="details">
+                        {% if a.скидка + a.промо_скидка > 0 %}
+                        цена:<s>{{ "{:,}".format(a.цена)}}</s>
+                        <span style="color:red">
+                            {{ "{:,.0f}".format(a.цена*(1-a.промо_скидка)*(1 - a.скидка))}}
+                        </span>
+                        {% else %}
+                        {{ "{:,}".format(a.цена)}}
+                        {% endif %}
+                    </p>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+
+<script>
+    let p = '{{articles}}'
+    let parent = '{{parent}}'
+</script>
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
+    crossorigin="anonymous"></script>
+<script src="{{url_for('static', filename='/js/catalog2.js')}}"></script>
+<script src="{{url_for('static', filename='/js/index.js')}}"></script>
+
+{% endblock %}

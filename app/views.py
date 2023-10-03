@@ -12,7 +12,7 @@ from random import randint
 
 parent = "/static/images/parent/"
 sms_messages = True
-sms_messages = False
+# sms_messages = False
 full = False
 
 
@@ -230,6 +230,20 @@ def catalog():
                "cats": cats,
                "menu": menu()}
     return render_template('catalog.html', **content)
+
+
+@app.route('/catalog2')
+def catalog2():
+    articles = art_display('/catalog', 0, False)
+    brands = sorted({a['бренд'] for a in articles})
+    cats = sorted({a['категория'] for a in art_display('/catalog', 0)})
+    content = {"title": "Каталог товаров",
+               "parent": parent,
+               "articles": articles,
+               "brands": brands,
+               "cats": cats,
+               "menu": menu()}
+    return render_template('catalog2.html', **content)
 
 
 @app.route("/shops")
