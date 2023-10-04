@@ -246,20 +246,36 @@ def product2(styleid):
     this_styleid = i.get('styleid')
     if this_styleid == 'not available':
         abort(404)
-    print(request.path)
+    print(request.path, request.method)
     sql = f"select web.product_({styleid})"
     big_data = json.loads(s(sql))
-    # print(big_data, type(big_data))
     data = big_data[0]
-    # print(f'data = big_data[0] {data}')
     content = {
         "menu": menu(),
         "parent": parent,
-        # "data": style_data(styleid),
         "data": data,
         "last_date": finish_date()
     }
     return render_template('product2.html', **content)
+
+
+@app.route('/productS2/<styleid>', methods=['GET', 'POST'])
+def productS2(styleid):
+    i = inv_set(styleid)[0]
+    this_styleid = i.get('styleid')
+    if this_styleid == 'not available':
+        abort(404)
+    print(request.path, request.method)
+    sql = f"select web.product_({styleid})"
+    big_data = json.loads(s(sql))
+    data = big_data[0]
+    content = {
+        "menu": menu(),
+        "parent": parent,
+        "data": data,
+        "last_date": finish_date()
+    }
+    return render_template('productS2.html', **content)
 
 
 @app.route('/catalog')

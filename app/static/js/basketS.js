@@ -11,7 +11,6 @@ var checks = document.querySelectorAll('.basket-checkbox')
 var tr = document.querySelectorAll('tr')
 
 var fields = ['styleid', 'color', 'size', 'price', 'discount', 'promo']
-h_length = headers.length
 
 let obj = []
 const Cook = getCookies()

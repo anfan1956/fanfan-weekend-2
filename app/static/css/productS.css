@@ -1,0 +1,39 @@
+* {
+  font-family: Mulish;
+  font-size: 12px;
+}
+
+body {
+  padding-bottom: 30rem;
+}
+@media (max-width: 768px) {
+  .close {
+    /* position: absolute; */
+    font-size: 18px;
+    top: 10rem;
+    left: 5rem;
+    cursor: pointer;
+  }
+  .modal-img {
+    /* position: absolute; */
+    width: 30%;
+  }
+  .my-modal {
+    position: relative;
+    margin: 0 auto;
+    display: none;
+    width: 80%;
+    height: 20rem;
+    border: 1px solid red;
+    z-index: 100;
+    background: red;
+  }
+  .product-container {
+    padding-bottom: 20rem;
+  }
+
+  .product-img {
+    width: 60%;
+    cursor: pointer;
+  }
+}
