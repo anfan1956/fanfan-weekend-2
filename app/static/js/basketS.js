@@ -3,41 +3,12 @@ $(function () {
   calcTotals()
 })
 
-$(function getImage () {
-  $('tr').each(function () {
-    $(this).click(function () {
-      let photo = $(this).find('td').eq(11).text().trim('\n')
-      let path = $(this).find('td').eq(1).text().trim('\n')
-
-      let img = 'static/images/parent/' + path + '/800/' + photo
-      if (photo == 'None') {
-        img = 'static/images/error4.svg'
-      }
-      $('.basket').css('background-image', 'url(' + img + ')')
-    })
-  })
-})
-
 var pcsSelected
 var totalSelected
 var activeColor = '#b2ffe3'
 var basketIcon = '../static/images/basket.svg'
 var checks = document.querySelectorAll('.basket-checkbox')
 var tr = document.querySelectorAll('tr')
-
-var headers = [
-  'brand',
-  'styleid',
-  'category',
-  'color',
-  'size',
-  'price',
-  'discount',
-  'promo',
-  'customerDiscount',
-  'qty',
-  'sign'
-]
 
 var fields = ['styleid', 'color', 'size', 'price', 'discount', 'promo']
 h_length = headers.length
@@ -72,31 +43,48 @@ function selectAll () {
 }
 
 function calcSelected () {
+  let inv = []
   let selected = {}
   let pcs = 0,
     amount = 0
   $('.basket-checkbox').each(function () {
     if ($(this).is(':checked')) {
+      let product = {}
+      let $parent = $(this).closest('.product')
       amount += parseInt(
-        $(this)
-          .closest('.product')
-          .find('.num1')
-          .text()
-          .split(': ')[1]
-          .replaceAll(',', '')
+        $parent.find('.num1').text().split(': ')[1].replaceAll(',', '')
       )
-      pcs += parseInt(
-        $(this).closest('.product').find('.pcs').text().split(': ')[1]
+      pcs += parseInt($parent.find('.pcs').text().split(': ')[1])
+      product.styleid = $parent.find('.model').text().split(': ')[1]
+      product.color = $parent.find('.color').text().split(': ')[1]
+      product.size = $parent.find('.size').text().split(': ')[1]
+      product.price = parseInt(
+        $parent.find('.price').text().replaceAll(',', '')
       )
+      discount = $parent.find('.discount').text().split(': -')[1]
+      product.discount =
+        discount != undefined ? discount.replaceAll('%', '') / 100 : 0
+      promo = $parent.find('.promo').text().split(': -')[1]
+      product.promo = promo != undefined ? promo.replaceAll('%', '') / 100 : 0
+      product.qty = $parent.find('.qty').text().split(': ')[1]
+      product.total = parseInt(
+        product.price *
+          (1 - product.discount) *
+          (1 - product.promo) *
+          product.qty
+      )
+      inv.push(product)
     }
   })
   selected.amount = amount
   selected.pcs = pcs
+  inv.unshift(selected)
+  console.log(inv)
   let toPay = amount.toLocaleString('us')
   pcs = pcs.toLocaleString('us')
   $('#toPay').text(toPay)
   $('#qty').text(pcs)
-  //   return selected
+  return inv
 }
 
 function clearSelected () {
@@ -122,13 +110,26 @@ function openProductPage (arg) {
 // will goto the /promo with parameters and will initialize the "order_status_site" procedure upon load
 
 // !!!!!!! will have to finish delivery logs for the web.reservation_json proc !!
-function buySelected (inv, spotid, pickupid, orderTotal) {
-  // calculateTotals()
-  thisPhone.spotid = spotid
-  thisPhone.pickupid = pickupid
+function buySelected () {
+  let delivery = $('#delivery option:selected')
+  if (delivery.val() == 'choose address') {
+    flashMessage('нужно выбрать способ доставки')
+    return false
+  }
+  if ($.isNumeric(delivery.val())) {
+    spotid = delivery.val()
+    thisPhone.spotid = spotid
+  } else {
+    pickupid = delivery.val().split('-')[1]
+    thisPhone.pickupid = pickupid
+  }
+  let inv = calcSelected()
+  let orderTotal = inv[0].amount
   thisPhone.orderTotal = orderTotal
   thisPhone.procName = 'ON_SITE RESERVATION'
-  // console.log(inv)
+  console.log(thisPhone)
+  inv.shift()
+  console.log(inv)
   promissed = basketActions(inv)
   promissed.done(function (data, state) {
     if (state == 'success') {
@@ -145,30 +146,14 @@ function buySelected (inv, spotid, pickupid, orderTotal) {
   })
 }
 
-function calculateSelected (inv) {
-  var bdata
-  thisPhone.procName = 'calculate'
-  // let inv = selected()
-  // if (inv.error) {
-  //   return inv
-  // }
-  // console.log(inv)
-
-  promissed = basketActions(inv)
-  promissed.done(function (data) {
-    // document.querySelector('#toPay').innerHTML = data.toPay
-    // $('#buy-amount').text(data.toPay)
-    bdata = data
-    console.log(data)
-  })
-  return bdata
-}
-
+// new version actually working
 function removeSelected () {
   let action = 'remove'
   thisPhone.procName = action
   thisPhone.uuid = Cook.Session
-  let inv = selected('hide')
+
+  let inv = calcSelected()
+  inv.shift()
   console.log(inv)
   if (inv.error) {
     flashMessage('ничего не выбрано')
@@ -183,7 +168,6 @@ function removeSelected () {
       setTimeout(() => {
         location.reload(true)
       }, 1500)
-      // window.location.href = '/basket'
     }
   })
 }
@@ -225,7 +209,7 @@ function basketActions (arg) {
   }
   // do not insert thisPhone in the calling prcedure
   arg.unshift(thisPhone)
-  // console.log('basket actions:', arg)
+  console.log('basket actions:', arg)
   return $.ajax({
     type: 'POST',
     url: '/basket_actions',
@@ -274,16 +258,6 @@ $(function () {
   })
 })
 
-function removePhoto () {
-  $('tr').each(function (index) {
-    if (index == 0) {
-      $(this).find('.table-cell').eq(11).hide()
-    } else {
-      $(this).find('td').eq(11).hide()
-    }
-  })
-}
-
 // this function iterates throug the rows of a table and returns total
 function calcTotals () {
   let totals = {}
@@ -303,67 +277,7 @@ function calcTotals () {
 }
 
 // this function is to record changes to basket when + or - is clicked
+// to be created anew
 function submitChanges () {
-  newObj = []
   console.log(newObj)
-  thisPhone.action = 'submit'
-  newObj.push(thisPhone)
-  $('tr').each(function (index) {
-    if (index > 0) {
-      let test = {}
-      $qty = $(this).find('.counter').val()
-      $styleid = $(this).find('td').eq(1).text().trim('\n')
-      $color = $(this).find('td').eq(3).text().trim('\n')
-      $size = $(this).find('td').eq(4).text().trim('\n')
-      test.styleid = $styleid
-      test.color = $color
-      test.size = $size
-      test.qty = $qty
-      newObj.push(test)
-    }
-  })
-  console.log(newObj)
-}
-
-function flashConfirmation () {
-  let spotid, pickupid
-  let region = 'us'
-  let inv = selected()
-  console.log(inv)
-
-  console.log(
-    inv,
-    'flashConfirmation, function "selected()"',
-    pcsSelected,
-    totalSelected
-  )
-  if (inv.error) {
-    flashMessage('Нужно отметить то, что вы хотите купить', false)
-    return
-  }
-  let delivery = $('#delivery option:selected')
-  if (delivery.val() == 'choose address') {
-    flashMessage('нужно выбрать способ доставки')
-    return
-  }
-  $('#buy-amount').text(
-    totalSelected.toLocaleString(region, {
-      maximumFractionDigits: 0
-    })
-  )
-  $('#buy-qty').text(pcsSelected)
-
-  $('.confirmation-message').slideDown(250)
-  $('#cancel').click(function () {
-    $('.confirmation-message').slideUp(250)
-  })
-  $('#make-payment').click(function () {
-    $('.confirmation-message').slideUp(500)
-    if ($.isNumeric(delivery.val())) {
-      spotid = delivery.val()
-    } else {
-      pickupid = delivery.val().split('-')[1]
-    }
-    buySelected(inv, spotid, pickupid, totalSelected)
-  })
 }

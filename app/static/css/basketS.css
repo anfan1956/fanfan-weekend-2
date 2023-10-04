@@ -51,6 +51,15 @@ body {
     padding: 1rem;
     justify-content: space-around;
   }
+  .checked {
+    flex: 3;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+    background-color: rgb(237, 255, 222);
+    /* background-color: bisque; */
+    /* justify-content: space-around; */
+  }
   .crossed {
     text-decoration: line-through;
   }
@@ -63,7 +72,9 @@ body {
     width: 90%;
     margin: 0rem 1rem;
   }
-  .discount {
+
+  .discount,
+  .promo {
     color: red;
   }
 
@@ -90,10 +101,16 @@ body {
   .img {
     width: 100%;
   }
+  .in-basket {
+    flex: 1;
+  }
   .info {
     text-transform: lowercase;
     /* padding-top: 0.5em; */
     margin: 0;
+  }
+  .info.size {
+    text-transform: capitalize;
   }
   .pcs,
   .info-num {
@@ -142,11 +159,16 @@ body {
     background: rgb(237, 255, 222);
     border-left: 2px solid rgba(56, 141, 53, 0.2);
   }
+  .total {
+    padding-left: 0.2rem;
+    border-left: 2px solid var(--passiveMenu);
+  }
   .totals {
+    display: flex;
     font-weight: 700;
     margin: 1rem 1rem;
     padding: 0.5rem 0.5rem;
-    display: flex;
+    gap: 2rem;
     justify-content: space-between;
     border: 1px solid var(--passiveMenu);
   }
