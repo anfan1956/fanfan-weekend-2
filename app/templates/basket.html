@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-<!-- <link rel="stylesheet" href="../static/CSS/basket.css"> -->
 <link rel="stylesheet" href="{{url_for('static', filename='/css/basket.css')}}">
 
 {{ super() }}
@@ -71,7 +70,10 @@
             <div class="totals">
                 <div class="total">
                     <h1>Стоимость товара в корзине:</h1>
-                    <h1><span class="span-totals" id="total">100 руб</span></h1>
+                    <h1><span class="span-totals" id="total">100
+                        </span></h1>
+                    руб
+
                 </div>
                 <div class="total">
                     <h1>Штук:</h1>

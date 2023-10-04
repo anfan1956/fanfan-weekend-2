@@ -12,7 +12,7 @@ from random import randint
 
 parent = "/static/images/parent/"
 sms_messages = True
-# sms_messages = False
+sms_messages = False
 full = False
 
 
@@ -29,6 +29,50 @@ def landing():
     # return '<h1> Hi, it is home</h1>'
     return redirect(url_for("promo"))
 
+
+@app.route("/basketS")
+def basketS():
+    print(f"request.path: {request.path}, request.method: {request.method}")
+    phone = request.cookies.get('phone')
+    content = {
+        'menu': menu()
+    }
+    content = {"title": "КОРЗИНА", "menu": menu()}
+    if not phone:
+        res = make_response(redirect(url_for('register2', menu=menu())))
+        res.set_cookie("currentLocation", request.path)
+        return res
+    sql = f"select web.delivery_addr_js_('{phone}')"
+    print(sql)
+    addr_list = json.loads(s(sql))
+    # print(f'addr_list: {addr_list}, {type(addr_list)}')
+    if request.method == 'GET':
+        # print(f"request.cookies.get: {phone}")
+        # print(f"request.args: {request.args}")
+        address = request.args.get("deliverTo")
+        content['deliverTo'] = address
+        content['addrData'] = addr_list
+        print('flag 1')
+    sql = f"select web.basketContent_('{phone}')"
+    print(f"sql:  {sql}")
+    data = s(sql)
+    data = json.loads(data)
+    data_0 = data[0]
+    print(data_0)
+    basket_content = data_0.get('корзина')
+    sql = f"select cust.basket_totals_json('{phone}')"
+    print(sql)
+    basket_totals = json.loads(s(sql))[0]
+    totals = basket_totals.get('итого')
+    if not basket_content:
+        headers = list(data[0].keys())
+        content['headers'] = headers
+        content['data'] = data
+        if basket_totals:
+            content['totals'] = basket_totals
+    else:
+        content['basket_content'] = basket_content
+    return render_template('basketS.html', **content)
 
 @app.route("/basket")
 def basket():

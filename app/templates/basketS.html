@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<link rel="stylesheet" href="{{url_for('static', filename='/css/basketS.css')}}">
+{{ super() }}
+
+
+<div class="basket-product">
+    {% if basket_content %}
+    <h1>Корзина: {{basket_content}} - checking media</h1>
+    {% else %}
+    <div id="orders" class="cell-basket">
+    </div>
+    {% endif %}
+</div>
+<div class="housekeeping">
+    <div class="headers">
+        <div class="heading">Доставка</div>
+        <div class="heading">Корзина</div>
+    </div>
+    <div id="addr" name="addr" class="addr">
+        <div class="custom-select">
+            <select class="delivery" name="delivery" id="delivery" onchange="deliveryAction()">
+                <option value="choose address">-- выбрать или добавить адрес доставки --
+                </option>
+                <option value="pickup-18">самовывоз: ТК "Дрим Хаус, магазин "ФАНФАН""</option>
+                <option value="pickup-25">самовывоз: ТК "Крокус Сити Молл", магазин "ФАНФАН"</option>
+                <option value="pickup-27">самовывоз: ТК "Крокус Сити Молл", магазин "WEEKEND"</option>
+                <option value="new-address">добавить адрес</option>
+                {% if addrData %}
+                {% for a in addrData %}
+                <option value="{{a.spotid}}">{{a.address_string}}</option>
+                {% endfor %}
+                {% endif %}
+            </select>
+        </div>
+        <div>
+            <h1 class="address-warning">адрес доставки не выбран</h1>
+        </div>
+    </div>
+</div>
+{% for d in data %}
+<div class="product">
+    <div class="image">
+        <img class="img" src="/static/images/parent/{{d.модель}}/120/{{d.photo}}">
+    </div>
+    <div class="product-info">
+        <h1>{{d.марка}}</h1>
+        <p class="info">{{d.категория}}</p>
+        <p class="info">модель: {{d.модель}}</p>
+        <p class="info">цв.: {{d.цвет}}</p>
+        <p class="info">размер:
+            <span style="text-transform: capitalize; ">
+                {{d.размер}}
+            </span>
+        </p>
+    </div>
+    <div class="checks">
+        <input type="checkbox" class="basket-checkbox">
+        <!-- <span class="minus">-</span>
+        <span class="plus">+</span> -->
+        <div> &nbsp;</div>
+        <div style="cursor:pointer"> + &#8593;</div>
+        <div> &nbsp;</div>
+        <div style="cursor:pointer"> - &#8595;</div>
+    </div>
+
+    <div class="product-numbers">
+        <h1 class="num">Цена </h1>
+        {% if d.промо + d.скидка > 0 %}
+        <p class="info-num crossed">{{'{:,}'.format(d.цена|int)}}</p>
+        {% else %}
+        <p class="info-num">{{'{:,}'.format(d.цена|int)}}</p>
+        {% endif %}
+        {% if d.скидка > 0 %}
+        <p class="info-num discount">скидка: -{{'{:.0%}'.format(d.скидка)}}</p>
+        {% endif %}
+        {% if d.промо > 0 %}
+        <p class="info-num discount">промо: -{{'{:.0%}'.format(d.промо)}}</p>
+        {% endif %}
+        <p class="info-num">
+            {% if d.промо + d.скидка > 0 %}
+            {{ '{:,}' .format((
+            d.цена * (1 - d.промо)*(1 - d.скидка))|int)}}
+            {% endif %}
+        </p>
+        <p class="pcs">штук: {{d.количество}}</p>
+        <h1 class="num1">Всего: {{
+            '{:,}' .format((
+            d.количество * d.цена * (1 - d.промо)*(1 - d.скидка))|int)}}</h1>
+    </div>
+</div>
+{% endfor %}
+<div class="totals">
+    <div class="total">
+        <h1>В корзине:</h1>
+        <h1><span class="span-totals" id="total"></span></h1>р.
+    </div>
+    <div class="total">
+        <h1>Штук:</h1>
+        <h1><span class="span-totals" id="qty"></span></h1>
+    </div>
+    <div class="total">
+        <h1>К оплате:</h1>
+        <h1><span class="span-totals" id="toPay"></span>р.</h1>
+    </div>
+</div>
+<div class="buttons-area">
+    <button class="button blue" type="button" id="select-all" onclick="selectAll()">
+        отметить все &#x2714;
+    </button>
+    <button class="button sand" type="button" id="clear-selected" onclick="clearSelected()">
+        снять &#x2714;
+    </button>
+    <button class="button green" type="button" id="buy-selected" onclick="flashConfirmation()">
+        купить &#x2714;
+    </button>
+    <button class="button red" type="button" id="remove-selected" onclick="calcSelected()">
+        удалить &#x2714;
+    </button>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
+    crossorigin="anonymous">
+    </script>
+<script>
+</script>
+
+<script src="/static/js/basketS.js"></script>
+<script src="/static/js/index.js"></script>
+
+{% endblock %}

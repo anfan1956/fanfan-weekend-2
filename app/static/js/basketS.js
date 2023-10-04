@@ -1,17 +1,6 @@
-if (window.matchMedia('(max-width: 768px)').matches) {
-  console.log('switch to different location')
-  window.location.href = '/basketS'
-
-  // do functionality on screens smaller than 768px
-}
-
-$(document).ready(function () {
-  $('body').css('opacity', 1)
-})
 $(function () {
-  removePhoto()
-  calculateTotals()
-  justify()
+  $('.basket-checkbox').click(calcSelected)
+  calcTotals()
 })
 
 $(function getImage () {
@@ -59,26 +48,6 @@ var thisPhone = {}
 thisPhone['phone'] = Cook.phone
 thisPhone['Session'] = Cook.Session
 
-tr.forEach(el => {
-  el.addEventListener('click', function (e) {
-    tr.forEach(element => {
-      element.style.backgroundColor = ''
-    })
-    el.style.backgroundColor = activeColor
-  })
-  el.addEventListener('dblclick', function (e) {
-    let obj = {}
-    el.style.backgroundColor = activeColor
-    le = el.children.length
-    for (let i = 0; i < le; i++) {
-      if (fields.includes(headers[i])) {
-        obj[headers[i]] = el.children.item(i).innerText
-      }
-    }
-    openProductPage(obj)
-  })
-})
-
 $('#delivery > option').each(function () {
   const $select = document.querySelector('#delivery')
   let search = window.location.search.split('=')
@@ -94,18 +63,47 @@ function selectAll () {
   checks.forEach(function (item) {
     item.checked = true
   })
-  calculateTotals()
-  $('tr').css({ backgroundColor: '' })
-  $('.basket').css('background-image', 'url(' + basketIcon + ')')
+  let totals = calcTotals()
+  let toPay = totals.amount.toLocaleString('us')
+  let pcs = totals.pcs.toLocaleString('us')
+  $('#toPay').text(toPay)
+  $('#total').text(toPay)
+  $('#qty').text(pcs)
+}
+
+function calcSelected () {
+  let selected = {}
+  let pcs = 0,
+    amount = 0
+  $('.basket-checkbox').each(function () {
+    if ($(this).is(':checked')) {
+      amount += parseInt(
+        $(this)
+          .closest('.product')
+          .find('.num1')
+          .text()
+          .split(': ')[1]
+          .replaceAll(',', '')
+      )
+      pcs += parseInt(
+        $(this).closest('.product').find('.pcs').text().split(': ')[1]
+      )
+    }
+  })
+  selected.amount = amount
+  selected.pcs = pcs
+  let toPay = amount.toLocaleString('us')
+  pcs = pcs.toLocaleString('us')
+  $('#toPay').text(toPay)
+  $('#qty').text(pcs)
+  //   return selected
 }
 
 function clearSelected () {
   checks.forEach(function (item) {
     item.checked = false
   })
-  calculateTotals()
-  $('tr').css({ backgroundColor: '' })
-  $('.basket').css('background-image', 'url(' + basketIcon + ')')
+  calcSelected()
 }
 
 function openProductPage (arg) {
@@ -188,47 +186,6 @@ function removeSelected () {
       // window.location.href = '/basket'
     }
   })
-}
-
-function selected (action) {
-  ;(pcsSelected = 0), (totalSelected = 0)
-  let obj1 = []
-  checks.forEach(function (item) {
-    if (item.checked) {
-      let obj = {}
-      el = item.closest('tr')
-      for (let i = 0; i < h_length; i++) {
-        if (fields.includes(headers[i])) {
-          obj[headers[i]] = el.children
-            .item(i)
-            .innerText.replaceAll('%', '')
-            .replaceAll(',', '')
-            .replaceAll('-', '')
-        }
-      }
-
-      let qty = parseInt(el.children.item(8).children[1].value)
-      obj.qty = qty
-      console.log(qty, 'obj.qty')
-      obj.discount = obj.discount / 100
-      obj.promo = obj.promo / 100
-      obj.total = qty * obj.price * (1 - obj.discount) * (1 - obj.promo)
-      console.log(obj.total)
-
-      totalSelected += obj.total
-      console.log(totalSelected, ' iter totalSelected')
-
-      pcsSelected += qty
-      obj1.push(obj)
-    }
-  })
-  if (obj1.length == 0) {
-    return {
-      error: 'nothing selected'
-    }
-  }
-  console.log(pcsSelected, totalSelected)
-  return obj1
 }
 
 function deliveryAction () {
@@ -317,12 +274,6 @@ $(function () {
   })
 })
 
-$(function () {
-  $('.basket-checkbox').on('click', function () {
-    calculateTotals()
-  })
-})
-
 function removePhoto () {
   $('tr').each(function (index) {
     if (index == 0) {
@@ -334,65 +285,21 @@ function removePhoto () {
 }
 
 // this function iterates throug the rows of a table and returns total
-function calculateTotals () {
-  $(function () {
-    let region = 'en-US'
-    var sum = 0
-    var pieces = 0
-    var sumChecked = 0
-    let discount, promo
-    //iterate through each row in the table
-    $('tr').each(function (index) {
-      $price = parseInt(
-        $(this).find('td').eq(5).text().replaceAll(',', '').replaceAll(' ', '')
-      )
-      let fmt = $price.toLocaleString(region, { maximumFractionDigits: 0 })
-      $(this).find('td').eq(5).text(fmt)
-      $qty = $(this).find('.counter').val()
-
-      discount = parseFloat($(this).find('td').eq(6).text().trim('\n'))
-      discount = isNaN(discount) ? 0 : discount / 100
-      promo = parseFloat($(this).find('td').eq(7).text().trim('\n'))
-      promo = isNaN(promo) ? 0 : promo / 100
-      $checked = $(this).find('.basket-checkbox').is(':checked')
-      if ($.isNumeric($price) && $.isNumeric(promo) && $.isNumeric(discount)) {
-        let delta = $price * $qty * (1 - promo) * (1 - discount)
-        let deltaChecked = $checked ? delta : 0
-        let piecesChecked = $checked ? $qty : 0
-        let fmt = delta.toLocaleString(region, {
-          maximumFractionDigits: 0
-        })
-        $(this).find('td').eq(9).text(fmt)
-        sum += delta
-        pieces += parseInt(piecesChecked)
-        sumChecked += deltaChecked
-      }
-    })
-    let fmt =
-      sum.toLocaleString(region, {
-        maximumFractionDigits: 0
-      }) + ' руб'
-    $('#total').text(fmt)
-    let fmtChecked =
-      sumChecked.toLocaleString(region, {
-        maximumFractionDigits: 0
-      }) + ' руб'
-    $('#toPay').text(fmtChecked)
-    $('#qty').text(pieces)
+function calcTotals () {
+  let totals = {}
+  let pcs = 0,
+    amount = 0
+  $('.num1').each(function () {
+    amount += parseInt($(this).text().replaceAll(',', '').split(': ')[1])
   })
-}
-
-// to justify the row in table , numbers and text
-function justify () {
-  $('tr').each(function (index) {
-    if (index > 0) {
-      for (let i = 5; i < 10; i++) {
-        $(this).find('.table-cell').eq(i).css({
-          'text-align': 'right'
-        })
-      }
-    }
+  $('.pcs').each(function () {
+    pcs += parseInt($(this).text().replaceAll(',', '').split(': ')[1])
   })
+  totals.amount = amount
+  totals.pcs = pcs
+  amount = amount.toLocaleString('us')
+  $('#total').text(amount)
+  return totals
 }
 
 // this function is to record changes to basket when + or - is clicked

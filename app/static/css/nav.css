@@ -1,5 +1,6 @@
 :root {
   --activeMenu: #e7ffc0;
+  --passiveMenu: #d2d6d6;
   --blueBack: #dbedfc;
   --lightblueBack: #f0f8ff;
   --blueForgr: #2f86c9;
@@ -12,6 +13,7 @@
   --neutral: #ffffff;
   --logoback: #f8de86;
   --mainBack: #fffae8;
+  --menuGreen: #556b2f;
   --promo: #9e12c9;
 }
 * {

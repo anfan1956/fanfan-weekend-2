@@ -1,10 +1,12 @@
 $(document).ready(function () {
-  $('body').on('click', '.top', function () {
-    $('nav.menu').toggleClass('menu_show')
-    setTimeout(function () {
+  $('body')
+    .css('opacity', 1)
+    .on('click', '.top', function () {
       $('nav.menu').toggleClass('menu_show')
-    }, 5000)
-  })
+      setTimeout(function () {
+        $('nav.menu').toggleClass('menu_show')
+      }, 5000)
+    })
   let menuItem
   menu = menu.replaceAll('&#39;', '"')
   menu = JSON.parse(menu)
