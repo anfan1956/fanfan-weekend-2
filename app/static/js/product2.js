@@ -1,12 +1,10 @@
-// if (window.matchMedia('(max-width: 768px)').matches) {
-//   console.log('switch to different location')
-//   let search = location.search
-//   let path = location.pathname.split('/')[2]
-//   window.location.href = '/productS2/' + path + search
-//   console.log(path + ', ' + location.search)
-
-//   // do functionality on screens smaller than 768px
-// }
+if (window.matchMedia('(max-width: 768px)').matches) {
+  console.log('switch to different location')
+  let search = location.search
+  let path = location.pathname.split('/')[2]
+  window.location.href = '/productS2/' + path + search
+  console.log(path + ', ' + location.search)
+}
 var data, items, mainColor, photo, images, styleid, water, size
 var styleid, Cook, thisColor, search, alert_message, alert_general
 var flashTime = 3000

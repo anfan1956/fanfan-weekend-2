@@ -2,17 +2,84 @@
   font-family: Mulish;
   font-size: 12px;
 }
-
 body {
   padding-bottom: 30rem;
 }
 @media (max-width: 768px) {
+  .brand {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .category {
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: lowercase;
+  }
+  .cell-product {
+    display: flex;
+    margin: 0 1rem auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgb(255, 231, 231);
+    box-shadow: 2px 2px 2px 2px rgb(209, 209, 209);
+  }
   .close {
     /* position: absolute; */
     font-size: 18px;
     top: 10rem;
     left: 5rem;
     cursor: pointer;
+  }
+  .details {
+    padding-top: 0.2rem;
+    padding-left: 1rem;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: lowercase;
+  }
+  .info {
+    position: absolute;
+    /* padding-left: 2rem; */
+    top: 1.5rem;
+    left: 2rem;
+    /* transform: translate(-25%, -25%); */
+    /* text-align: center; */
+  }
+  .prices {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    bottom: 1rem;
+    left: 2rem;
+  }
+  .product-details {
+    display: flex;
+    margin: 0 1rem auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    border: 1px solid rgb(255, 231, 231);
+    box-shadow: 2px 2px 2px 2px rgb(209, 209, 209);
+  }
+  .discount {
+    /* position: absolute;
+    bottom: 2.2rem;
+    left: 2rem; */
+  }
+  .promo {
+    /* position: absolute;
+    bottom: 1rem;
+    left: 2rem; */
+  }
+
+  .final-price {
+    position: absolute;
+    font-size: 14px;
+    top: 3rem;
+    right: 2rem;
+    transform: rotate(15deg);
+    /* transform: translate(-50%, -50%); */
   }
   .modal-img {
     /* position: absolute; */
@@ -28,12 +95,18 @@ body {
     z-index: 100;
     background: red;
   }
+  .product {
+    display: flex;
+    padding-top: 1rem;
+    flex-direction: column;
+    position: relative;
+  }
   .product-container {
     padding-bottom: 20rem;
   }
-
   .product-img {
-    width: 60%;
+    padding-top: 2rem;
+    width: 90%;
     cursor: pointer;
   }
 }

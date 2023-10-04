@@ -12,29 +12,41 @@
 
 <div class="product-container">
     <div class="product">
-        <div class="cell-product">
-            <div class="prod-title-sm">Бренд: {{data.brand}}</div>
-            {% if data.promo != 0 or data.discount != 0 %}
-            <div class="final-price">Конечная цена: <br> <span style="color:red;">
-                    {{ "{:,.0f}".format(data.price * (1 - data.promo)* (1-data.discount))}}
-                    руб! </span>
+        <div class="info">
+            <div class="brand">{{data.brand}}</div>
+            <div class="category">{{data.category}}</div>
+        </div>
+        {% if data.promo + data.discount != 0 %}
+        <div class="final-price">Конечная цена: <br> <span style="color:red;">
+                {{ "{:,.0f}".format(data.price * (1 - data.promo)* (1-data.discount))}}
+                руб! </span>
+        </div>
+        {% endif %}
+        <div class="prices">
+            <div class="price">цена: {{'{:,}'.format(data.price)}}</div>
+            {% if data.promo != 0 %}
+            <div class="promo">
+                промо: - {{ '{:.0%}'.format(data.promo) }}
             </div>
             {% endif %}
-            {% if data.promo > 0 %}
-            <div class="promo-discount-p">
-                промо: {{ '{:.0%}'.format(data.promo) }}
-            </div>
-            {% endif %}
-            <div id="watermark">
-                <img id="main" class="product-img" src="{{parent}}{{ data.styleid }}/800/{{data.photo}}">
-            </div>
-            {% if data.discount > 0 %}
-            <div class="discount item-p">
-                - {{ "{:,.0%}".format(data.discount) }}
+            {% if data.discount != 0 %}
+            <div class="discount">
+                скидка: - {{ "{:,.0%}".format(data.discount) }}
             </div>
             {% endif %}
         </div>
+        <div class="cell-product">
+            <img id="main" class="product-img" src="{{parent}}{{ data.styleid }}/800/{{data.photo}}">
+        </div>
     </div>
+    <div class="product">
+        <div class="product-details">
+            <div class="details">Модель: {{data.styleid}}</div>
+            <div class="details">Артикул: {{data.article}}</div>
+            <div class="details">Состав: {{data.composition}}</div>
+        </div>
+    </div>
+
 </div>
 
 
