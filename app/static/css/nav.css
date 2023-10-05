@@ -178,8 +178,11 @@ nav.menu > a {
   }
   .base-message {
     display: none;
-    margin-top: 0rem;
-    padding: 1rem;
+    position: fixed;
+    width: 100%;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    /* padding-top: 1rem; */
     font-size: 16px;
     font-weight: bold;
     color: var(--redForgr);
