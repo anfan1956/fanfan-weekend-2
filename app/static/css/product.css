@@ -606,15 +606,18 @@ span.area-code input {
     margin: 0 auto;
     padding: 0.5rem 2rem;
     border-radius: 4px;
+    cursor: pointer;
   }
   #back-to-shop.button-oneclick {
     background-color: #3089fd;
     margin-left: 1rem;
+    cursor: pointer;
   }
   .callmebutton3 {
     display: inline-flex;
     /* padding: 5.4rem 0.5rem; */
     width: 70%;
+    cursor: pointer;
   }
 
   .cb {

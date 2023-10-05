@@ -80,9 +80,11 @@ body {
     margin: 0 auto;
     padding: 0.5rem 0.5rem;
     border-radius: 4px;
+    cursor: pointer;
   }
   #back-to-shop.button-oneclick {
     background-color: #3089fd;
+    cursor: pointer;
     /* margin-left: 1rem; */
   }
 
