@@ -4,16 +4,16 @@ from app.functions import goods, inv_set, the_totals, calculate_webOrder, key_va
 from app.functions import delivery_data
 from app.Payments import pmt_link, order_status_site
 from app.send_sms import sms
+from app.site_settings import send_sms_messages, make_full_payment, parent
 from app.mails import fanfan_send_mail, mail_pmt_link, mail_sales_receipt
 from app.data import sql_query as s, sql_list, sql_fetch_list
 from flask import render_template, redirect, request, url_for, make_response, jsonify, flash, abort
 import json, re, uuid
 from random import randint
 
-parent = "/static/images/parent/"
-sms_messages = True
-sms_messages = False
-full = False
+parent = parent()
+sms_messages = send_sms_messages()
+full = make_full_payment()
 
 
 @app.route("/home")

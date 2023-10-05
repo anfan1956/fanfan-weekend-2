@@ -5,14 +5,17 @@ from app.data import sql_query as s, sql_fetch_list as f
 from app.email_mod import send_mail as mail
 import app.KKM_test as Kkm
 from app.send_sms import sms
-import asyncio
+from app.site_settings import alfa_url, return_url, alfa_token
 
 
-url = 'https://payment.alfabank.ru/payment/rest/register.do'
-token = 'nb9vb7d5g14af89m84n3vqohhb'
+# url = 'https://payment.alfabank.ru/payment/rest/register.do'
+# token = 'nb9vb7d5g14af89m84n3vqohhb'
 # returnUrl = 'http://fanfan.store:8082/promo?trace?'
-returnUrl = 'http://127.0.0.1:8000/promo?trace?'
 # returnUrl = 'http://fanfan.store:8082/basket?trace?'
+# returnUrl = 'http://127.0.0.1:8000/promo?trace?'
+url = alfa_url()
+token = alfa_token()
+returnUrl = return_url()
 
 
 def key_value(key, dictionary):
