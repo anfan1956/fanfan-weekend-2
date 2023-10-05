@@ -4,12 +4,6 @@
 <link rel="stylesheet" href="{{url_for('static', filename='/css/productS.css')}}">
 
 
-<div class="my-modal">
-    <img id="modal-img" class="modal-img" src="{{parent}}{{ data.styleid }}/800/{{data.photo}}">
-    <button class="close" type="button">close</button>
-</div>
-
-
 <div class="product-container">
     <div class="product">
         <div class="info">
@@ -23,28 +17,102 @@
         </div>
         {% endif %}
         <div class="prices">
-            <div class="price">цена: {{'{:,}'.format(data.price)}}</div>
-            {% if data.promo != 0 %}
-            <div class="promo">
-                промо: - {{ '{:.0%}'.format(data.promo) }}
+            <div class="testing">
+                <div class="price">цена: {{'{:,}'.format(data.price)}}</div>
+                {% if data.promo != 0 %}
+                <div class="promo">
+                    промо: - {{ '{:.0%}'.format(data.promo) }}
+                </div>
+                {% endif %}
+                {% if data.discount != 0 %}
+                <div class="discount">
+                    скидка: - {{ "{:,.0%}".format(data.discount) }}
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
-            {% if data.discount != 0 %}
-            <div class="discount">
-                скидка: - {{ "{:,.0%}".format(data.discount) }}
+            <!-- <div class="product"> -->
+            <div class="product-details2">
+                <div class="details">Модель: {{data.styleid}}</div>
+                <div class="details">Артикул: {{data.article}}</div>
+                <div class="details">Состав: {{data.composition}}</div>
             </div>
-            {% endif %}
+            <!-- </div> -->
         </div>
         <div class="cell-product">
             <img id="main" class="product-img" src="{{parent}}{{ data.styleid }}/800/{{data.photo}}">
         </div>
     </div>
     <div class="product">
-        <div class="product-details">
-            <div class="details">Модель: {{data.styleid}}</div>
-            <div class="details">Артикул: {{data.article}}</div>
-            <div class="details">Состав: {{data.composition}}</div>
+        <div class="icons">
+            {% for photo in data.photos.split(",") %}
+            <img class="image-icons" src="{{parent}}{{ data.styleid }}/800/{{photo}}">
+            {% endfor %}
         </div>
+    </div>
+    <div id="colors" class="colors">
+        <div class="left">Цвет: </div>
+        <div class="right">
+            {% for color in data.colors.split(",") %}
+            <div class="color">{{ color }}</div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="container-sizes">
+        <div class="left">
+            <div class="wrap">Разм:</div>
+            <div class="wrap">Кол.:</div>
+        </div>
+        <div class="right">
+            {% for size in data.sizes.split(",") %}
+            <div class="column">
+                <div class="sizes">{{size}}</div>
+                <div class="quantities">0</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="selection-group">
+        <input class="product-selected" id="product-selected" autocomplete="off"
+            placeholder="Выберите цвет и размер или позвоните">
+        <input class="product-qty" type="number" id="quantity" name="quantity" min="1" value="">
+    </div>
+
+    <div class="buttons-all-wrap">
+        <div class="btn-one-wrap">
+            <button class="basket-buy">купить в один клик </button>
+            <button class="basket-button" type="button" id="addBasket">добавить в корзину</button>
+        </div>
+        <div class="btn-one-wrap">
+            <button class="button-promo2" id="btn-promo2">получить промокод </button>
+            <button class="button-green" id="go-to-basket">перейти в корзину </button>
+        </div>
+    </div>
+    <div class="basket-right">
+        {% if basket_total != 0 %}
+        <div class="basket-info">
+            <span style="font-weight: bold;
+            font-size:1.2em;">
+                В корзине:
+            </span>
+            <br>
+            этого товара:
+            <span class="this-in-basket" id="this-qty">
+            </span>
+            <br>
+            Всего:
+            <span class="total-in-basket" id="basket-total"> </span>
+        </div>
+        {% endif %}
+    </div>
+
+
+
+    <div class="cb2">
+        <a href="javascript:;" onclick="callmeup(13244);" class="js-callme-modal-1 callmebutton3" id="callButton">
+            Обратный звонок
+            <!-- <img src="/static/images/phone_4.png" class="phone-icon"> -->
+        </a>
     </div>
 
 </div>
@@ -58,6 +126,10 @@
     </script>
 <script src="/static/js/productS2.js"> </script>
 <script src="/static/js/index.js"></script>
-<script>const allData = "{{data}}"</script>
+<script>
+    const allData = "{{data}}"
+    // console.log(allData);
+</script>
+
 
 {% endblock %}
