@@ -53,6 +53,9 @@ body {
     width: 100%;
     cursor: pointer;
   }
+  .basket-info {
+    margin-left: 1rem;
+  }
   .brand {
     font-size: 14px;
     font-weight: 700;
