@@ -68,6 +68,8 @@ function getMainColor () {
 }
 
 function render (color, items) {
+  console.log(items, 'from render proc')
+
   let columns = $('.column')
   let colors = $('.color')
   let sizes = $('.sizes')
@@ -81,10 +83,11 @@ function render (color, items) {
         // console.log(items.qtys)
         items.qtys.forEach(element => {
           if (element.size == $(this).text()) {
-            // console.log(element.size, $(this).text())
+            // console.log(element.size, $(this).text(), ' - just checking qtys')
 
             columns.eq(index).addClass('col-color')
             qtys.eq(index).text(element.qty)
+            // console.log(element.qty)
           }
         })
       })

@@ -91,6 +91,17 @@ body {
     cursor: pointer;
     background-color: lightgoldenrodyellow;
   }
+  .color-sizes,
+  .color-qtys {
+    height: 12px;
+    text-decoration: line-through;
+    text-decoration-color: black;
+    text-decoration-thickness: 1px;
+  }
+  .column.col-color {
+    background: rgb(237, 255, 237);
+    text-decoration: none;
+  }
   .col-color {
     /* do not kill it */
   }
