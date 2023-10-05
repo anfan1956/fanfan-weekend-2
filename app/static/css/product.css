@@ -473,7 +473,7 @@ span.area-code input {
     flex-direction: column;
     gap: 0.5rem;
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 100; /* Sit on top */
     padding: 0.5rem 5rem;
     width: 800px;
     /* height: auto; */

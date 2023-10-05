@@ -6,6 +6,37 @@ body {
   padding-bottom: 30rem;
 }
 @media (max-width: 768px) {
+  .alert {
+    display: none; /* Hidden by default */
+    /* display: block; */
+    position: fixed; /* Stay in place */
+    z-index: 100; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    /* left: 20px;
+    top: 3em; */
+    top: 40%;
+    left: 50%;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    width: 90%; /*Full width */
+    /* background-color: rgb(0, 255, 234);  */
+    /* Fallback color */
+    /* background-color: rgba(0, 0, 0, 0.4); */
+    /* Black w/ opacity */
+  }
+  /* Alert Close button */
+  .alert-close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  .alert-close:hover,
+  .alert-close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
   .basket-button {
     background-color: rgb(48, 137, 253);
     font-size: 12px;
@@ -38,6 +69,20 @@ body {
     padding: 0.4rem 0.5rem;
     border: 1px solid var(--greenForgr);
   }
+  .button-oneclick {
+    display: inline-flex;
+    width: fit-content;
+    color: antiquewhite;
+    background-color: green;
+    margin: 0 auto;
+    padding: 0.5rem 0.5rem;
+    border-radius: 4px;
+  }
+  #back-to-shop.button-oneclick {
+    background-color: #3089fd;
+    /* margin-left: 1rem; */
+  }
+
   .button-promo2 {
     color: white;
     display: inline-block;
@@ -51,7 +96,11 @@ body {
     gap: 2rem;
     /* margin-top: 1rem; */
   }
-
+  .buttons-one-click {
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+  }
   .cb2 {
     display: flex;
     margin-top: 2rem;
@@ -203,6 +252,33 @@ body {
     gap: 0.8rem;
     justify-content: start;
   } */
+  .one-click {
+    display: flex;
+    flex-direction: column;
+    /* width: 160%; */
+    gap: 2rem;
+    background-color: rgb(245, 245, 245);
+    padding: 1rem 3rem;
+    border-radius: 4px;
+    border: rgb(140, 221, 140) 2px solid;
+    box-shadow: 2px 2px 2px 2px rgb(199, 199, 199);
+  }
+  .one-click-final {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .one-click-wrap {
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    gap: 0.5rem;
+  }
+  .one-click-wrap-sb {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+  }
   .prices {
     position: absolute;
     display: flex;

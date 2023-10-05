@@ -188,6 +188,7 @@ nav.menu > a {
     color: var(--redForgr);
     background-color: var(--redBack);
     border: var(--redForgr) 1px solid;
+    z-index: 100;
   }
   header {
     font-size: 12px;

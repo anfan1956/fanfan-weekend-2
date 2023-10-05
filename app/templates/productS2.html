@@ -4,6 +4,71 @@
 <link rel="stylesheet" href="{{url_for('static', filename='/css/productS.css')}}">
 
 
+
+<!-- The Modal -->
+<div id="myModal" class="alert">
+    <form class="one-click">
+        <div class="">
+            <p style="font-weight: 400; font-size: 1.2em;">Покупка в один клик</p>
+        </div>
+        <div class="one-click-wrap">
+            <div class="">
+                <li>Бренд: {{data.brand}}</li>
+            </div>
+            <div class="">
+                <li>кат.: {{data.category}}</li>
+            </div>
+            <div class="">
+                <li>артикул: {{data.article}}</li>
+            </div>
+            <div class="">
+                <li>цвет: {{data.color}}</li>
+            </div>
+            <div class="">
+                <li id="current-size">
+                    размер:
+                </li>
+            </div>
+            <div class="">
+                <li>{{data.composition}}</li>
+            </div>
+        </div>
+        <div class="one-click-wrap-sb">
+            <div class="one-price-discounts">
+                <div class="">
+                    <div>цена: {{ "{:,d}".format(data.price) }} руб., </div>
+                </div>
+                <div class="">
+                    {% if data.discount !=0 %}
+                    <div>скидка: {{"{:,.0%}".format(data.discount)}},</div>
+                    {% endif %}
+                </div>
+                <div class="promo-added">
+                    {% if data.promo !=0 %}
+                    <div>промо-скидка: {{"{:,.0%}".format(data.promo)}},</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="one-click-wrap-sb">
+                <div class="">
+                    <p>Итого: </p>
+                </div>
+                <div class="one-click-final">
+                    <p>{{"{:,.0f}".format(data.price * (1-data.discount)* (1-data.promo))}} руб.</p>
+                </div>
+            </div>
+        </div>
+        <div class="buttons-one-click">
+            <button class="button-oneclick" id="pmt-link" type="button">
+                перейти к оплате
+            </button>
+            <button class="button-oneclick" id="back-to-shop">
+                вернуться в магазин
+            </button>
+        </div>
+    </form>
+</div>
+
 <div class="product-container">
     <div class="product">
         <div class="info">

@@ -205,9 +205,10 @@ $('.image-icons').click(function () {
 // one click buy procedure
 $('.basket-buy').click(function () {
   if (sizeSelected()) {
+    console.log('style data:')
     $('#current-size').text('размер: ' + size)
     $('#myModal').css('display', 'block')
-    $('.product-container').css('opacity', '1')
+    $('.product-container').css('opacity', '0.2')
     $('#pmt-link').click(function () {
       arg = Cook.phone
       let styleData = addStyleData(arg)
@@ -216,11 +217,13 @@ $('.basket-buy').click(function () {
       styleData.ticketid = 'null'
       styleData.qty = $('#quantity').val()
       styleData.pickup = 0
+      console.log('style data:', styleData)
       paymentLink(styleData)
     })
     $('#back-to-shop').click(function (event) {
       event.preventDefault()
       $('#myModal').css('display', 'none')
+      $('.product-container').css('opacity', '1')
     })
   }
 })
