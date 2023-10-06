@@ -14,11 +14,11 @@ body {
     padding-top: 100px; /* Location of the box */
     /* left: 20px;
     top: 3em; */
-    top: 40%;
+    top: 50%;
     left: 50%;
     z-index: 2;
     transform: translate(-50%, -50%);
-    width: 90%; /*Full width */
+    width: 95%; /*Full width */
     /* background-color: rgb(0, 255, 234);  */
     /* Fallback color */
     /* background-color: rgba(0, 0, 0, 0.4); */
@@ -78,14 +78,15 @@ body {
     color: antiquewhite;
     background-color: green;
     margin: 0 auto;
-    padding: 0.5rem 0.5rem;
+    padding: 0.5rem 2.5rem;
     border-radius: 4px;
     cursor: pointer;
   }
   #back-to-shop.button-oneclick {
     background-color: #3089fd;
+    padding: 0.5rem 1.5rem;
     cursor: pointer;
-    /* margin-left: 1rem; */
+    margin-bottom: 1rem;
   }
 
   .button-promo2 {
@@ -103,8 +104,10 @@ body {
   }
   .buttons-one-click {
     display: flex;
+    flex-direction: column;
     gap: 2rem;
     justify-content: space-between;
+    align-items: start;
   }
   .cb2 {
     display: flex;
@@ -206,6 +209,9 @@ body {
   .container-sizes > *:first-child {
     align-self: stretch;
   }
+  .delivery {
+    width: 100%;
+  }
   .filled {
     background-color: aquamarine;
     font-weight: 700;
@@ -257,6 +263,11 @@ body {
     gap: 0.8rem;
     justify-content: start;
   } */
+  .note {
+    font-style: italic;
+    padding-top: 0.2rem;
+    padding-left: 0.5rem;
+  }
   .one-click {
     display: flex;
     flex-direction: column;
@@ -279,10 +290,18 @@ body {
     justify-content: left;
     gap: 0.5rem;
   }
+  /* .one-click-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    gap: 1rem;
+  } */
   .one-click-wrap-sb {
     display: flex;
     gap: 0.5rem;
     justify-content: space-between;
+  }
+  .ogroup {
+    font-size: 9px;
   }
   .prices {
     position: absolute;

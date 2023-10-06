@@ -5,14 +5,30 @@ $(document).ready(function () {
   })
   data = allData.replaceAll('&#39;', '"')
   data = JSON.parse(data)
-  console.log(data)
+  // console.log(data)
 })
-var data, items, mainColor, photo, images, styleid, water, size
+var data, items, mainColor, photo, images, styleid, water, size, deliveryData
 var styleid, Cook, thisColor, search, alert_message, alert_general
 var flashTime = 3000
+var thisPhone = {}
 const parent = '/static/images/parent/'
 alert_message = $('.alert-message')
 alert_general = $('.alert-general')
+
+$('#delivery').on('change', function () {
+  deliveryData = {}
+  var value = $(this).val().split('-')
+  if (value[0] == 'pickup') {
+    deliveryData.pickup = value[1]
+  } else if (value[0] == 'new') {
+    console.log(value, ' - will have to run new proc')
+  } else {
+    deliveryData.spotid = value[0]
+  }
+  console.log(deliveryData)
+  console.log('spotid' in deliveryData, ' just checking')
+  $('#pmt-link').trigger('click')
+})
 
 $(function () {
   search = window.location.search
@@ -24,6 +40,8 @@ $(function () {
   images = data.images
   photo = data.photo
   Cook = getCookies()
+  thisPhone['phone'] = Cook.phone
+  thisPhone['Session'] = Cook.Session
   // console.log(Cook)
 
   mainColor = getMainColor()
@@ -214,9 +232,11 @@ $('.basket-buy').click(function () {
       let styleData = addStyleData(arg)
       styleData.location = '/promo'
       styleData.action = 'paymentLink'
-      styleData.ticketid = 'null'
+      styleData.spotid = 'spotid' in deliveryData ? deliveryData.spotid : 0
+      styleData.pickup = 'pickup' in deliveryData ? 1 : 0
+      styleData.pickupShopid =
+        'pickup' in deliveryData ? deliveryData.pickup : 0
       styleData.qty = $('#quantity').val()
-      styleData.pickup = 0
       console.log('style data:', styleData)
       paymentLink(styleData)
     })
@@ -358,6 +378,8 @@ function addStyleData (arg) {
 }
 
 function paymentLink (args) {
+  console.log('paymentLink args', args)
+
   data_str = JSON.stringify(args)
   $.ajax({
     type: 'POST',

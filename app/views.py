@@ -261,6 +261,19 @@ def product2(styleid):
 
 @app.route('/productS2/<styleid>', methods=['GET', 'POST'])
 def productS2(styleid):
+    phone = request.cookies.get('phone')
+    if not phone:
+        res = make_response(redirect(url_for('register2', menu=menu())))
+        res.set_cookie("currentLocation", request.path)
+        return res
+    sql = f"select web.delivery_addr_js_('{phone}')"
+    print(sql)
+    addr_list = json.loads(s(sql))
+    # print(f'addr_list: {addr_list}, {type(addr_list)}')
+    if request.method == 'GET':
+        # print(f"request.cookies.get: {phone}")
+        # print(f"request.args: {request.args}")
+        address = request.args.get("deliverTo")
     i = inv_set(styleid)[0]
     this_styleid = i.get('styleid')
     if this_styleid == 'not available':
@@ -273,7 +286,8 @@ def productS2(styleid):
         "menu": menu(),
         "parent": parent,
         "data": data,
-        "last_date": finish_date()
+        "last_date": finish_date(),
+        'addrData':addr_list
     }
     return render_template('productS2.html', **content)
 
@@ -544,9 +558,21 @@ def oneClick():
     # to change when appropriate, wait_minutes, pickupShopid
     if request.method == "POST":
         data = request.get_json()
-        # print(data)
+        print(data)
         action = key_value('action', data)
+        pickup = key_value('pickup', data)
+        spotid = key_value('spotid', data)
+        pickupShopid = key_value('pickupShopid', data)
+        print(f'action, pickup, spotid, pickupShopid:  {action}, {pickup}, {spotid}, {pickupShopid}')
+        if pickupShopid is None:
+            pickupShopid = 0
+        print(pickupShopid)
         if action == 'paymentLink':
+            phone = data['phone']
+            sql = f"web.deliveryLog_create  {spotid}"
+            tickeid = s(sql)
+
+            data['ticketid'] = tickeid
             args = ['styleid', 'color', 'size']
             par_string = ", ".join([f"'{data[k]}'" for k in args])
             sql = f"select barcodeid from inv.bc_sortid_qtys(inv.barcode_sortid_({par_string})) where shipOrder = 1"
@@ -554,18 +580,18 @@ def oneClick():
             barcodeid = s(sql)
             args_2 = ['price', 'discount', 'promo', 'pickup', 'ticketid', 'final']
             par_string_2 = ", ".join([f"{data[k]}" for k in args_2])
-
+            print(par_string_2)
             shop = 'FANFAN.STORE'
             user = 'INTERBOT F. '
-            phone = data['phone']
             wait_minutes = 15
-            pickupShopid = 27  # ____________________________________________________________________________________________
+            # pickupShopid = 27  # ____________________________________________________________________________________________
             sql_2 = f"set nocount on; declare @r int, @note varchar(max); if @@TRANCOUNT > 0 rollback transaction; " \
                     f" declare @info web.reservation_type; insert @info values ({barcodeid}, {par_string_2} ); " \
                     f" exec @r = web.reservation_create '{shop}', '{user}', '{phone}', @info , @note output, {wait_minutes}, " \
                     f"{pickupShopid}; select @note note, @r orderid;"
-            # print(sql_2)
+            print(sql_2)
             result = sql_fetch_list(sql_2)
+            print(f"result from sql - web.reservation_create: {result}")
             orderid = result[1]
             jsdata = str(orderid) + ", 900"  # hardcoding 900 seconds ______________________________________________________
 

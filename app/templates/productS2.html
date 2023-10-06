@@ -9,7 +9,11 @@
 <div id="myModal" class="alert">
     <form class="one-click">
         <div class="">
-            <p style="font-weight: 400; font-size: 1.2em;">Покупка в один клик</p>
+            <p style="
+                    font-weight: 700; 
+                    font-size: 1.2em;
+                    margin-bottom: 0rem;
+                    ">Покупка в один клик</p>
         </div>
         <div class="one-click-wrap">
             <div class="">
@@ -59,12 +63,47 @@
             </div>
         </div>
         <div class="buttons-one-click">
-            <button class="button-oneclick" id="pmt-link" type="button">
-                перейти к оплате
-            </button>
-            <button class="button-oneclick" id="back-to-shop">
-                вернуться в магазин
-            </button>
+
+            <div class="one-click-wrapper">
+                <button class="button-oneclick" id="pmt-link" type="button">
+                    перейти к оплате
+                </button>
+                <div class="note">
+                    &#42;вам будет отправлен код заказа. По нему вы сможете или оформить доставку, или забрать товар из
+                    магазина
+                    <br><br> или &nbsp;&nbsp;&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;
+                </div>
+            </div>
+            <div class="one-click-wrapper">
+                <div id="addr" name="addr" class="addr">
+                    <div class="custom-select">
+                        <select class="delivery" name="delivery" id="delivery">
+                            <!-- to change font size -->
+                            <!-- <option class="ogroup" value="choose address">-выбрать или добавить адрес доставки-</option> -->
+                            <option value="choose address">-выбрать или добавить адрес доставки-</option>
+                            <option value="new-address">добавить адрес</option>
+                            <option value="pickup-18">самовывоз: ТК "Дрим Хаус, магазин "ФАНФАН""</option>
+                            <option value="pickup-25">самовывоз: ТК "Крокус Сити Молл", магазин "ФАНФАН"</option>
+                            <option value="pickup-27">самовывоз: ТК "Крокус Сити Молл", магазин "WEEKEND"</option>
+                            {% if addrData %}
+                            {% for a in addrData %}
+                            <option value="{{a.spotid}}">{{a.address_string}}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="note">
+                    <br> или &nbsp;&nbsp;&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;
+                </div>
+            </div>
+
+
+            <div class="one-click-wrapper">
+                <button class="button-oneclick" id="back-to-shop">
+                    вернуться в магазин
+                </button>
+            </div>
         </div>
     </form>
 </div>
