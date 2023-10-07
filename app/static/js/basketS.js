@@ -18,16 +18,19 @@ var thisPhone = {}
 thisPhone['phone'] = Cook.phone
 thisPhone['Session'] = Cook.Session
 
-$('#delivery > option').each(function () {
-  const $select = document.querySelector('#delivery')
-  let search = window.location.search.split('=')
-  $option = search.slice(1)[0]
-  if ($.isNumeric($option)) {
-    $select.value = $option
-    $('.address-warning').hide()
-    $('#delivery').parent().css('background-color', 'var(--greenBack)')
-  }
-})
+// do not delete! To check later!
+// $('#delivery > option').each(function () {
+//   console.log('delivery > option proc')
+
+//   const $select = document.querySelector('#delivery')
+//   let search = window.location.search.split('=')
+//   $option = search.slice(1)[0]
+//   if ($.isNumeric($option)) {
+//     $select.value = $option
+//     $('.address-warning').hide()
+//     $('#delivery').parent().css('background-color', 'var(--greenBack)')
+//   }
+// })
 
 function selectAll () {
   checks.forEach(function (item) {
@@ -78,7 +81,8 @@ function calcSelected () {
   selected.amount = amount
   selected.pcs = pcs
   inv.unshift(selected)
-  console.log(inv)
+  console.log('inv from calcSelected: ', inv)
+  // console.log(inv)
   let toPay = amount.toLocaleString('us')
   pcs = pcs.toLocaleString('us')
   $('#toPay').text(toPay)
@@ -126,9 +130,9 @@ function buySelected () {
   let orderTotal = inv[0].amount
   thisPhone.orderTotal = orderTotal
   thisPhone.procName = 'ON_SITE RESERVATION'
-  console.log(thisPhone)
+  console.log('buySelected thisPhone: ', thisPhone)
   inv.shift()
-  console.log(inv)
+  console.log('buySelected inv: ', inv)
   promissed = basketActions(inv)
   promissed.done(function (data, state) {
     if (state == 'success') {
@@ -138,7 +142,7 @@ function buySelected () {
         window.location.href = data
       } else {
         flashMessage(data.error, false, 5000)
-        window.location.href = '/basket'
+        window.location.href = '/basketS'
       }
     }
     console.log(data, state)
@@ -173,7 +177,7 @@ function removeSelected () {
 
 function deliveryAction () {
   var value = $('#delivery').val()
-  console.log(value)
+  console.log(`deliveryAction #delivery.val(): ${value}`)
   if (value == 'new-address') {
     window.location.href = '/delivery'
   } else if (value == 'choose address') {

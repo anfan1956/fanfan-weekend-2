@@ -482,9 +482,12 @@ def basket_actions():
         # dt = dt_time_max()
         response = {}
         data = request.get_json()
+        print(data)
         action = data[0].get('procName')
+        print(f'basket_actions - "procName {action}"')
         phone = data[0].get('phone')
-        orderTotal = data[0].get('orderTotal')
+        orderTotal = int(data[0].get('orderTotal'))
+        print(f'"orderTotal" from data : {orderTotal}')
         if action == 'calculate':
             data = f"'{json.dumps(data)}'"
             sql = f"select web.basket_toPay_json({data})"
@@ -517,16 +520,19 @@ def basket_actions():
         if action in ['ON_SITE RESERVATION']:
             order = f"'{json.dumps(data)}'"
             sql = f"select web.basketContent_('{phone}')"
+            print(f'ON-SITE-RESERVATION first sql: {sql}')
             basketContent = json.loads(s(sql))
             orderTotals = calculate_webOrder(basketContent, data)
+            print(f"orderTotals['amount'] from calculate_webOrder: {orderTotals['amount']} ")
             if orderTotals['amount'] == orderTotal:
                 sql = f"exec web.reservation_json {order}"
+                print(f"sql after orderTotals == orderTotal: {sql}")
                 result = json.loads(s(sql))
                 pmtPars = result[0].get('pmtPars')
                 pmtPars = f"'{full}', {pmtPars}"
                 print(f"pmtPars:  {pmtPars}", type(pmtPars))
                 orderid = pmtPars.split(", ")[1]
-                print(orderid, type(orderid))
+                print("orderid, type(orderid): ", orderid, type(orderid))
                 sql = f"select web.pmt_str_params_({pmtPars}, next value for web.ordersSequence)"
                 print(f"sql: {sql}")
                 result = s(sql)

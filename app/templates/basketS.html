@@ -5,6 +5,21 @@
 {{ super() }}
 
 
+<div class="confirmation-message">
+    <h1>Вы покупаете:
+    </h1>
+    <ul>
+        <li> количество штук: <span id="buy-qty">4</span> </li>
+        <li> на сумму: <span id="buy-amount">1 254 руб</span> </li>
+    </ul>
+    <div class="confirmation-buttons">
+        <button class="conf-button green" id="make-payment">Перейти к оплате</button>
+        <button class="conf-button blue" id="cancel">вернуться в корзину</button>
+    </div>
+</div>
+
+
+
 <div class="basket-product">
     {% if basket_content %}
     <h1>Корзина: {{basket_content}} - checking media</h1>

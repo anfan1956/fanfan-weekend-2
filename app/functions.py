@@ -180,6 +180,7 @@ def the_totals(js, product=None):
 
 def calculate_webOrder(js, products=None):
     """function takes two json lists of dictionaries:
+    -- there was a prob with function. It did not round up the price!!! --
     js - list of the latest basket content, product  -   proposed order for payment.
     it removes the first dict from products, relating to user and session
     returns three values :  {'qty': 2, 'amount': 38250.0, 'total': 5}
@@ -214,6 +215,7 @@ def calculate_webOrder(js, products=None):
                     amount += int(product['qty']) * int(product['price'])*(1 - float(product['discount']))*(1 - float(product['promo']))
                     qty += int(product['qty'])
     total = sum([int(j['количество']) for j in js])
+    amount = int(amount)
     totals = {
         "qty": qty,
         'amount': amount,
