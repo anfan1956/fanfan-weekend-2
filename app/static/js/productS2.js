@@ -14,13 +14,49 @@ var thisPhone = {}
 const parent = '/static/images/parent/'
 alert_message = $('.alert-message')
 alert_general = $('.alert-general')
+var spot_search = location.search
+
+if (spot_search.split('=')[0] == '?spotid') {
+  // var spotVal = 'spotid-' + spot_search.split('=')[1]
+  var spotVal = spot_search.split('=')[1]
+  deliveryData = {}
+  deliveryData.spotid = spotVal
+  // $('#delivery').val(spotVal)
+  $('#basket-buy').trigger('click')
+  console.log('sport_search spotVal:', spotVal)
+}
+
+$('#delivery option').each(function () {
+  $('#delivery').parent().css('background-color', 'var(--redBack)')
+  $('.address-warning').css('display', 'block')
+  let value = $(this).val()
+  let search = window.location.search.split('=')
+  $option = search.slice(1)[0]
+  if ($.isNumeric($option)) {
+    console.log($option, 'this is the adrr')
+    $('#delivery').val($option)
+    $('.address-warning').hide()
+    $('#delivery').parent().css('background-color', 'var(--greenBack)')
+    return false
+  } else if ($.isNumeric(value) && value > 0) {
+    console.log(value)
+    $('#delivery').val(value)
+    $('.address-warning').hide()
+    $('#delivery').parent().css('background-color', 'var(--greenBack)')
+    return false
+  }
+})
 
 $('#delivery').on('change', function () {
   deliveryData = {}
   var value = $(this).val().split('-')
   if (value[0] == 'pickup') {
     deliveryData.pickup = value[1]
-  } else if (value[0] == 'new') {
+  } else if (value[0] == 0) {
+    let path = location.pathname
+    console.log('path: ', path)
+
+    window.location.href = '/delivery?' + path
     console.log(value, ' - will have to run new proc')
   } else {
     deliveryData.spotid = value[0]
@@ -222,23 +258,47 @@ $('.image-icons').click(function () {
 
 // one click buy procedure
 $('.basket-buy').click(function () {
+  let fin_price
   if (sizeSelected()) {
     console.log('style data:')
     $('#current-size').text('размер: ' + size)
     $('#myModal').css('display', 'block')
     $('.product-container').css('opacity', '0.2')
+    $('#one-click-qty').text('Количество: ' + $('#quantity').val())
+    let final = parseInt(
+      $('#final-price').text().split(' ')[0].replace(',', '')
+    )
+    // $().text().split(' ')[0].replace(',', '')
+    fin_price = $('#quantity').val() * final
+    let final_price = fin_price.toLocaleString('us') + ' руб.'
+    $('#final-price').text(final_price)
+
     $('#pmt-link').click(function () {
       arg = Cook.phone
+      let thePhone = {}
+      let inv = []
+      if (deliveryData != undefined) {
+        console.log('deliverData: ', deliveryData)
+        thePhone.spotid = 'spotid' in deliveryData ? deliveryData.spotid : 0
+        thePhone.pickupid = 'pickup' in deliveryData ? deliveryData.pickup : 0
+        thePhone.orderTotal = fin_price
+      } else {
+        thePhone.spotid = $('#delivery').val()
+      }
       let styleData = addStyleData(arg)
-      styleData.location = '/promo'
-      styleData.action = 'paymentLink'
-      styleData.spotid = 'spotid' in deliveryData ? deliveryData.spotid : 0
-      styleData.pickup = 'pickup' in deliveryData ? 1 : 0
-      styleData.pickupShopid =
-        'pickup' in deliveryData ? deliveryData.pickup : 0
       styleData.qty = $('#quantity').val()
+      styleData.total = fin_price
+      thePhone.phone = arg
+      thePhone.orderTotal = fin_price
+      thePhone.Session = Cook.Session
+      thePhone.procName = 'ONE_CLICK'
       console.log('style data:', styleData)
-      paymentLink(styleData)
+      inv[0] = styleData
+      inv.unshift(thePhone)
+      console.log('inv', inv)
+
+      // paymentLink(styleData)
+      paymentLink(inv)
     })
     $('#back-to-shop').click(function (event) {
       event.preventDefault()
@@ -365,15 +425,14 @@ function getCookies () {
 
 function addStyleData (arg) {
   let b_data = new Object()
+  b_data.styleid = styleid
   b_data.color = thisColor
   b_data.size = size
-  b_data.styleid = styleid
   b_data.price = data.price
   b_data.discount = data.discount
   b_data.promo = data.promo
-  b_data.final = data.price * (1 - data.discount) * (1 - data.promo)
-  b_data.phone = arg
-  b_data.qty = 1
+  // b_data.total = data.price * (1 - data.discount) * (1 - data.promo)
+  // b_data.phone = arg
   return b_data
 }
 
@@ -383,13 +442,14 @@ function paymentLink (args) {
   data_str = JSON.stringify(args)
   $.ajax({
     type: 'POST',
-    url: '/oneClick',
+    // url: '/oneClick',
+    url: '/basket_actions',
     data: JSON.stringify(args),
     contentType: 'application/json',
     dataType: 'json',
     success: function (data, state) {
       window.location.href = data
-      console.log(data)
+      // console.log(data)
     },
     error: function (err) {
       console.log(err.responseText, ': error ', err) // <-- printing error message to console
@@ -413,3 +473,7 @@ function alreadyInBasket (arg) {
     }
   })
 }
+
+$('#go-to-basket').on('click', function () {
+  window.location.href = '/basket'
+})

@@ -48,23 +48,58 @@
                     <div>промо-скидка: {{"{:,.0%}".format(data.promo)}},</div>
                     {% endif %}
                 </div>
+                <div class="one-click-qty" id="one-click-qty">Количество: </div>
             </div>
             <div class="one-click-wrap-sb">
                 <div class="">
                     <p>Итого: </p>
                 </div>
                 <div class="one-click-final">
-                    <p>{{"{:,.0f}".format(data.price * (1-data.discount)* (1-data.promo))}} руб.</p>
+                    <p id="final-price">{{"{:,.0f}".format(data.price * (1-data.discount)* (1-data.promo))}} руб.</p>
                 </div>
             </div>
         </div>
-        <div class="">
-            <button class="button-oneclick" id="pmt-link" type="button">
-                перейти к оплате
-            </button>
-            <button class="button-oneclick" id="back-to-shop">
-                вернуться в магазин
-            </button>
+        <div class="buttons-one-click">
+            <div class="one-click-wrapper">
+                <button class="button-oneclick" id="pmt-link" type="button">
+                    перейти к оплате
+                </button>
+
+                <div class="note">
+                    &#42;вам будет отправлен код заказа. По нему вы сможете или оформить доставку, или забрать товар из
+                    магазина
+                    <br><br> или &nbsp;&nbsp;&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;
+                </div>
+            </div>
+            <div class="one-click-wrapper">
+                <div id="addr" name="addr" class="addr">
+                    <div class="custom-select">
+                        <select class="delivery" name="delivery" id="delivery">
+                            <!-- to change font size -->
+                            <!-- <option class="ogroup" value="choose address">-выбрать или добавить адрес доставки-</option> -->
+                            <option value="choose address">-выбрать или добавить адрес доставки-</option>
+                            <!-- <option value="new-address">добавить адрес</option> -->
+                            <option value="pickup-18">самовывоз: ТК "Дрим Хаус, магазин "ФАНФАН"</option>
+                            <option value="pickup-25">самовывоз: ТК "Крокус Сити Молл", магазин "ФАНФАН"</option>
+                            <option value="pickup-27">самовывоз: ТК "Крокус Сити Молл", магазин "WEEKEND"</option>
+                            {% if addrData %}
+                            {% for a in addrData %}
+                            <option value="{{a.spotid}}">{{a.address_string}}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="note">
+                    <br> или &nbsp;&nbsp;&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;
+                </div>
+            </div>
+
+            <div class="one-click-wrapper">
+                <button class="button-oneclick" id="back-to-shop">
+                    вернуться в магазин
+                </button>
+            </div>
         </div>
     </form>
 </div>

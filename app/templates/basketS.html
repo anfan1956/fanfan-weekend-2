@@ -35,13 +35,14 @@
     </div>
     <div id="addr" name="addr" class="addr">
         <div class="custom-select">
-            <select class="delivery" name="delivery" id="delivery" onchange="deliveryAction()">
+            <!-- <select class="delivery" name="delivery" id="delivery" onchange="deliveryAction()"> -->
+            <select class="delivery" name="delivery" id="delivery">
                 <option value="choose address">-- выбрать или добавить адрес доставки --
                 </option>
                 <option value="pickup-18">самовывоз: ТК "Дрим Хаус, магазин "ФАНФАН""</option>
                 <option value="pickup-25">самовывоз: ТК "Крокус Сити Молл", магазин "ФАНФАН"</option>
                 <option value="pickup-27">самовывоз: ТК "Крокус Сити Молл", магазин "WEEKEND"</option>
-                <option value="new-address">добавить адрес</option>
+                <!-- <option value="new-address">добавить адрес</option> -->
                 {% if addrData %}
                 {% for a in addrData %}
                 <option value="{{a.spotid}}">{{a.address_string}}</option>

@@ -24,27 +24,46 @@ body {
     border-style: solid;
     border-width: 1px;
     box-shadow: 2px 2px 2px 2px rgba(207, 207, 207, 0.5);
+    cursor: pointer;
   }
   .blue {
-    background-color: #dbedfc;
-    color: #2f86c9;
-    border-color: #46a8f5;
+    background-color: var(--blueBack);
+    color: var(--blueForgr);
+    border-color: var(--blueForgr);
   }
+  .blue:hover {
+    background-color: var(--blueForgr);
+    color: white;
+  }
+
   .green {
-    background-color: #b2ffe3;
-    color: #269e72;
-    border-color: #2eb886;
+    background-color: var(--greenBack);
+    color: var(--greenForgr);
+    border-color: var(--greenForgr);
+  }
+  .green:hover {
+    background-color: var(--greenForgr);
+    color: white;
   }
   .red {
-    background-color: #ffd7d5;
-    color: #cc534a;
-    border-color: #f66358;
+    background-color: var(--redBack);
+    color: var(--redForgr);
+    border-color: var(--redForgr);
+  }
+  .red:hover {
+    background-color: var(--redForgr);
+    color: white;
   }
   .sand {
-    background-color: #fcf8c1;
-    color: #777224;
-    border-color: #777224;
+    background-color: var(--sandBack);
+    color: var(--sandForgr);
+    border-color: var(--sandForgr);
   }
+  .sand:hover {
+    background-color: var(--sandForgr);
+    color: white;
+  }
+
   .buttons-area {
     display: flex;
     gap: 0.5rem;
@@ -56,7 +75,7 @@ body {
     display: grid;
     gap: 1rem;
     grid-template-columns: 1fr 1fr;
-    background-color: rgb(237, 255, 222);
+    background-color: var(--greenTicket);
     /* background-color: bisque; */
     /* justify-content: space-around; */
   }
@@ -114,6 +133,7 @@ body {
   }
   .img {
     width: 100%;
+    cursor: pointer;
   }
   .in-basket {
     flex: 1;
@@ -170,7 +190,7 @@ body {
   .product-numbers {
     display: flex;
     flex-direction: column;
-    background: rgb(237, 255, 222);
+    background: var(--greenTicket);
     border-left: 2px solid rgba(56, 141, 53, 0.2);
   }
   .total {

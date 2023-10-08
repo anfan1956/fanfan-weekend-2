@@ -19,18 +19,17 @@ thisPhone['phone'] = Cook.phone
 thisPhone['Session'] = Cook.Session
 
 // do not delete! To check later!
-// $('#delivery > option').each(function () {
-//   console.log('delivery > option proc')
-
-//   const $select = document.querySelector('#delivery')
-//   let search = window.location.search.split('=')
-//   $option = search.slice(1)[0]
-//   if ($.isNumeric($option)) {
-//     $select.value = $option
-//     $('.address-warning').hide()
-//     $('#delivery').parent().css('background-color', 'var(--greenBack)')
-//   }
-// })
+$('#delivery > option').each(function () {
+  console.log('delivery > option proc')
+  const $select = document.querySelector('#delivery')
+  let search = window.location.search.split('=')
+  $option = search.slice(1)[0]
+  if ($.isNumeric($option)) {
+    $select.value = $option
+    $('.address-warning').hide()
+    $('#delivery').parent().css('background-color', 'var(--greenBack)')
+  }
+})
 
 function selectAll () {
   checks.forEach(function (item) {
@@ -152,10 +151,12 @@ function buySelected () {
 // new version actually working
 function removeSelected () {
   let action = 'remove'
-  thisPhone.procName = action
-  thisPhone.uuid = Cook.Session
 
   let inv = calcSelected()
+  let orderTotal = inv[0].amount
+  thisPhone.procName = action
+  thisPhone.uuid = Cook.Session
+  thisPhone.orderTotal = orderTotal
   inv.shift()
   console.log(inv)
   if (inv.error) {
@@ -175,10 +176,36 @@ function removeSelected () {
   })
 }
 
-function deliveryAction () {
+$('#delivery option').each(function () {
+  $('#delivery').parent().css('background-color', 'var(--redBack)')
+  $('.address-warning').css('display', 'block')
+  let value = $(this).val()
+  let search = window.location.search.split('=')
+  $option = search.slice(1)[0]
+  if ($.isNumeric($option)) {
+    console.log($option, 'this is the adrr')
+    $('#delivery').val($option)
+    $('.address-warning').hide()
+    $('#delivery').parent().css('background-color', 'var(--greenBack)')
+    return false
+  } else if ($.isNumeric(value) && value > 0) {
+    console.log(value)
+    $('#delivery').val(value)
+    $('.address-warning').hide()
+    $('#delivery').parent().css('background-color', 'var(--greenBack)')
+    return false
+  }
+})
+
+$('#delivery').on('change', function () {
   var value = $('#delivery').val()
-  console.log(`deliveryAction #delivery.val(): ${value}`)
-  if (value == 'new-address') {
+  console.log(
+    `deliveryAction #delivery.val(): ${value}`,
+    value == 'choose address',
+    value.length,
+    'choose address'.length
+  )
+  if (value == 0) {
     window.location.href = '/delivery'
   } else if (value == 'choose address') {
     $('#delivery').parent().css('background-color', 'var(--redBack)')
@@ -193,7 +220,28 @@ function deliveryAction () {
     $('#delivery').parent().css('background-color', 'var(--sandBack)')
     $('.address-warning').css('display', 'none')
   }
-}
+})
+
+// function deliveryAction () {
+//   var value = $('#delivery').val()
+//   console.log(`deliveryAction #delivery.val(): ${value}`)
+//   // if (value == 'new-address') {
+//   if (value == 0) {
+//     window.location.href = '/delivery'
+//   } else if (value == 'choose address') {
+//     $('#delivery').parent().css('background-color', 'var(--redBack)')
+//     $('.address-warning').css('display', 'block')
+//   } else if (value == 'deliverTo') {
+//     $('#delivery').parent().css('background-color', 'var(--blueBack)')
+//     $('.address-warning').css('display', 'none')
+//   } else if ($.isNumeric(value)) {
+//     $('#delivery').parent().css('background-color', 'var(--greenBack)')
+//     $('.address-warning').css('display', 'none')
+//   } else {
+//     $('#delivery').parent().css('background-color', 'var(--sandBack)')
+//     $('.address-warning').css('display', 'none')
+//   }
+// }
 
 function getCookies () {
   let Cookies = {}
@@ -277,6 +325,19 @@ function calcTotals () {
   amount = amount.toLocaleString('us')
   $('#total').text(amount)
   return totals
+}
+$('.img').on('click', function () {
+  let page = {}
+  let color = $(this).closest('.product').find('.color').text().split(': ')[1]
+  let styleid = $(this).closest('.product').find('.model').text().split(': ')[1]
+  page.color = color
+  page.styleid = styleid
+  openProductPage(page)
+})
+
+function openProductPage (arg) {
+  console.log(arg)
+  window.location.href = '/product2/' + arg.styleid + '?' + 'color=' + arg.color
 }
 
 // this function is to record changes to basket when + or - is clicked

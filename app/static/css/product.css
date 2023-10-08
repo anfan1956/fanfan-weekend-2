@@ -14,12 +14,13 @@ input[type="number"]::-webkit-outer-spin-button {
   display: none; /* Hidden by default */
   /* display: block; */
   position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  z-index: 100; /* Sit on top */
   padding-top: 100px; /* Location of the box */
-  left: 20px;
-  top: 3em;
-
+  top: 50%;
+  left: 10%;
   z-index: 2;
+  transform: translate(-50%, -50%);
+  /* width: 70%;  */
   /* width: 80%; Full width */
   /* background-color: rgb(0, 255, 234);  */
   /* Fallback color */
@@ -456,10 +457,21 @@ span.area-code input {
 
 @media (min-width: 992px) {
   .alert {
-    /* width: 50%; */
-    left: 25%;
-    top: 10rem;
-    font-size: 20px;
+    display: none; /* Hidden by default */
+    /* display: block; */
+    position: fixed; /* Stay in place */
+    z-index: 100; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    /* width: 40%;  */
+    /* width: 80%; Full width */
+    /* background-color: rgb(0, 255, 234);  */
+    /* Fallback color */
+    /* background-color: rgba(0, 0, 0, 0.4); */
+    /* Black w/ opacity */
   }
   /* Alert content */
   /* .alert-content {
@@ -758,8 +770,11 @@ span.area-code input {
   }
   .one-price-discounts {
     display: flex;
+    flex-direction: column;
     justify-content: left;
     gap: 0.2rem;
+    font-size: 16px;
+    font-family: Mulish;
   }
   .product {
     display: grid;

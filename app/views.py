@@ -74,6 +74,7 @@ def basketS():
         content['basket_content'] = basket_content
     return render_template('basketS.html', **content)
 
+
 @app.route("/basket")
 def basket():
     print(f"request.path: {request.path}, request.method: {request.method}")
@@ -83,38 +84,40 @@ def basket():
         res = make_response(redirect(url_for('register2', menu=menu())))
         res.set_cookie("currentLocation", request.path)
         return res
-    sql = f"select web.delivery_addr_js_('{phone}')"
-    print(sql)
-    addr_list = json.loads(s(sql))
-    # print(f'addr_list: {addr_list}, {type(addr_list)}')
-    if request.method == 'GET':
-        # print(f"request.cookies.get: {phone}")
-        # print(f"request.args: {request.args}")
-        address = request.args.get("deliverTo")
-        content['deliverTo'] = address
-        content['addrData'] = addr_list
-        print('flag 1')
-    sql = f"select web.basketContent_('{phone}')"
-    print(f"sql:  {sql}")
-    data = s(sql)
-    data = json.loads(data)
-    data_0 = data[0]
-    print(data_0)
-    basket_content = data_0.get('корзина')
-    sql = f"select cust.basket_totals_json('{phone}')"
-    print(sql)
-    basket_totals = json.loads(s(sql))[0]
-    totals = basket_totals.get('итого')
-    # print(basket_totals, type(basket_totals), f" итого: {totals}")
-    # print(basket_content, type(basket_content))
-    if not basket_content:
-        headers = list(data[0].keys())
-        content['headers'] = headers
-        content['data'] = data
-        if basket_totals:
-            content['totals'] = basket_totals
     else:
-        content['basket_content'] = basket_content
+        sql = f"select web.delivery_addr_js_('{phone}')"
+        # sql = f"select web.top_adr_('{phone}')"
+        print(sql)
+        addr_list = json.loads(s(sql))
+        # print(f'addr_list: {addr_list}, {type(addr_list)}')
+        if request.method == 'GET':
+            # print(f"request.cookies.get: {phone}")
+            # print(f"request.args: {request.args}")
+            address = request.args.get("deliverTo")
+            content['deliverTo'] = address
+            content['addrData'] = addr_list
+            print('flag 1')
+        sql = f"select web.basketContent_('{phone}')"
+        print(f"sql:  {sql}")
+        data = s(sql)
+        data = json.loads(data)
+        data_0 = data[0]
+        print(data_0)
+        basket_content = data_0.get('корзина')
+        sql = f"select cust.basket_totals_json('{phone}')"
+        print(sql)
+        basket_totals = json.loads(s(sql))[0]
+        totals = basket_totals.get('итого')
+        # print(basket_totals, type(basket_totals), f" итого: {totals}")
+        # print(basket_content, type(basket_content))
+        if not basket_content:
+            headers = list(data[0].keys())
+            content['headers'] = headers
+            content['data'] = data
+            if basket_totals:
+                content['totals'] = basket_totals
+        else:
+            content['basket_content'] = basket_content
     return render_template('basket.html', **content)
 
 
@@ -242,6 +245,14 @@ def promo():
 
 @app.route('/product2/<styleid>', methods=['GET', 'POST'])
 def product2(styleid):
+    phone = request.cookies.get('phone')
+    if not phone:
+        res = make_response(redirect(url_for('register2', menu=menu())))
+        res.set_cookie("currentLocation", request.path)
+        return res
+    sql = f"select web.delivery_addr_js_('{phone}')"
+    print(sql)
+    addr_list = json.loads(s(sql))
     i = inv_set(styleid)[0]
     this_styleid = i.get('styleid')
     if this_styleid == 'not available':
@@ -254,7 +265,8 @@ def product2(styleid):
         "menu": menu(),
         "parent": parent,
         "data": data,
-        "last_date": finish_date()
+        "last_date": finish_date(),
+        'addrData': addr_list
     }
     return render_template('product2.html', **content)
 
@@ -269,11 +281,6 @@ def productS2(styleid):
     sql = f"select web.delivery_addr_js_('{phone}')"
     print(sql)
     addr_list = json.loads(s(sql))
-    # print(f'addr_list: {addr_list}, {type(addr_list)}')
-    if request.method == 'GET':
-        # print(f"request.cookies.get: {phone}")
-        # print(f"request.args: {request.args}")
-        address = request.args.get("deliverTo")
     i = inv_set(styleid)[0]
     this_styleid = i.get('styleid')
     if this_styleid == 'not available':
@@ -287,7 +294,7 @@ def productS2(styleid):
         "parent": parent,
         "data": data,
         "last_date": finish_date(),
-        'addrData':addr_list
+        'addrData': addr_list
     }
     return render_template('productS2.html', **content)
 
@@ -488,6 +495,7 @@ def basket_actions():
         phone = data[0].get('phone')
         orderTotal = int(data[0].get('orderTotal'))
         print(f'"orderTotal" from data : {orderTotal}')
+        print(action, 'action in ONE_CLICK', action in ['ON_SITE RESERVATION', 'ONE_CLICK'])
         if action == 'calculate':
             data = f"'{json.dumps(data)}'"
             sql = f"select web.basket_toPay_json({data})"
@@ -517,14 +525,15 @@ def basket_actions():
                 print('will have not to redirect')
                 return res
             return res
-        if action in ['ON_SITE RESERVATION']:
+        if action in ['ON_SITE RESERVATION', 'ONE_CLICK']:
             order = f"'{json.dumps(data)}'"
             sql = f"select web.basketContent_('{phone}')"
             print(f'ON-SITE-RESERVATION first sql: {sql}')
             basketContent = json.loads(s(sql))
             orderTotals = calculate_webOrder(basketContent, data)
             print(f"orderTotals['amount'] from calculate_webOrder: {orderTotals['amount']} ")
-            if orderTotals['amount'] == orderTotal:
+            print()
+            if orderTotals['amount'] == orderTotal or action == 'ONE_CLICK':
                 sql = f"exec web.reservation_json {order}"
                 print(f"sql after orderTotals == orderTotal: {sql}")
                 result = json.loads(s(sql))
@@ -564,7 +573,12 @@ def oneClick():
     # to change when appropriate, wait_minutes, pickupShopid
     if request.method == "POST":
         data = request.get_json()
-        print(data)
+        action2 = data.get('action')
+        print(data, action2)
+        order = json.dumps(data)
+        sql = f"exec web.reservation_json '[{order}]'"
+
+        print(f'sql: {sql}')
         action = key_value('action', data)
         pickup = key_value('pickup', data)
         spotid = key_value('spotid', data)
@@ -575,10 +589,11 @@ def oneClick():
         print(pickupShopid)
         if action == 'paymentLink':
             phone = data['phone']
-            sql = f"web.deliveryLog_create  {spotid}"
-            tickeid = s(sql)
+            # sql = f"web.deliveryLog_create  {spotid}, {pickupShopid}"
+            # print(f'sql : {sql}')
+            # tickeid = s(sql)
 
-            data['ticketid'] = tickeid
+            # data['ticketid'] = tickeid
             args = ['styleid', 'color', 'size']
             par_string = ", ".join([f"'{data[k]}'" for k in args])
             sql = f"select barcodeid from inv.bc_sortid_qtys(inv.barcode_sortid_({par_string})) where shipOrder = 1"

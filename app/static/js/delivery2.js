@@ -15,6 +15,14 @@ $(document).ready(function () {
 })
 var flashTime = 2000
 var Cook = getCookies()
+var product_path = location.search
+if (product_path) {
+  product_path = product_path.replace('?', '')
+  console.log(product_path)
+} else {
+  product_path = 'no-path'
+  console.log(product_path)
+}
 console.log(Cook)
 
 var search = window.location.search
@@ -82,7 +90,9 @@ function deliveryActions (arg) {
     dataType: 'json',
     success: function (data) {
       console.log(data)
-      window.location.href = '/basket' + '?spotid=' + data[0].spotid //  + data.address
+      let path = product_path == 'no-path' ? '/basket' : product_path
+
+      window.location.href = path + '?spotid=' + data[0].spotid //  + data.address
       // window.location.href = '/basket'
     }
   })

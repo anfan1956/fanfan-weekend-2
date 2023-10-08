@@ -4,15 +4,16 @@
   --blueBack: #dbedfc;
   --lightblueBack: #f0f8ff;
   --blueForgr: #2f86c9;
-  --greenBack: #b2ffe3;
+  --greenBack: #ecfff8;
   --greenForgr: #269e72;
+  --greenTicket: #f0fdec;
   --redBack: #ffd7d5;
   --redForgr: #cc534a;
   --sandBack: #fcf8c1;
   --sandForgr: #777224;
   --neutral: #ffffff;
-  --logoback: #f8de86;
-  --mainBack: #fffae8;
+  --logoback: #ffeba8;
+  --mainBack: #fdfbf4;
   --menuGreen: #556b2f;
   --promo: #9e12c9;
 }
@@ -26,7 +27,6 @@ body::-webkit-scrollbar {
 
 body {
   padding-top: 100px;
-  /* overflow: scroll; */
   max-width: 1440px;
   margin: 0 auto;
 }
@@ -73,24 +73,22 @@ header {
   left: 0;
   right: 0;
 }
-header > .top a.menu_icon i {
+header > .top a.menu-icon i {
   color: #535353;
+  color: black;
   font-size: 2rem;
   padding-top: 5px;
-  /* transition: 3.3s ease; */
 }
-header > .top a.menu_icon:hover i {
+header > .top a.menu-icon:hover i {
   color: #4b6323;
+  color: red;
 }
 .active-menu {
   text-decoration: underline double !important;
-  /* background: #273017; */
   color: var(--activeMenu) !important;
-  /* background: red; */
 }
 #incognito {
   width: 10%;
-  /* height: 100%; */
   cursor: pointer;
   float: right;
 }
@@ -121,7 +119,6 @@ header > .top a.menu_icon:hover i {
   gap: 2rem;
   margin-left: 1.5rem;
   margin-top: 2rem;
-  /* color: white; */
 }
 .menu_show {
   left: 0 !important;
@@ -130,7 +127,6 @@ nav.menu {
   width: 140px;
   min-height: calc(100vh - 321px);
   background: #556b2f;
-  /* background-color: #0e7aac; */
   position: fixed;
   top: 60px;
   left: -200px;
@@ -192,7 +188,7 @@ nav.menu > a {
   }
   header {
     font-size: 12px;
-    background: #f8de86;
+    background: var(--logoback);
     align-items: center;
     border-bottom: solid 15px darkolivegreen;
     height: 55px;
@@ -239,7 +235,6 @@ nav.menu > a {
     width: 220px;
     min-height: calc(120vh - 321px);
     background: #556b2f;
-    /* background-color: #0e7aac; */
     position: fixed;
     top: 60px;
     left: -220px;
@@ -261,7 +256,6 @@ nav.menu > a {
 
   .top {
     display: block;
-    /* background-color: blue; */
     margin: 0 0 0 0 auto;
   }
 }
@@ -333,7 +327,6 @@ nav.menu > a {
     gap: 2rem;
     margin-left: 1.5rem;
     margin-top: 0;
-    /* color: white; */
   }
   .menu-icon {
     display: none;
@@ -376,7 +369,6 @@ nav.menu > a {
     margin-bottom: 0.5rem;
     width: 80%;
     border: none;
-    /* background-color: lightsalmon; */
   }
   #sms-glob.input-glob {
     background: white;

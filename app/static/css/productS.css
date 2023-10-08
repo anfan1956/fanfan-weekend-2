@@ -71,7 +71,13 @@ body {
     background: var(--greenBack);
     padding: 0.4rem 0.5rem;
     border: 1px solid var(--greenForgr);
+    cursor: pointer;
   }
+  .button-green:hover {
+    background-color: var(--greenForgr);
+    color: white;
+  }
+
   .button-oneclick {
     display: inline-flex;
     width: fit-content;

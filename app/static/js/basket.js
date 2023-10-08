@@ -1,6 +1,7 @@
 if (window.matchMedia('(max-width: 768px)').matches) {
   console.log('switch to different location')
-  window.location.href = '/basketS'
+  let search = location.search
+  window.location.href = '/basketS' + search
 
   // do functionality on screens smaller than 768px
 }
@@ -79,16 +80,44 @@ tr.forEach(el => {
   })
 })
 
-$('#delivery > option').each(function () {
-  const $select = document.querySelector('#delivery')
+$('#delivery option').each(function () {
+  $('#delivery').parent().css('background-color', 'var(--redBack)')
+  $('.address-warning').css('display', 'block')
+  let value = $(this).val()
   let search = window.location.search.split('=')
   $option = search.slice(1)[0]
   if ($.isNumeric($option)) {
-    $select.value = $option
+    console.log($option, 'this is the adrr')
+    $('#delivery').val($option)
     $('.address-warning').hide()
     $('#delivery').parent().css('background-color', 'var(--greenBack)')
+    return false
+  } else if ($.isNumeric(value) && value > 0) {
+    console.log(value)
+    $('#delivery').val(value)
+    $('.address-warning').hide()
+    $('#delivery').parent().css('background-color', 'var(--greenBack)')
+    return false
   }
 })
+
+// $('#delivery > option').each(function () {
+//   const $select = document.querySelector('#delivery')
+//   let search = window.location.search.split('=')
+//   $option = search.slice(1)[0]
+//   if ($.isNumeric($option)) {
+//     console.log($option)
+
+//     $select.value = $option
+//     $('.address-warning').hide()
+//     $('#delivery').parent().css('background-color', 'var(--greenBack)')
+//   } else {
+//     // console.log($select.value)
+
+//     // $select.value = 2
+//     console.log($select.value, '#delivery > option')
+//   }
+// })
 
 function selectAll () {
   checks.forEach(function (item) {
@@ -234,7 +263,8 @@ function selected (action) {
 function deliveryAction () {
   var value = $('#delivery').val()
   console.log(value)
-  if (value == 'new-address') {
+  // if (value == 'new-address') {
+  if (value == 0) {
     window.location.href = '/delivery'
   } else if (value == 'choose address') {
     $('#delivery').parent().css('background-color', 'var(--redBack)')

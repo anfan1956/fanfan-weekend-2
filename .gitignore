@@ -14,4 +14,5 @@ app/templates/test.html
 main.py
 *newtest.py
 *test.py
+*test2.py
 *site_settings.py
