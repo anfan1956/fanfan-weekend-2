@@ -1,16 +1,17 @@
 import pyodbc
 from pyodbc import connect as cnn
 import os
+from app.site_settings import server
 
 PWD = os.environ.get('sql_path')
 # server = '62.181.56.179,41433'
-server = '10.0.0.7'
+# server = '10.0.0.7'
 # server = '127.0.0.1'
 
 
 def cn():
     con = cnn('Driver={ODBC Driver 17 for SQL Server};'
-              f'Server={server};'
+              f'Server={server()};'
               'Database=fanfan;'
               'UID=anfan;'
               f'PWD={PWD};')
