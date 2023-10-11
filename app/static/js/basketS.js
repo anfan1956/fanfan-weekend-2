@@ -3,6 +3,7 @@ $(function () {
   calcTotals()
 })
 
+const flashTime = 3000
 var pcsSelected
 var totalSelected
 var activeColor = '#b2ffe3'
@@ -80,7 +81,10 @@ function calcSelected () {
   selected.amount = amount
   selected.pcs = pcs
   inv.unshift(selected)
-  console.log('inv from calcSelected: ', inv)
+  console.log('pcs from calcSelected: ', pcs, 'inv: ', inv)
+  if (pcs == 0) {
+    inv.error = 'ничего не выбрано'
+  }
   // console.log(inv)
   let toPay = amount.toLocaleString('us')
   pcs = pcs.toLocaleString('us')
@@ -114,6 +118,14 @@ function openProductPage (arg) {
 // !!!!!!! will have to finish delivery logs for the web.reservation_json proc !!
 function buySelected () {
   let delivery = $('#delivery option:selected')
+  if (Cook.phone == undefined) {
+    flashMessage(
+      'Чтобы делать покупки авторизуйтесь в личном кабинете',
+      true,
+      flashTime
+    )
+    return false
+  }
   if (delivery.val() == 'choose address') {
     flashMessage('нужно выбрать способ доставки')
     return false
@@ -126,6 +138,10 @@ function buySelected () {
     thisPhone.pickupid = pickupid
   }
   let inv = calcSelected()
+  if (inv.error) {
+    flashMessage(inv.error, false, flashTime)
+    return false
+  }
   let orderTotal = inv[0].amount
   thisPhone.orderTotal = orderTotal
   thisPhone.procName = 'ON_SITE RESERVATION'
@@ -137,10 +153,10 @@ function buySelected () {
     if (state == 'success') {
       console.log(data)
       if (!data.error) {
-        flashMessage('Товар зарезервирован. Переход к оплате', true, 5000)
+        flashMessage('Товар зарезервирован. Переход к оплате', true, flashTime)
         window.location.href = data
       } else {
-        flashMessage(data.error, false, 5000)
+        flashMessage(data.error, false, flashTime)
         window.location.href = '/basketS'
       }
     }

@@ -32,13 +32,17 @@ def landing():
 
 @app.route("/basketS")
 def basketS():
+    dt = dt_time_max()
     print(f"request.path: {request.path}, request.method: {request.method}")
     content = {"title": "КОРЗИНА", "menu": menu()}
     phone = request.cookies.get('phone')
     Session = request.cookies.get('Session')
     if not phone and not Session:
-        res = make_response(redirect(url_for('register2', menu=menu())))
+        res = make_response(redirect(url_for('register2')))
         res.set_cookie("currentLocation", request.path)
+        Session = uuid.uuid4()
+        res.set_cookie("Session", Session, expires=dt)
+
         return res
     else:
         sql = f"select web.delivery_addr_js_('{phone}')"
@@ -259,15 +263,14 @@ def promo():
                }
     if goods():
         content['goods'] = goods()
+    res = make_response(render_template("promo.html", **content))
+    res.set_cookie("currentLocation", request.path, expires=dt_time_max())
     Session = request.cookies.get("Session")
     if not Session:
-        Session = request.cookies.get("session")
-        if not Session:
-            Session = str(uuid.uuid4())
-        res = make_response(redirect(url_for('promo')))
+        Session = str(uuid.uuid4())
         res.set_cookie("Session", Session, expires=dt_time_max())
-        return res
-    return render_template("promo.html", **content)
+    return res
+    # return render_template("promo.html", **content)
 
 
 @app.route('/product2/<styleid>', methods=['GET', 'POST'])
@@ -326,7 +329,10 @@ def productS2(styleid):
         "last_date": finish_date(),
         'addrData': addr_list
     }
-    return render_template('productS2.html', **content)
+    res = make_response(render_template('productS2.html', **content))
+    res.set_cookie("currentLocation", request.path)
+    return res
+    # return render_template('productS2.html', **content)
 
 
 @app.route('/catalog')
@@ -560,10 +566,12 @@ def basket_actions():
             sql = f"select web.basketContent_('{phone}')"
             print(f'ON-SITE-RESERVATION first sql: {sql}')
             basketContent = json.loads(s(sql))
-            orderTotals = calculate_webOrder(basketContent, data)
-            print(f"orderTotals['amount'] from calculate_webOrder: {orderTotals['amount']} ")
-            print()
-            if orderTotals['amount'] == orderTotal or action == 'ONE_CLICK':
+            amounts_equal = True
+            if action == 'ON_SITE RESERVATION':
+                orderTotals = calculate_webOrder(basketContent, data)
+                print(f"orderTotals['amount'] from calculate_webOrder: {orderTotals['amount']} ")
+                amounts_equal = (orderTotals['amount'] == orderTotal)
+            if amounts_equal or action == 'ONE_CLICK':
                 sql = f"exec web.reservation_json {order}"
                 print(f"sql after orderTotals == orderTotal: {sql}")
                 result = json.loads(s(sql))

@@ -32,16 +32,18 @@ span.area-code {
 .change {
   display: inline;
   width: fit-content;
-  /* height: 80%; */
-  /* margin-top: 5px;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem; */
+  padding: 0.2rem 1rem;
+  padding-right: 1rem;
   background-color: var(--greenBack);
   font-size: 14px;
+  border: 1px solid var(--greenForgr);
   border-radius: 4px;
 }
+#prefs.change {
+  background-color: var(--blueBack);
+  display: none;
+}
+
 .comment {
   font-style: italic;
   font-size: 14px;
@@ -160,13 +162,7 @@ h1.prefs {
     justify-content: space-between;
     gap: 1rem;
   }
-  .change {
-    /* margin-top: 5px; */
-    padding: 0.2rem 1rem;
-    padding-right: 1rem;
-    background-color: var(--greenBack);
-    border: 1px solid var(--greenForgr);
-  }
+
   h2 {
     font-size: 16px;
   }

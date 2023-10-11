@@ -101,6 +101,7 @@ $(function () {
     }
   }
   $('#btn-promo2').on('click', function () {
+    let newPath = window.location.pathname
     window.location.href = '/register2'
   })
 })
@@ -221,6 +222,7 @@ $('.color').click(function () {
     }
   }
 })
+
 // change active color and main picture
 $('.image-icons').click(function () {
   let source = $(this).attr('src')
@@ -259,6 +261,12 @@ $('.image-icons').click(function () {
 // one click buy procedure
 $('.basket-buy').click(function () {
   let fin_price
+  let arg = Cook.phone
+  if (arg == undefined) {
+    flashMessage('для покупки требуется авторизация', false, flashTime)
+    return false
+  }
+
   if (sizeSelected()) {
     console.log('style data:')
     $('#current-size').text('размер: ' + size)
@@ -275,6 +283,8 @@ $('.basket-buy').click(function () {
 
     $('#pmt-link').click(function () {
       arg = Cook.phone
+      console.log('arg - see if phone is definded: ', arg)
+
       let thePhone = {}
       let inv = []
       if (deliveryData != undefined) {

@@ -29,6 +29,7 @@ body {
   padding-top: 100px;
   max-width: 1440px;
   margin: 0 auto;
+  position: relative;
 }
 
 footer {
@@ -150,6 +151,23 @@ nav.menu > a {
   border-radius: 4px;
   border-color: none;
   color: white;
+}
+.pay-card {
+  display: flex;
+}
+.pay-wrap {
+  width: 90%;
+  display: flex;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  flex-direction: column;
+  gap: 5rem;
+  font-size: 20px;
+  background-color: #e0ffbd;
+  transform: translate(-50%, -50%);
+  z-index: 100;
 }
 .promo-dsc {
   background: var(--promo);

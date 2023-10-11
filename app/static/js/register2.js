@@ -144,7 +144,16 @@ $(document).ready(function () {
     })
   })
 
-  // $('#prefs').click(function () {
+  $('#prefs').click(function () {
+    let location = objCookies().currentLocation
+    if (location) {
+      window.location.href = location
+      return
+    } else {
+      window.location.href = '/promo'
+      console.log('no location defined')
+    }
+  })
   $('.checkboxes').each(function () {
     $(this).change(function () {
       promissed = registerData(prefsUpdate())
@@ -267,6 +276,7 @@ function prefsUpdate (deleteMail = false) {
 function resetPhoneCoockie () {
   document.cookie = 'phone' + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
   document.cookie = 'promo' + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
-  // document.cookie = 'Session' + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
-  document.cookie = 'Session=newSession;' + 'max-age=3600;'
+  document.cookie =
+    'currentLocation' + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
+  document.cookie = 'Session=newSession;max-age=3600;'
 }
