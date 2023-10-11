@@ -20,6 +20,7 @@ $(function getImage () {
     $(this).click(function () {
       let photo = $(this).find('td').eq(11).text().trim('\n')
       let path = $(this).find('td').eq(1).text().trim('\n')
+      console.log('photo, path: ', photo, path)
 
       let img = 'static/images/parent/' + path + '/800/' + photo
       if (photo == 'None') {

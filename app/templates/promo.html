@@ -35,16 +35,13 @@
                 {% for a in goods %}
                 <div class="cell">
                     <p class="brand-title">
-                        {{a.бренд}},
-                        <span style="
-                    text-transform:lowercase;
-                    font-weight:300;
-                    ">{{a.категория}}</span>
+                        {{a.бренд}}
+                        <!-- <span style="text-transform:lowercase;font-weight:300;">{{a.категория}}</span> -->
                     </p>
                     <a href="/product2/{{a.модель}}?discount">
                         <img class="image" src="{{parent}}{{ a.модель }}/540/{{a.фото}}">
                     </a>
-                    {% if a.скидка > 0 %}
+                    {% if a.скидка!= 0 %}
                     <div class="discount">
                         - {{ "{:,.0%}".format(a.скидка) }}
                     </div>
@@ -55,7 +52,7 @@
                     <p class="details">{{a.категория}}, мод: {{a.модель}}</p>
                     <p class="details">арт: {{a.артикул}}</p>
                     <p class="details">
-                        {% if (a.скидка > 0) %}
+                        {% if (a.скидка != 0) %}
                         скидка:{{a.скидка_str}},
                         {% endif %}
                         промо:{{a.промо}}</p>

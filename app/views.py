@@ -33,45 +33,50 @@ def landing():
 @app.route("/basketS")
 def basketS():
     print(f"request.path: {request.path}, request.method: {request.method}")
-    phone = request.cookies.get('phone')
-    content = {
-        'menu': menu()
-    }
     content = {"title": "КОРЗИНА", "menu": menu()}
-    if not phone:
+    phone = request.cookies.get('phone')
+    Session = request.cookies.get('Session')
+    if not phone and not Session:
         res = make_response(redirect(url_for('register2', menu=menu())))
         res.set_cookie("currentLocation", request.path)
         return res
-    sql = f"select web.delivery_addr_js_('{phone}')"
-    print(sql)
-    addr_list = json.loads(s(sql))
-    # print(f'addr_list: {addr_list}, {type(addr_list)}')
-    if request.method == 'GET':
-        # print(f"request.cookies.get: {phone}")
-        # print(f"request.args: {request.args}")
-        address = request.args.get("deliverTo")
-        content['deliverTo'] = address
-        content['addrData'] = addr_list
-        print('flag 1')
-    sql = f"select web.basketContent_('{phone}')"
-    print(f"sql:  {sql}")
-    data = s(sql)
-    data = json.loads(data)
-    data_0 = data[0]
-    print(data_0)
-    basket_content = data_0.get('корзина')
-    sql = f"select cust.basket_totals_json('{phone}')"
-    print(sql)
-    basket_totals = json.loads(s(sql))[0]
-    totals = basket_totals.get('итого')
-    if not basket_content:
-        headers = list(data[0].keys())
-        content['headers'] = headers
-        content['data'] = data
-        if basket_totals:
-            content['totals'] = basket_totals
     else:
-        content['basket_content'] = basket_content
+        sql = f"select web.delivery_addr_js_('{phone}')"
+        print(sql)
+        addr_list = json.loads(s(sql))
+        # print(f'addr_list: {addr_list}, {type(addr_list)}')
+        if request.method == 'GET':
+            # print(f"request.cookies.get: {phone}")
+            # print(f"request.args: {request.args}")
+            address = request.args.get("deliverTo")
+            content['deliverTo'] = address
+            content['addrData'] = addr_list
+            print('flag 1')
+        sqlParams = {
+            'phone': phone,
+            'Session': Session
+        }
+        sqlParams = json.dumps(sqlParams)
+        sql = f"select web.basketContent_json_('{sqlParams}')"
+        print(f"sql for basket:  {sql}")
+        data = s(sql)
+        data = json.loads(data)
+        data_0 = data[0]
+        print(data_0)
+        basket_content = data_0.get('корзина')
+        # sql = f"select cust.basket_totals_json('{phone}')"
+        sql = f"select cust.basket_totals_json('{sqlParams}')"
+        print(sql)
+        basket_totals = json.loads(s(sql))[0]
+        totals = basket_totals.get('итого')
+        if not basket_content:
+            headers = list(data[0].keys())
+            content['headers'] = headers
+            content['data'] = data
+            if basket_totals:
+                content['totals'] = basket_totals
+        else:
+            content['basket_content'] = basket_content
     return render_template('basketS.html', **content)
 
 
@@ -80,11 +85,12 @@ def basket():
     print(f"request.path: {request.path}, request.method: {request.method}")
     content = {"title": "КОРЗИНА", "menu": menu()}
     phone = request.cookies.get('phone')
-    if not phone:
+    Session = request.cookies.get('Session')
+    if not phone and not Session:
         res = make_response(redirect(url_for('register2', menu=menu())))
         res.set_cookie("currentLocation", request.path)
         return res
-    else:
+    if phone or Session:
         sql = f"select web.delivery_addr_js_('{phone}')"
         # sql = f"select web.top_adr_('{phone}')"
         print(sql)
@@ -97,14 +103,19 @@ def basket():
             content['deliverTo'] = address
             content['addrData'] = addr_list
             print('flag 1')
-        sql = f"select web.basketContent_('{phone}')"
-        print(f"sql:  {sql}")
+        sqlParams = {
+            'phone': phone,
+            'Session': Session
+        }
+        sqlParams = json.dumps(sqlParams)
+        sql = f"select web.basketContent_json_('{sqlParams}')"
+        print(f"sql for basket:  {sql}")
         data = s(sql)
         data = json.loads(data)
         data_0 = data[0]
         print(data_0)
         basket_content = data_0.get('корзина')
-        sql = f"select cust.basket_totals_json('{phone}')"
+        sql = f"select cust.basket_totals_json('{sqlParams}')"
         print(sql)
         basket_totals = json.loads(s(sql))[0]
         totals = basket_totals.get('итого')
@@ -232,21 +243,29 @@ def main():
 
 @app.route("/promo")
 def promo():
+    print("print: request.method, request.path: ", request.method, request.path)
     content = {"title": finish_date(),
                "menu": menu(),
-               # "goods": goods(),
                "parent": parent
                }
     if goods():
         content['goods'] = goods()
-    # print(goods())
+    Session = request.cookies.get("Session")
+    if not Session:
+        Session = request.cookies.get("session")
+        if not Session:
+            Session = str(uuid.uuid4())
+        res = make_response(redirect(url_for('promo')))
+        res.set_cookie("Session", Session, expires=dt_time_max())
+        return res
     return render_template("promo.html", **content)
 
 
 @app.route('/product2/<styleid>', methods=['GET', 'POST'])
 def product2(styleid):
     phone = request.cookies.get('phone')
-    if not phone:
+    Session = request.cookies.get('Session')
+    if not phone and not Session:
         res = make_response(redirect(url_for('register2', menu=menu())))
         res.set_cookie("currentLocation", request.path)
         return res
@@ -274,7 +293,9 @@ def product2(styleid):
 @app.route('/productS2/<styleid>', methods=['GET', 'POST'])
 def productS2(styleid):
     phone = request.cookies.get('phone')
-    if not phone:
+    Session = request.cookies.get('Session')
+    print(Session)
+    if not phone and not Session:
         res = make_response(redirect(url_for('register2', menu=menu())))
         res.set_cookie("currentLocation", request.path)
         return res
@@ -649,7 +670,9 @@ def basket_user():
         phone = js_string[0].get('phone')
         arg = json.dumps(js_string)
         sql = f"exec web.basketAction_2 '{arg}';"
+        print(sql)
         response = s(sql)
+
         if procName == 'insert':
             data = js_string[1]
             sql2 = f"select web.basketContent_('{phone}')"

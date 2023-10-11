@@ -50,6 +50,7 @@ def pmt_link(args):
     params = base_params | args
     # print(args, ' from pmt_link')
     response = r.post(url, params).text
+    print('url, params from pmt_link procedure: ', url, params)
     res = json.loads(response)
     print(res, 'this is the "res" from "pmt_link" procedure')
     key = 'formUrl'

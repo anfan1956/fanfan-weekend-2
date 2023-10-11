@@ -1,24 +1,59 @@
+.image {
+  width: 100%;
+  cursor: pointer;
+}
+
+p {
+  margin: 0;
+  padding: 0.2rem;
+}
+.promo-discount {
+  background-color: var(--promo);
+  color: white;
+  position: absolute;
+  padding: 0.2rem 0.2rem 0.2rem 0.5rem;
+  transform: rotate(0deg);
+  border-radius: 4px;
+  font-size: 12px;
+  top: 3.5rem;
+  left: 1rem;
+}
+
+.sorts-filters {
+  display: block;
+  width: 100%;
+  margin-top: 0rem;
+  position: fixed;
+  padding-left: 0.7rem;
+  padding-top: 1rem;
+  z-index: 100;
+  background-color: white;
+}
+
 @media (max-width: 768px) {
   * {
     font-size: 14px;
-    font-family: Mulish;
+    font-family: Mulish, Roboto;
   }
+
   .cats {
     width: 300px;
   }
+
   .cell {
+    font-family: Roboto;
     position: relative;
     align-items: center;
     box-shadow: inset;
     cursor: pointer;
-    margin: 0.7rem;
+    margin: 0.3rem;
     box-shadow: 2px 2px 3px 2px #e4e4e4;
   }
   .container {
     margin-top: 2.5rem;
   }
   .criteria {
-    margin: 1rem 0.7rem 0.1rem 0.7rem;
+    margin: 1rem 0.7rem 0.1rem 0.3rem;
     text-align: left;
     padding: 0.5rem;
     background: linear-gradient(to right, #d2e2b7, #d2e2b7 20%, white 90%);
@@ -26,6 +61,14 @@
   .details {
     margin: 0;
     padding: 0;
+    font-size: 12px;
+  }
+  .details-wrap {
+    padding-left: 0.2rem;
+    padding-bottom: 0.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
   }
   .discount {
     background-color: red;
@@ -34,7 +77,7 @@
     padding: 0.2rem;
     border-radius: 9999px;
     font-size: 12px;
-    top: 2.5rem;
+    top: 3.5rem;
     right: 1rem;
   }
   .filter-form {
@@ -49,32 +92,18 @@
     width: 130px;
     /* width: 100px; */
   }
-  .image {
-    width: 100%;
-  }
+
   .main-frame {
     padding-top: 1rem;
     padding-bottom: 40rem;
   }
   .promo-discount {
-    background-color: var(--promo);
-    color: white;
-    position: absolute;
-    padding: 0.2rem 0.2rem 0.2rem 0.5rem;
-    transform: rotate(-15deg);
-    border-radius: 4px;
-    font-size: 12px;
-    top: 3.5rem;
+    top: 2.5rem;
     left: 1rem;
   }
+
   .sorts-filters {
-    display: block;
-    width: 100%;
-    position: fixed;
-    padding-left: 0.7rem;
-    padding-top: 1rem;
-    z-index: 100;
-    background-color: white;
+    padding-left: 0.3rem;
   }
   .sort-form {
     width: 85px;
@@ -90,14 +119,26 @@
     font-size: 18px;
     font-family: Mulish;
   }
+  .brand-title {
+    font-family: Roboto;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .cat {
+    font-size: 14px;
+  }
   .cats {
     width: 300px;
   }
+
   .cell {
+    display: flex;
+    flex-direction: column;
+    font-family: Roboto;
     position: relative;
     align-items: center;
     box-shadow: inset;
-    cursor: pointer;
+    /* cursor: pointer; */
     margin: 0.7rem;
     box-shadow: 2px 2px 3px 2px #e4e4e4;
   }
@@ -111,13 +152,37 @@
     padding: 0.5rem;
     background: linear-gradient(to right, #d2e2b7, #d2e2b7 20%, white 90%);
   }
+  .details {
+    font-family: Roboto;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+  }
+  .details-wrap {
+    padding-left: 0.2rem;
+    padding-bottom: 0.2rem;
+    display: block;
+    width: 100%;
+    /* flex-direction: column; */
+    justify-content: left;
+    align-items: start;
+    /* background-color: aqua; */
+  }
+  .discount {
+    background-color: red;
+    color: white;
+    position: absolute;
+    padding: 0.2rem;
+    border-radius: 9999px;
+    font-size: 12px;
+    top: 1.5rem;
+    right: 1rem;
+  }
   .filter-form {
     display: inline-block;
     width: 150px;
   }
-  .image {
-    width: 100%;
-  }
+
   .main-frame {
     padding-top: 2rem;
     padding-bottom: 40rem;

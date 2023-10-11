@@ -46,28 +46,38 @@
                     <a href="/product2/{{a.модель}}">
                         <img class="image" src="{{parent}}{{ a['модель'] }}/540/{{a.фото}}">
                     </a>
-                    {% if a.скидка > 0 %}
+                    {% if a.скидка != 0 %}
                     <div class="discount">
                         - {{ "{:,.0%}".format(a.скидка) }}
                     </div>
                     {% endif %}
-                    {% if a.промо_скидка > 0 %}
+                    {% if a.промо_скидка!= 0 %}
                     <div class="promo-discount">
                         - {{ "{:,.0%}".format(a.промо_скидка) }}
                     </div>
                     {% endif %}
-                    <p class="details">артикул: {{ a.артикул }}</p>
-                    <p class="details">модель: {{ a.модель }}</p>
-                    <p class="details">
-                        {% if a.скидка + a.промо_скидка > 0 %}
-                        цена:<s>{{ "{:,}".format(a.цена)}}</s>
-                        <span style="color:red">
-                            {{ "{:,.0f}".format(a.цена*(1-a.промо_скидка)*(1 - a.скидка))}}
-                        </span>
-                        {% else %}
-                        {{ "{:,}".format(a.цена)}}
-                        {% endif %}
-                    </p>
+                    <div class="details-wrap">
+                        <p class="details">модель: {{ a.модель }}</p>
+                        <p class="details">артикул: {{ a.артикул }}</p>
+                        <p class="details">
+                            {% if a.скидка!= 0 %}
+                            скидка: - {{ "{:,.0%}".format(a.скидка) }}
+                            {% endif %}
+                            {% if a.промо_скидка != 0 %}
+                            промо: - {{ "{:,.0%}".format(a.промо_скидка) }}
+                            {% endif %}
+                        </p>
+                        <p class="details">цена:
+                            {% if a.скидка + a.промо_скидка > 0 %}
+                            <s class="details">&nbsp; {{ "{:,}".format(a.цена)}}</s>
+                            <span class="details" style="color:red">
+                                &nbsp; {{ "{:,.0f}".format(a.цена*(1-a.промо_скидка)*(1 - a.скидка))}}
+                            </span>
+                            {% else %}
+                            {{ "{:,}".format(a.цена)}}
+                            {% endif %} руб.
+                        </p>
+                    </div>
                 </div>
                 {% endif %}
                 {% endfor %}
