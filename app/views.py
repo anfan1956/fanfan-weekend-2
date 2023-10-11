@@ -134,8 +134,11 @@ def basket():
 
 @app.route("/register2", methods=['POST', 'GET'])
 def register2():
+    print(f"method: {request.method}, path: {request.path}")
+    Session = request.cookies.get('Session')
+    dt = dt_time_max()
+    print(Session)
     if request.method == 'POST':
-        print(f"method: {request.method}, path: {request.path}")
         results = None
         if request.method == 'POST':
             response = {}
@@ -157,7 +160,6 @@ def register2():
                 if deleteEmail:
                     sql = f"cust.email_delete '{phone}'"
                     results = jsonify(s(sql))
-                dt = dt_time_max()
                 sms_entered = data.get('sms_entered')
                 sql = f"select top 1 smsCode from web.sms_log where phone = '{phone}' order by logid desc"
                 sms_msg = str(s(sql))
@@ -228,6 +230,13 @@ def register2():
                 results = jsonify(response)
             # print(results)
         return results
+    if not Session or Session == 'newSession':
+        print('will have to make new cookie')
+        Session = str(uuid.uuid4())
+        # res = make_response(redirect(url_for('register2', menu=menu(), form=form())))
+        res = make_response(redirect(url_for('register2')))
+        res.set_cookie("Session", Session, expires=dt)
+        return res
     return render_template('register2.html', menu=menu(), form=form())
 
 

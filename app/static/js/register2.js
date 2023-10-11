@@ -144,16 +144,19 @@ $(document).ready(function () {
     })
   })
 
-  $('#prefs').click(function () {
-    promissed = registerData(prefsUpdate())
-    promissed.done(function (data, state) {
-      if (state == 'success') {
-        if (!data.error) {
-          flashMessage('настройки оповещений записаны', true, flashTime)
-        } else {
-          flashMessage(data.error, false, flashTime)
+  // $('#prefs').click(function () {
+  $('.checkboxes').each(function () {
+    $(this).change(function () {
+      promissed = registerData(prefsUpdate())
+      promissed.done(function (data, state) {
+        if (state == 'success') {
+          if (!data.error) {
+            flashMessage('настройки оповещений записаны', true, flashTime)
+          } else {
+            flashMessage(data.error, false, flashTime)
+          }
         }
-      }
+      })
     })
   })
 })
@@ -264,5 +267,6 @@ function prefsUpdate (deleteMail = false) {
 function resetPhoneCoockie () {
   document.cookie = 'phone' + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
   document.cookie = 'promo' + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
-  document.cookie = 'Session' + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
+  // document.cookie = 'Session' + '=; expires=Thu, 01-Jan-70 00:00:01 GMT;'
+  document.cookie = 'Session=newSession;' + 'max-age=3600;'
 }
