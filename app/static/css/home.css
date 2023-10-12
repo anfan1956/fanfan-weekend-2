@@ -1,9 +1,40 @@
+* {
+  font-family: Mulish;
+}
 a {
   /* color: #fff; */
   text-decoration: none;
 }
+.container {
+  width: 100%;
+  display: flex;
+  position: relative;
+  /* margin: 40px; */
+  /* overflow: auto; */
+}
+.foot-section {
+  padding-block-start: 1rem;
+  padding-block-end: 1rem;
+  background-color: antiquewhite;
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+  font-size: 14px;
+  margin-bottom: 10rem;
+}
+.foot-wrapper {
+  padding: 0.2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+.home-header {
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0rem;
+}
 .info {
-  margin: 40px;
+  margin: 1rem;
 }
 .page-layout {
   display: flex;
@@ -21,13 +52,6 @@ a {
   float: left;
   cursor: pointer;
   opacity: 0.2;
-}
-.container {
-  width: 100%;
-  display: flex;
-  position: relative;
-  /* margin: 40px; */
-  /* overflow: auto; */
 }
 .general {
   font-size: 16px;
@@ -73,10 +97,41 @@ a {
     /* margin: 40px; */
     /* overflow: auto; */
   }
+  .first-page {
+    font-size: 14px;
+  }
+  .footer.bullet {
+    display: none;
+  }
+  .foot-section {
+    gap: 0.5rem;
+    align-items: left;
+  }
+  .footer {
+    padding: 0 1rem;
+  }
+  .foot-wrapper {
+    /* flex-direction: column; */
+    gap: 0.1rem;
+    flex-wrap: wrap;
+    justify-content: left;
+  }
+
+  .general {
+    font-size: 14px;
+    text-indent: 0rem;
+  }
   .img-title {
     padding-left: 2rem;
     font-family: mulish;
     font-weight: 500;
+  }
+  .info {
+    /* font-size: 6px; */
+  }
+  .home-header {
+    margin-top: 1rem;
+    font-size: 14px;
   }
   .page-layout::-webkit-scrollbar {
     display: none;
