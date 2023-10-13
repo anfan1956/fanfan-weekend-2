@@ -5,6 +5,19 @@
 body {
   padding-bottom: 30rem;
 }
+.pmt-logo {
+  width: 40%;
+  cursor: pointer;
+  box-shadow: 2px 2px 2px 2px lightgray;
+}
+.pmt-sys {
+  display: flex;
+  /* flex-direction: column; */
+  gap: 1rem;
+  width: 80%;
+  padding: 0.5rem;
+}
+
 @media (max-width: 768px) {
   .alert {
     display: none; /* Hidden by default */

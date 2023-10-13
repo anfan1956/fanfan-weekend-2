@@ -29,35 +29,12 @@ encoded = tokenValues.encode()
 Token = hashlib.sha256(encoded).hexdigest()
 
 
-
-Items = [
-    {
-        "Name": "брюки",
-        "Price": 500,
-        "Quantity": 2,
-        "Amount": 1000,
-        "Tax": "none",
-        "PaymentMethod": "prepayment",
-        "PaymentObject": "commodity",
-        "MeasurementUnit": "шт"
-    }
-]
-
-Receipt = {
-    "FfdVersion": "1.2",
-    "Taxation": "usn_income",
-    "Phone": phone,
-    "Email": email,
-    "Items": Items
-}
-
-
 data = {
     "TerminalKey": TerminalKey,
     "Amount": total,
     "OrderId": orderid,
     "Token": Token
-    # "Receipt": Receipt,
+
 }
 
 response = requests.post(PaymentURL, headers=headers, json=data)

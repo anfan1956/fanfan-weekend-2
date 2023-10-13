@@ -1,11 +1,13 @@
 import sys, time
+from datetime import datetime, timedelta
 import requests as r
+import hashlib
 import json
 from app.data import sql_query as s, sql_fetch_list as f
 from app.email_mod import send_mail as mail
 import app.KKM_test as Kkm
 from app.send_sms import sms
-from app.site_settings import alfa_url, return_url, alfa_token
+from app.site_settings import alfa_url, return_url, alfa_token, tinkoffPars, tin_url
 
 
 # url = 'https://payment.alfabank.ru/payment/rest/register.do'
@@ -16,6 +18,7 @@ from app.site_settings import alfa_url, return_url, alfa_token
 url = alfa_url()
 token = alfa_token()
 returnUrl = return_url()
+tinURL = "https://securepay.tinkoff.ru/v2/Init"
 
 
 def key_value(key, dictionary):
@@ -50,7 +53,7 @@ def pmt_link(args):
     params = base_params | args
     # print(args, ' from pmt_link')
     response = r.post(url, params).text
-    print('url, params from pmt_link procedure: ', url, params)
+    # print('url, params from pmt_link procedure: ', url, params)
     res = json.loads(response)
     print(res, 'this is the "res" from "pmt_link" procedure')
     key = 'formUrl'
@@ -276,9 +279,78 @@ def order_status_site(args):
     return s_message
 
 
-# func_arg = {"order_id": order_id, "order_status": order_status, "order_cancel": order_cancel}
+def tinkoffInitPars(token):
+    pars = tinkoffPars()
+    tokenData = {
+        "Amount": token["Amount"],
+        "OrderId": token["OrderId"],
+        "Password": pars["Password"],
+        "TerminalKey": pars["TerminalKey"]
+    }
+    tokenValues = ''.join(str(val) for val in tokenData.values())
+    encoded = tokenValues.encode()
+    Token = hashlib.sha256(encoded).hexdigest()
+    interval = token["interval"]
+    expiration_time = datetime.now() + timedelta(seconds=interval)
+
+    data = {
+        "TerminalKey": pars["TerminalKey"],
+        "Amount": token["Amount"],
+        "OrderId": token["OrderId"],
+        "Token": Token,
+        "RedirectDueDate": expiration_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    }
+    arg = {
+        "headers": pars["headers"],
+        "json": data
+    }
+    return arg
+
+
+def tinkoff_link(arg):
+    token = {
+        "Amount": arg.get("amount"),
+        "interval": arg.get("timeOutSec"),
+        "OrderId": arg.get("orderNumber")
+    }
+    args = tinkoffInitPars(token)
+    response = r.post(tin_url(), **args)
+    return response.json()
+
 
 if __name__ == '__main__':
-    arg = {'orderNumber': '78257-102', 'description': 'order # 78254', 'amount': 100, 'timeOutSec': 900, 'phone': '9167834248', 'email': 'af.fanfan.2012@gmail.com'}
-    # order_status(arg)
-    print(returnUrl)
+    pmtPars = {
+        'orderNumber': '79056-625',
+        'description': 'order # 79056',
+        'amount': 1000,
+        'timeOutSec': 900,
+        'phone': '9167834248',
+        'email': 'af.fanfan.2012@gmail.com'
+    }
+    link = tinkoff_link(pmtPars)
+    print(link)
+
+    # total = 1000
+    # interval = 900
+    # orderid = "2345/8"
+    # token = {
+    #     "Amount": total,
+    #     "OrderId": orderid,
+    #     "interval": interval
+    #
+    # }
+    # args = tinkoffInitPars(token)
+    #
+    # response = r.post(tin_url(), **args)
+    #
+    # print("JSON Response ", response.content)
+    # response = response.json()
+    # print(response)
+    # res = json.dumps(response)
+    # print(res)
+    #
+    # # json = response["PaymentId"]
+    # json = response.get("PaymentId")
+    #
+    # # print("Status Code", response.status_code)
+    # print(json)

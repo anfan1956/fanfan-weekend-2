@@ -1,6 +1,7 @@
 import time, datetime, json
 from datetime import timedelta
 from app.data import sql_query as s, cn
+from app.Payments import tinkoff_link
 
 
 def replace_keys(dct, mapping):
@@ -235,6 +236,12 @@ def delivery_data(arg):
         sql = f"select web.ticket_address_({arg})"
         result = json.loads(s(sql))[0] if s(sql) is not None else None
     return result
+
+
+def use_pmtSys(arg, args):
+    match arg:
+        case 'tinkoff':
+            return tinkoff_link(args)
 
 
 if __name__ == '__main__':

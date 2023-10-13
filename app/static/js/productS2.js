@@ -259,6 +259,8 @@ $('.image-icons').click(function () {
 })
 
 // one click buy procedure
+// one click buy procedure
+// one click buy procedure
 $('.basket-buy').click(function () {
   let fin_price
   let arg = Cook.phone
@@ -266,7 +268,6 @@ $('.basket-buy').click(function () {
     flashMessage('для покупки требуется авторизация', false, flashTime)
     return false
   }
-
   if (sizeSelected()) {
     console.log('style data:')
     $('#current-size').text('размер: ' + size)
@@ -276,15 +277,12 @@ $('.basket-buy').click(function () {
     let final = parseInt(
       $('#final-price').text().split(' ')[0].replace(',', '')
     )
-    // $().text().split(' ')[0].replace(',', '')
     fin_price = $('#quantity').val() * final
     let final_price = fin_price.toLocaleString('us') + ' руб.'
     $('#final-price').text(final_price)
-
     $('#pmt-link').click(function () {
       arg = Cook.phone
       console.log('arg - see if phone is definded: ', arg)
-
       let thePhone = {}
       let inv = []
       if (deliveryData != undefined) {
@@ -306,7 +304,6 @@ $('.basket-buy').click(function () {
       inv[0] = styleData
       inv.unshift(thePhone)
       console.log('inv', inv)
-
       // paymentLink(styleData)
       paymentLink(inv)
     })
@@ -316,6 +313,35 @@ $('.basket-buy').click(function () {
       $('.product-container').css('opacity', '1')
     })
   }
+})
+
+$('.pmt-logo').each(function () {
+  $(this).click(function () {
+    let thePhone = {}
+    let inv = []
+    let fin_price
+    let arg = Cook.phone
+    let final = parseInt(
+      $('#final-price').text().split(' ')[0].replace(',', '')
+    )
+    fin_price = $('#quantity').val() * final
+    let styleData = addStyleData(arg)
+    styleData.qty = $('#quantity').val()
+    styleData.total = fin_price
+    thePhone.phone = arg
+    thePhone.orderTotal = fin_price
+    thePhone.Session = Cook.Session
+    console.log('style data:', styleData)
+    inv[0] = styleData
+    inv.unshift(thePhone)
+    let pmtSys = $(this).attr('id')
+    thePhone.procName = 'ONE_CLICK'
+    thePhone.pmtSys = pmtSys
+    if (pmtSys == 'tinkoff') {
+      console.log('inv', inv)
+      paymentLink(inv)
+    }
+  })
 })
 
 // add to basket procedure

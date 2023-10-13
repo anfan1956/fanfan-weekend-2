@@ -1,7 +1,7 @@
 from app import app
 from app.functions import menu, dt_time_max, form, art_display, set_dates, finish_date
 from app.functions import goods, inv_set, the_totals, calculate_webOrder, key_value
-from app.functions import delivery_data
+from app.functions import delivery_data, use_pmtSys
 from app.Payments import pmt_link, order_status_site
 from app.send_sms import sms
 from app.site_settings import send_sms_messages, make_full_payment, parent
@@ -527,6 +527,7 @@ def basket_actions():
         data = request.get_json()
         print(data)
         action = data[0].get('procName')
+        pmtSys = data[0].get('pmtSys')
         print(f'basket_actions - "procName {action}"')
         phone = data[0].get('phone')
         orderTotal = int(data[0].get('orderTotal'))
@@ -583,10 +584,13 @@ def basket_actions():
                 sql = f"select web.pmt_str_params_({pmtPars}, next value for web.ordersSequence)"
                 print(f"sql: {sql}")
                 result = s(sql)
-                print(f"result = s(sql) pmtStr parameters: {result}")
+                # print(f"result = s(sql) pmtStr parameters: {result}")
                 pmtPars = json.loads(result)[0]
-
-                link = pmt_link(pmtPars)
+                print(f"pmtPars after json.loads(result)[0]: {pmtPars}")
+                result = use_pmtSys(pmtSys, pmtPars)
+                link = result.get("PaymentURL")
+                # link = pmt_link(pmtPars)
+                print(f"this is link for alfabank: {link}")
                 sql = f"select cust.customer_mail('{phone}')"
                 email = s(sql)
                 arg = {
@@ -662,7 +666,6 @@ def oneClick():
             # print(f"result = s(sql): {result}")
             pmtPars = json.loads(result)[0]
             link = pmt_link(pmtPars)
-
             result = jsonify(link)
             if sms_messages:
                 s_message = 'ссылка на оплату: ' + link
