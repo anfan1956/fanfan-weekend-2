@@ -337,12 +337,15 @@ $('.pmt-logo').each(function () {
     inv[0] = styleData
     inv.unshift(thePhone)
     let pmtSys = $(this).attr('id')
+    if (pmtSys == 'yandex') {
+      pmtSys = 'tinkoff'
+    }
     thePhone.procName = 'ONE_CLICK'
     thePhone.pmtSys = pmtSys
-    if (pmtSys == 'tinkoff') {
-      console.log('inv', inv)
-      paymentLink(inv)
-    }
+    // if (pmtSys == 'tinkoff') {
+    console.log('inv', inv)
+    paymentLink(inv)
+    // }
   })
 })
 

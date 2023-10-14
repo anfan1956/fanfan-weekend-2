@@ -24,6 +24,15 @@ def home():
     return render_template('home.html', **content)
 
 
+@app.route("/not_found")
+def not_found():
+    content = {"title": "Page Not Found", "menu": menu()}
+    # print(content['menu'])
+    # abort(404)
+    return render_template('404.html', **content)
+
+
+
 @app.route('/')
 def landing():
     # return '<h1> Hi, it is home</h1>'
@@ -588,17 +597,19 @@ def basket_actions():
                 pmtPars = json.loads(result)[0]
                 print(f"pmtPars after json.loads(result)[0]: {pmtPars}")
                 result = use_pmtSys(pmtSys, pmtPars)
-                link = result.get("PaymentURL")
+                # link = result.get("PaymentURL")
+                link = result
                 # link = pmt_link(pmtPars)
-                print(f"this is link for alfabank: {link}")
+                print(f"this is link for {pmtSys}: {link}")
                 sql = f"select cust.customer_mail('{phone}')"
                 email = s(sql)
-                arg = {
-                    "To": email,
-                    "link": link,
-                    "orderid": orderid
-                }
-                mail_pmt_link(**arg)
+                if email != 'na':
+                    arg = {
+                        "To": email,
+                        "link": link,
+                        "orderid": orderid
+                    }
+                    mail_pmt_link(**arg)
                 result = jsonify(link)
                 return result
             else:

@@ -1,7 +1,7 @@
 import time, datetime, json
 from datetime import timedelta
 from app.data import sql_query as s, cn
-from app.Payments import tinkoff_link
+from app.Payments import tinkoff_link, pmt_link
 
 
 def replace_keys(dct, mapping):
@@ -239,9 +239,13 @@ def delivery_data(arg):
 
 
 def use_pmtSys(arg, args):
+    link = '/not_found'
     match arg:
         case 'tinkoff':
-            return tinkoff_link(args)
+            link = tinkoff_link(args).get("PaymentURL")
+        case 'alfabank':
+            link = pmt_link(args)
+    return link
 
 
 if __name__ == '__main__':
