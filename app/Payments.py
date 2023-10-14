@@ -8,6 +8,7 @@ from app.email_mod import send_mail as mail
 import app.KKM_test as Kkm
 from app.send_sms import sms
 from app.site_settings import alfa_url, return_url, alfa_token, tinkoffPars, tin_url
+from app.site_settings import tin_successURL
 
 
 # url = 'https://payment.alfabank.ru/payment/rest/register.do'
@@ -298,8 +299,13 @@ def tinkoffInitPars(token):
         "Amount": token["Amount"],
         "OrderId": token["OrderId"],
         "Token": Token,
-        "RedirectDueDate": expiration_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+        "RedirectDueDate": expiration_time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "SuccessURL": tin_successURL(),
+        "FailURL": "https://fanfan.store/promo",
+        "NotificationURL": "https://fanfan.store/info"
+        # "NotificationURL": "http://10.0.0.7:8000/info"
     }
+
     arg = {
         "headers": pars["headers"],
         "json": data
@@ -314,6 +320,7 @@ def tinkoff_link(arg):
         "OrderId": arg.get("orderNumber")
     }
     args = tinkoffInitPars(token)
+    print(args)
     response = r.post(tin_url(), **args)
     return response.json()
 
@@ -330,27 +337,3 @@ if __name__ == '__main__':
     link = tinkoff_link(pmtPars)
     print(link)
 
-    # total = 1000
-    # interval = 900
-    # orderid = "2345/8"
-    # token = {
-    #     "Amount": total,
-    #     "OrderId": orderid,
-    #     "interval": interval
-    #
-    # }
-    # args = tinkoffInitPars(token)
-    #
-    # response = r.post(tin_url(), **args)
-    #
-    # print("JSON Response ", response.content)
-    # response = response.json()
-    # print(response)
-    # res = json.dumps(response)
-    # print(res)
-    #
-    # # json = response["PaymentId"]
-    # json = response.get("PaymentId")
-    #
-    # # print("Status Code", response.status_code)
-    # print(json)

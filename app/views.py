@@ -805,3 +805,18 @@ def paymentTrace():
         }
         mail_sales_receipt(**arg)
     return result
+
+
+@app.route('/info', methods=['POST', 'GET'])
+def info():
+    print(request.method, request.path, "type smth")
+    content = {
+            "title": "tinkov@info",
+            "menu": menu()
+            }
+    # if request.method == "POST":
+    d = request.get_json()
+    b = request.args
+    a = request.data
+    print(d, b, a, "this is notification post")
+    return render_template("promo.html", **content)

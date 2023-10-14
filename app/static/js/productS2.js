@@ -27,6 +27,8 @@ if (spot_search.split('=')[0] == '?spotid') {
 }
 
 $('#delivery option').each(function () {
+  console.log('testing default')
+
   $('#delivery').parent().css('background-color', 'var(--redBack)')
   $('.address-warning').css('display', 'block')
   let value = $(this).val()
