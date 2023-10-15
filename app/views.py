@@ -829,7 +829,7 @@ def info():
     key = d.get("TerminalKey")
     bank = pmt_keys().get(key)
     # print(f"key, bank {key}, {bank}")
-    d.Bank = bank
+    d["Bank"] = bank
     sql = f"exec web.order_action_json '[{d}]'"
     print(sql)
     return bank
