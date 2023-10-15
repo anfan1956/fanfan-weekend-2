@@ -823,17 +823,14 @@ def paymentTrace():
 @app.route('/info', methods=['POST', 'GET'])
 def info():
     print(request.method, request.path, "type smth")
-    # content = {
-    #         "title": "tinkov@info",
-    #         "menu": menu()
-    #         }
-    # if request.method == "POST":
     d = request.get_json()
-    b = request.args
     a = request.data
-    print(d, '\nget_json()\n',  b, '\nargs\n', a, '\ndata\n', "this is notification post")
+    print(d, '\nget_json()\n', a, '\ndata\n', "this is notification post")
     key = d.get("TerminalKey")
     bank = pmt_keys().get(key)
-    print(f"key, bank {key}, {bank}")
+    # print(f"key, bank {key}, {bank}")
+    d.Bank = bank
+    sql = f"exec web.order_action_json '[{d}]'"
+    print(sql)
     return bank
     # return render_template("promo.html", **content)

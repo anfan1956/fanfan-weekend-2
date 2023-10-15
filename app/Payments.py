@@ -294,11 +294,8 @@ def tinkoffInitPars(token):
     Token = hashlib.sha256(encoded).hexdigest()
     interval = token["interval"]
     expiration_time = datetime.now() + timedelta(seconds=interval)
-
-    success = tin_URLs().get('success')
-    notification = tin_URLs().get('notification')
-
-
+    success = tin_URLs().get("success")
+    notification = tin_URLs().get("notification")
     data = {
         "TerminalKey": pars["TerminalKey"],
         "Amount": token["Amount"],
@@ -306,7 +303,7 @@ def tinkoffInitPars(token):
         "Token": Token,
         "RedirectDueDate": expiration_time.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "SuccessURL": success,
-        "SuccessURL": tin_successURL(),
+        # "SuccessURL": tin_successURL(),
         "FailURL": "https://fanfan.store/promo",
         # "NotificationURL": "https://fanfan.store/info"
         "NotificationURL": notification
