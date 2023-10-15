@@ -8,6 +8,7 @@ from app.email_mod import send_mail as mail
 import app.KKM_test as Kkm
 from app.send_sms import sms
 from app.site_settings import alfa_url, return_url, alfa_token, tinkoffPars, tin_url
+from app.site_settings import tin_URLs
 from app.site_settings import tin_successURL
 
 
@@ -294,16 +295,21 @@ def tinkoffInitPars(token):
     interval = token["interval"]
     expiration_time = datetime.now() + timedelta(seconds=interval)
 
+    success = tin_URLs().get('success')
+    notification = tin_URLs().get('notification')
+
+
     data = {
         "TerminalKey": pars["TerminalKey"],
         "Amount": token["Amount"],
         "OrderId": token["OrderId"],
         "Token": Token,
         "RedirectDueDate": expiration_time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "SuccessURL": success,
         "SuccessURL": tin_successURL(),
         "FailURL": "https://fanfan.store/promo",
-        "NotificationURL": "https://fanfan.store/info"
-        # "NotificationURL": "http://10.0.0.7:8000/info"
+        # "NotificationURL": "https://fanfan.store/info"
+        "NotificationURL": notification
     }
 
     arg = {

@@ -602,6 +602,7 @@ def basket_actions():
                 # link = pmt_link(pmtPars)
                 print(f"this is link for {pmtSys}: {link}")
                 sql = f"select cust.customer_mail('{phone}')"
+                print(sql, " sql: select cust.customer_mail")
                 email = s(sql)
                 if email != 'na':
                     arg = {
@@ -609,6 +610,7 @@ def basket_actions():
                         "link": link,
                         "orderid": orderid
                     }
+                    # turn off temporarily problem with Google Mail
                     mail_pmt_link(**arg)
                 result = jsonify(link)
                 return result
