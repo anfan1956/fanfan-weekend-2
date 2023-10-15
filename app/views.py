@@ -824,14 +824,11 @@ def paymentTrace():
 def info():
     print(request.method, request.path, "type smth")
     d = request.get_json()
-    a = request.data
-    print(d, '\nget_json()\n', a, '\ndata\n', "this is notification post")
     key = d.get("TerminalKey")
     bank = pmt_keys().get(key)
-    # print(f"key, bank {key}, {bank}")
     d["Bank"] = bank
     json_pars = json.dumps(d)
     sql = f"exec web.order_action_json '[{json_pars}]'"
-    print(sql)
+    response = s(sql)
+    print(f"sql, response: {sql}, \n, {response}")
     return bank
-    # return render_template("promo.html", **content)
