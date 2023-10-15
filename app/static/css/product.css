@@ -334,6 +334,19 @@ input[type="number"]::-webkit-outer-spin-button {
   padding: 0;
   margin: 0;
 }
+.pmt-logo {
+  width: 30%;
+  cursor: pointer;
+  box-shadow: 2px 2px 2px 2px lightgray;
+}
+.pmt-sys {
+  display: flex;
+  /* flex-direction: column; */
+  gap: 2rem;
+  width: 80%;
+  justify-content: space-evenly;
+  padding: 0.5rem;
+}
 .prod-title-sm {
   text-align: center;
   font-weight: 500;

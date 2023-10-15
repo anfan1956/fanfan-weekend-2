@@ -13,7 +13,6 @@ from random import randint
 
 parent = parent()
 sms_messages = send_sms_messages()
-full = make_full_payment()
 
 
 @app.route("/home")
@@ -30,7 +29,6 @@ def not_found():
     # print(content['menu'])
     # abort(404)
     return render_template('404.html', **content)
-
 
 
 @app.route('/')
@@ -586,7 +584,7 @@ def basket_actions():
                 print(f"sql after orderTotals == orderTotal: {sql}")
                 result = json.loads(s(sql))
                 pmtPars = result[0].get('pmtPars')
-                pmtPars = f"'{full}', {pmtPars}"
+                pmtPars = f"'{make_full_payment(pmtSys)}', {pmtPars}"
                 print(f"pmtPars:  {pmtPars}", type(pmtPars))
                 orderid = pmtPars.split(", ")[1]
                 print("orderid, type(orderid): ", orderid, type(orderid))
@@ -597,7 +595,7 @@ def basket_actions():
                 pmtPars = json.loads(result)[0]
                 print(f"pmtPars after json.loads(result)[0]: {pmtPars}")
                 result = use_pmtSys(pmtSys, pmtPars)
-                # link = result.get("PaymentURL")
+                print(result, ":result after use_pmtSys")
                 link = result
                 # link = pmt_link(pmtPars)
                 print(f"this is link for {pmtSys}: {link}")
@@ -621,77 +619,77 @@ def basket_actions():
         return res
 
 
-@app.route('/oneClick', methods=['POST', 'GET'])
-def oneClick():
-    print(f"method: {request.method}, path: {request.path}")
-    # some hard coding is done
-    # to change when appropriate, wait_minutes, pickupShopid
-    if request.method == "POST":
-        data = request.get_json()
-        action2 = data.get('action')
-        print(data, action2)
-        order = json.dumps(data)
-        sql = f"exec web.reservation_json '[{order}]'"
-
-        print(f'sql: {sql}')
-        action = key_value('action', data)
-        pickup = key_value('pickup', data)
-        spotid = key_value('spotid', data)
-        pickupShopid = key_value('pickupShopid', data)
-        print(f'action, pickup, spotid, pickupShopid:  {action}, {pickup}, {spotid}, {pickupShopid}')
-        if pickupShopid is None:
-            pickupShopid = 0
-        print(pickupShopid)
-        if action == 'paymentLink':
-            phone = data['phone']
-            # sql = f"web.deliveryLog_create  {spotid}, {pickupShopid}"
-            # print(f'sql : {sql}')
-            # tickeid = s(sql)
-
-            # data['ticketid'] = tickeid
-            args = ['styleid', 'color', 'size']
-            par_string = ", ".join([f"'{data[k]}'" for k in args])
-            sql = f"select barcodeid from inv.bc_sortid_qtys(inv.barcode_sortid_({par_string})) where shipOrder = 1"
-            # print(sql)
-            barcodeid = s(sql)
-            args_2 = ['price', 'discount', 'promo', 'pickup', 'ticketid', 'final']
-            par_string_2 = ", ".join([f"{data[k]}" for k in args_2])
-            print(par_string_2)
-            shop = 'FANFAN.STORE'
-            user = 'INTERBOT F. '
-            wait_minutes = 15
-            # pickupShopid = 27  # ____________________________________________________________________________________________
-            sql_2 = f"set nocount on; declare @r int, @note varchar(max); if @@TRANCOUNT > 0 rollback transaction; " \
-                    f" declare @info web.reservation_type; insert @info values ({barcodeid}, {par_string_2} ); " \
-                    f" exec @r = web.reservation_create '{shop}', '{user}', '{phone}', @info , @note output, {wait_minutes}, " \
-                    f"{pickupShopid}; select @note note, @r orderid;"
-            print(sql_2)
-            result = sql_fetch_list(sql_2)
-            print(f"result from sql - web.reservation_create: {result}")
-            orderid = result[1]
-            jsdata = str(orderid) + ", 900"  # hardcoding 900 seconds ______________________________________________________
-
-            jsdata = f"'{full}', {jsdata}"
-            print(jsdata, ': jsdata')
-            sql = f"select web.pmt_str_params_({jsdata}, next value for web.ordersSequence)"
-            # print(f"sql: {sql}")
-            result = s(sql)
-            # print(f"result = s(sql): {result}")
-            pmtPars = json.loads(result)[0]
-            link = pmt_link(pmtPars)
-            result = jsonify(link)
-            if sms_messages:
-                s_message = 'ссылка на оплату: ' + link
-                sms(phone, s_message)
-            sql = f"select cust.customer_mail('{phone}')"
-            email = s(sql)
-            arg = {
-                "To": email,
-                "link": link,
-                "orderid": orderid
-            }
-            mail_pmt_link(**arg)
-            return result
+# @app.route('/oneClick', methods=['POST', 'GET'])
+# def oneClick():
+#     print(f"method: {request.method}, path: {request.path}")
+#     # some hard coding is done
+#     # to change when appropriate, wait_minutes, pickupShopid
+#     if request.method == "POST":
+#         data = request.get_json()
+#         action2 = data.get('action')
+#         print(data, action2)
+#         order = json.dumps(data)
+#         sql = f"exec web.reservation_json '[{order}]'"
+#
+#         print(f'sql: {sql}')
+#         action = key_value('action', data)
+#         pickup = key_value('pickup', data)
+#         spotid = key_value('spotid', data)
+#         pickupShopid = key_value('pickupShopid', data)
+#         print(f'action, pickup, spotid, pickupShopid:  {action}, {pickup}, {spotid}, {pickupShopid}')
+#         if pickupShopid is None:
+#             pickupShopid = 0
+#         print(pickupShopid)
+#         if action == 'paymentLink':
+#             phone = data['phone']
+#             # sql = f"web.deliveryLog_create  {spotid}, {pickupShopid}"
+#             # print(f'sql : {sql}')
+#             # tickeid = s(sql)
+#
+#             # data['ticketid'] = tickeid
+#             args = ['styleid', 'color', 'size']
+#             par_string = ", ".join([f"'{data[k]}'" for k in args])
+#             sql = f"select barcodeid from inv.bc_sortid_qtys(inv.barcode_sortid_({par_string})) where shipOrder = 1"
+#             # print(sql)
+#             barcodeid = s(sql)
+#             args_2 = ['price', 'discount', 'promo', 'pickup', 'ticketid', 'final']
+#             par_string_2 = ", ".join([f"{data[k]}" for k in args_2])
+#             print(par_string_2)
+#             shop = 'FANFAN.STORE'
+#             user = 'INTERBOT F. '
+#             wait_minutes = 15
+#             # pickupShopid = 27  # ____________________________________________________________________________________________
+#             sql_2 = f"set nocount on; declare @r int, @note varchar(max); if @@TRANCOUNT > 0 rollback transaction; " \
+#                     f" declare @info web.reservation_type; insert @info values ({barcodeid}, {par_string_2} ); " \
+#                     f" exec @r = web.reservation_create '{shop}', '{user}', '{phone}', @info , @note output, {wait_minutes}, " \
+#                     f"{pickupShopid}; select @note note, @r orderid;"
+#             print(sql_2)
+#             result = sql_fetch_list(sql_2)
+#             print(f"result from sql - web.reservation_create: {result}")
+#             orderid = result[1]
+#             jsdata = str(orderid) + ", 900"  # hardcoding 900 seconds ______________________________________________________
+#
+#             jsdata = f"'{full}', {jsdata}"
+#             print(jsdata, ': jsdata')
+#             sql = f"select web.pmt_str_params_({jsdata}, next value for web.ordersSequence)"
+#             # print(f"sql: {sql}")
+#             result = s(sql)
+#             # print(f"result = s(sql): {result}")
+#             pmtPars = json.loads(result)[0]
+#             link = pmt_link(pmtPars)
+#             result = jsonify(link)
+#             if sms_messages:
+#                 s_message = 'ссылка на оплату: ' + link
+#                 sms(phone, s_message)
+#             sql = f"select cust.customer_mail('{phone}')"
+#             email = s(sql)
+#             arg = {
+#                 "To": email,
+#                 "link": link,
+#                 "orderid": orderid
+#             }
+#             mail_pmt_link(**arg)
+#             return result
 
 
 @app.route('/goToBasket', methods=['POST', 'GET'])

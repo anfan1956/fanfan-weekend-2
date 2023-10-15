@@ -314,7 +314,7 @@ $('.basket-buy').click(function () {
       console.log('inv', inv)
 
       // paymentLink(styleData)
-      paymentLink(inv)
+      // paymentLink(inv)
     })
     $('#back-to-shop').click(function (event) {
       event.preventDefault()
@@ -324,16 +324,38 @@ $('.basket-buy').click(function () {
   }
 })
 
-// function delSelect (arg) {
-//   $('#delivery > option').each(function () {
-//     const $select = document.querySelector('#delivery')
-//     console.log($(this).val(), ': arg: ', arg)
-
-//     // $select.value = arg
-//     // $('.address-warning').hide()
-//     // $('#delivery').parent().css('background-color', 'var(--greenBack)')
-//   })
-// }
+$('.pmt-logo').each(function () {
+  $(this).click(function () {
+    let thePhone = {}
+    let inv = []
+    let fin_price
+    let arg = Cook.phone
+    let final = parseInt(
+      $('#final-price').text().split(' ')[0].replace(',', '')
+    )
+    fin_price = $('#quantity').val() * final
+    let styleData = addStyleData(arg)
+    styleData.qty = $('#quantity').val()
+    styleData.total = fin_price
+    thePhone.spotid = $('#delivery').val()
+    thePhone.phone = arg
+    thePhone.orderTotal = fin_price
+    thePhone.Session = Cook.Session
+    console.log('style data:', styleData)
+    inv[0] = styleData
+    inv.unshift(thePhone)
+    let pmtSys = $(this).attr('id')
+    if (pmtSys == 'yandex') {
+      pmtSys = 'tinkoff'
+    }
+    thePhone.procName = 'ONE_CLICK'
+    thePhone.pmtSys = pmtSys
+    // if (pmtSys == 'tinkoff') {
+    console.log('inv', inv)
+    paymentLink(inv)
+    // }
+  })
+})
 
 // add to basket procedure
 $('#addBasket').click(function () {

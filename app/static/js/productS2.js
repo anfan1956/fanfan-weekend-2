@@ -307,7 +307,7 @@ $('.basket-buy').click(function () {
       inv.unshift(thePhone)
       console.log('inv', inv)
       // paymentLink(styleData)
-      paymentLink(inv)
+      // paymentLink(inv)
     })
     $('#back-to-shop').click(function (event) {
       event.preventDefault()
@@ -330,6 +330,7 @@ $('.pmt-logo').each(function () {
     let styleData = addStyleData(arg)
     styleData.qty = $('#quantity').val()
     styleData.total = fin_price
+    thePhone.spotid = $('#delivery').val()
     thePhone.phone = arg
     thePhone.orderTotal = fin_price
     thePhone.Session = Cook.Session

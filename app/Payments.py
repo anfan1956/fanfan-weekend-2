@@ -47,7 +47,6 @@ def my_dict(string):
 
 
 def pmt_link(args):
-    link = None
     suffix = '' + args['orderNumber']
     # returnUrl = returnUrl + '?' + suffix
     base_params = {'token': token, 'returnUrl': returnUrl + suffix}
@@ -57,11 +56,14 @@ def pmt_link(args):
     response = r.post(url, params).text
     # print('url, params from pmt_link procedure: ', url, params)
     res = json.loads(response)
-    print(res, 'this is the "res" from "pmt_link" procedure')
-    key = 'formUrl'
-    if key_value(key, res):
-        link = res['formUrl']
-    return link
+    # print(res, 'this is the "res" from "pmt_link" procedure')
+    # key = 'formUrl'
+    # if key_value(key, res):
+    #     link = res['formUrl']
+    # else:
+    #     link =
+    # print(link, " res['formUrl']")
+    return res
 
 
 def order_id(args):

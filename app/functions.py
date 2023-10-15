@@ -239,12 +239,15 @@ def delivery_data(arg):
 
 
 def use_pmtSys(arg, args):
-    link = '/not_found'
     match arg:
         case 'tinkoff':
             link = tinkoff_link(args).get("PaymentURL")
         case 'alfabank':
-            link = pmt_link(args)
+            link = pmt_link(args).get('formUrl')
+        case default:
+            link = '/not_found'
+    if link is None:
+        link = '/not_found'
     return link
 
 
