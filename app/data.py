@@ -21,7 +21,7 @@ def cn():
 def sql_query(args):
     con = cn()
     cursor = con.cursor()
-    print(args)
+    # print(args)
     cursor.execute(args)
     result = cursor.fetchone()[0]
     con.commit()
