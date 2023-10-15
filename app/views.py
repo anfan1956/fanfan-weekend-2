@@ -823,12 +823,14 @@ def paymentTrace():
 @app.route('/info', methods=['POST', 'GET'])
 def info():
     print(request.method, request.path, "type smth")
+    response = {}
     d = request.get_json()
     key = d.get("TerminalKey")
     bank = pmt_keys().get(key)
-    d["Bank"] = bank
-    json_pars = json.dumps(d)
-    sql = f"exec web.order_action_json '[{json_pars}]'"
-    response = s(sql)
-    print(f"sql, response: {sql}, \n, {response}")
-    return bank
+    if d.get("Status") == "CONFIRMED":
+        d["Bank"] = bank
+        json_pars = json.dumps(d)
+        sql = f"exec web.order_action_json '[{json_pars}]'"
+        response = s(sql)
+    #     I did not find what and where is returned in this case
+    return 200
