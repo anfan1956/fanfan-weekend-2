@@ -832,5 +832,4 @@ def info():
         json_pars = json.dumps(d)
         sql = f"exec web.order_action_json '[{json_pars}]'"
         response = s(sql)
-    #     I did not find what and where is returned in this case
     return response
