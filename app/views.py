@@ -4,7 +4,7 @@ from app.functions import goods, inv_set, the_totals, calculate_webOrder, key_va
 from app.functions import delivery_data, use_pmtSys
 from app.Payments import pmt_link, order_status_site
 from app.send_sms import sms
-from app.site_settings import send_sms_messages, make_full_payment, parent
+from app.site_settings import send_sms_messages, make_full_payment, parent, pmt_keys
 from app.mails import fanfan_send_mail, mail_pmt_link, mail_sales_receipt
 from app.data import sql_query as s, sql_list, sql_fetch_list
 from flask import render_template, redirect, request, url_for, make_response, jsonify, flash, abort
@@ -831,6 +831,7 @@ def info():
     a = request.data
     print(d, '\nget_json()\n',  b, '\nargs\n', a, '\ndata\n', "this is notification post")
     key = d.get("TerminalKey")
-    print(f"key {key}")
-
+    bank = pmt_keys().get(key)
+    print(f"key, bank {key}, {bank}")
+    return bank
     # return render_template("promo.html", **content)
