@@ -830,7 +830,8 @@ def info():
     bank = pmt_keys().get(key)
     # print(f"key, bank {key}, {bank}")
     d["Bank"] = bank
-    sql = f"exec web.order_action_json '[{d}]'"
+    json_pars = json.dumps(d)
+    sql = f"exec web.order_action_json '[{json_pars}]'"
     print(sql)
     return bank
     # return render_template("promo.html", **content)
