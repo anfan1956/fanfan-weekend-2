@@ -47,11 +47,34 @@ h1 {
   margin: 1rem 0;
   margin-bottom: 2rem;
 }
+.buy-message {
+  flex: 2;
+}
 .cell-basket {
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: start;
+}
+.confirmation-message {
+  width: 40%;
+  gap: 2rem;
+  flex-direction: row;
+  padding-left: 0.5rem;
+  padding-right: 2.5rem;
+}
+.confirmation-buttons {
+  flex: 4;
+  display: flex;
+  align-items: end;
+}
+.cancel-button {
+  height: fit-content;
+  width: 100%;
+  font-size: 16px;
+  background: var(--blueBack);
+  padding: 1rem 1rem 1rem 1rem;
+  cursor: pointer;
 }
 .counter {
   /* border: 1px solid blue; */
@@ -79,6 +102,24 @@ h1 {
   border: 2px black solid;
   margin: 0 auto;
 }
+.pmt-wrap {
+  display: flex;
+  flex-direction: column;
+}
+.pmt-logo {
+  width: 30%;
+  cursor: pointer;
+  box-shadow: 2px 2px 2px 2px lightgray;
+}
+.pmt-sys {
+  display: flex;
+  /* flex-direction: column; */
+  gap: 2rem;
+  width: 80%;
+  justify-content: space-evenly;
+  padding: 0.5rem;
+}
+
 .select-selected {
   background-color: dodgerblue;
 }
@@ -134,6 +175,9 @@ h1 {
   background-color: #dbedfc;
   color: #2f86c9;
   border-color: #46a8f5;
+}
+.conf-button.blue {
+  padding: 0;
 }
 .green {
   background-color: #b2ffe3;

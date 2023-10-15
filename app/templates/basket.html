@@ -4,16 +4,27 @@
 
 {{ super() }}
 
+
 <div class="confirmation-message">
-    <h1>Вы покупаете:
-    </h1>
-    <ul>
-        <li> количество штук: <span id="buy-qty">4</span> </li>
-        <li> на сумму: <span id="buy-amount">1 254 руб</span> </li>
-    </ul>
+    <div class="buy-message">
+        <h1>Вы покупаете:</h1>
+        <ul>
+            <li> количество штук: <span id="buy-qty">4</span> </li>
+            <li> на сумму: <span id="buy-amount">1 254 руб</span> </li>
+        </ul>
+    </div>
     <div class="confirmation-buttons">
-        <button class="conf-button green" id="make-payment">Перейти к оплате</button>
-        <button class="conf-button blue" id="cancel">вернуться в корзину</button>
+        <div class="pmt-wrap">
+            <div>Выберите платежную систему</div>
+            <div class="pmt-sys">
+                <img id="tinkoff" class="pmt-logo" src="../static/images/tinkoff2.png">
+                <img id="alfabank" class="pmt-logo" src="../static/images/alfabank2.png">
+                <img id="yandex" class="pmt-logo" src="../static/images/yandex.png">
+            </div>
+            <button class="cancel-button" id="cancel">вернуться в корзину</button>
+        </div>
+
+        <!-- <button class="conf-button green" id="make-payment">Перейти к оплате</button> -->
     </div>
 </div>
 
@@ -130,8 +141,8 @@
             </div>
         </div>
     </div>
-
 </div>
+
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
     crossorigin="anonymous"></script>
 <script>

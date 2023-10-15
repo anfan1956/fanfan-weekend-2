@@ -173,7 +173,7 @@ function buySelected (inv, spotid, pickupid, orderTotal) {
         window.location.href = '/basket'
       }
     }
-    console.log(data, state)
+    // console.log(data, state)
   })
 }
 
@@ -243,10 +243,10 @@ function selected (action) {
       obj.discount = obj.discount / 100
       obj.promo = obj.promo / 100
       obj.total = qty * obj.price * (1 - obj.discount) * (1 - obj.promo)
-      console.log(obj.total)
+      // console.log(obj.total)
 
       totalSelected += obj.total
-      console.log(totalSelected, ' iter totalSelected')
+      // console.log(totalSelected, ' iter totalSelected')
 
       pcsSelected += qty
       obj1.push(obj)
@@ -257,7 +257,7 @@ function selected (action) {
       error: 'nothing selected'
     }
   }
-  console.log(pcsSelected, totalSelected)
+  // console.log(pcsSelected, totalSelected)
   return obj1
 }
 
@@ -453,14 +453,7 @@ function flashConfirmation () {
   let spotid, pickupid
   let region = 'us'
   let inv = selected()
-  console.log(inv)
 
-  console.log(
-    inv,
-    'flashConfirmation, function "selected()"',
-    pcsSelected,
-    totalSelected
-  )
   if (inv.error) {
     flashMessage('Нужно отметить то, что вы хотите купить', false)
     return
@@ -470,6 +463,7 @@ function flashConfirmation () {
     flashMessage('нужно выбрать способ доставки')
     return
   }
+  $('.product-container').css('opacity', '0.3')
   $('#buy-amount').text(
     totalSelected.toLocaleString(region, {
       maximumFractionDigits: 0
@@ -477,9 +471,10 @@ function flashConfirmation () {
   )
   $('#buy-qty').text(pcsSelected)
 
-  $('.confirmation-message').slideDown(250)
+  $('.confirmation-message').slideDown(500).css('display', 'flex')
   $('#cancel').click(function () {
-    $('.confirmation-message').slideUp(250)
+    $('.confirmation-message').slideUp(500)
+    $('.product-container').css('opacity', '1')
   })
   $('#make-payment').click(function () {
     $('.confirmation-message').slideUp(500)
@@ -491,3 +486,35 @@ function flashConfirmation () {
     buySelected(inv, spotid, pickupid, totalSelected)
   })
 }
+$('.pmt-logo').each(function () {
+  $(this).click(function () {
+    // let thisPhone = {}
+    thisPhone.phone = Cook.phone
+    thisPhone.Session = Cook.Session
+    thisPhone.spotid = $('#delivery').val()
+    thisPhone.procName = 'ON_SITE RESERVATION'
+    thisPhone.orderTotal = totalSelected
+    let pmtSys = $(this).attr('id')
+    if (pmtSys == 'yandex') {
+      pmtSys = 'tinkoff'
+    }
+    thisPhone.pmtSys = pmtSys
+
+    let inv = selected()
+    // inv.unshift(thisPhone)
+    console.log(inv)
+    promissed = basketActions(inv)
+    promissed.done(function (data, state) {
+      if (state == 'success') {
+        console.log(data)
+        if (!data.error) {
+          flashMessage('Товар зарезервирован. Переход к оплате', true, 5000)
+          window.location.href = data
+        } else {
+          flashMessage(data.error, false, 5000)
+          window.location.href = '/basket'
+        }
+      }
+    })
+  })
+})
