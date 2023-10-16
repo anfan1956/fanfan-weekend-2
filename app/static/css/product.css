@@ -327,6 +327,11 @@ input[type="number"]::-webkit-outer-spin-button {
   /* background-color: antiquewhite; */
   font-size: 16px;
 }
+.note {
+  font-style: italic;
+  padding-top: 0.2rem;
+  padding-left: 0.5rem;
+}
 .phone-icon {
   width: 2rem;
   height: 2rem;

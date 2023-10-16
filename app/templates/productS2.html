@@ -64,30 +64,27 @@
             </div>
         </div>
         <div class="buttons-one-click">
-
-            <div class="one-click-wrapper">
+            <div class="confirmation-buttons">
                 <div class="pmt-wrap">
-                    <div>Выберите платежную систему</div>
+                    <div>&ndash; Выбрать платежную систему</div>
                     <div class="pmt-sys">
-                        <img id="tinkoff" class="pmt-logo" src="../static/images/tinkoff2.png">
-                        <img id="alfabank" class="pmt-logo" src="../static/images/alfabank2.png">
+                        <img id="alfabank" class="pmt-logo" src="../static/images/alfabank.png">
+                        <img id="tinkoff" class="pmt-logo" src="../static/images/tinkoff.png">
                         <img id="yandex" class="pmt-logo" src="../static/images/yandex.png">
                     </div>
                 </div>
-                <div class="note">
-                    &#42;вам будет отправлен код заказа. По нему вы сможете или оформить доставку, или забрать товар из
-                    магазина
-                    <br><br> или &nbsp;&nbsp;&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;
-                </div>
+
             </div>
+            <div class="note">
+                <br>&ndash; выбрать или добавить адрес доставки;
+            </div>
+
             <div class="one-click-wrapper">
                 <div id="addr" name="addr" class="addr">
                     <div class="custom-select">
-                        <select class="delivery" name="delivery" id="delivery">
-                            <!-- to change font size -->
-                            <!-- <option class="ogroup" value="choose address">-выбрать или добавить адрес доставки-</option> -->
-                            <option value="choose address">-выбрать или добавить адрес доставки-</option>
-                            <!-- <option value="new-address">добавить адрес</option> -->
+                        <select class="delivery" name="delivery" id="delivery"
+                            placeholder="-выбрать или добавить адрес доставки-">
+
                             <option value="pickup-18">самовывоз: ТК "Дрим Хаус, магазин "ФАНФАН"</option>
                             <option value="pickup-25">самовывоз: ТК "Крокус Сити Молл", магазин "ФАНФАН"</option>
                             <option value="pickup-27">самовывоз: ТК "Крокус Сити Молл", магазин "WEEKEND"</option>
@@ -99,14 +96,11 @@
                         </select>
                     </div>
                 </div>
-                <div class="note">
-                    <br> или &nbsp;&nbsp;&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;
-                </div>
             </div>
 
-
             <div class="one-click-wrapper">
-                <button class="button-oneclick" id="back-to-shop">
+                <br>
+                &ndash; или &nbsp;&nbsp;<button class="button-oneclick" id="back-to-shop">
                     вернуться в магазин
                 </button>
             </div>
