@@ -126,10 +126,6 @@ function buySelected () {
     )
     return false
   }
-  if (delivery.val() == 'choose address') {
-    flashMessage('нужно выбрать способ доставки')
-    return false
-  }
   if ($.isNumeric(delivery.val())) {
     spotid = delivery.val()
     thisPhone.spotid = spotid
@@ -163,6 +159,60 @@ function buySelected () {
     console.log(data, state)
   })
 }
+function readyToBuy () {
+  let checked = false
+  if (Cook.phone == undefined) {
+    flashMessage(
+      'Чтобы делать покупки авторизуйтесь в личном кабинете',
+      false,
+      flashTime
+    )
+    return false
+  }
+  $('.basket-checkbox').each(function () {
+    if ($(this).is(':checked')) {
+      checked = true
+    }
+  })
+  if (checked == false) {
+    flashMessage('Нужно отметить то, что вы хотите купить', false, flashTime)
+    return false
+  }
+  let delivery = $('#delivery option:selected')
+  if (delivery.val() == 'choose address') {
+    flashMessage('нужно выбрать способ доставки')
+    return
+  }
+  $('.main-message').slideDown(500).css('display', 'flex')
+  $('.basket-container').css('opacity', '0.2')
+
+  // $('#toPay').text(toPay)
+  // $('#qty').text(pcs)
+  // let totals = calcTotals()
+  let toPay = $('#toPay').text()
+  console.log(toPay, ' this is toPay')
+
+  let pcs = $('#qty').text()
+  $('#buy-qty').text(pcs)
+  $('#buy-amount').text(toPay)
+}
+
+$('#cancel').click(function () {
+  $('.main-message').slideUp(500).css('display', 'none')
+  $('.basket-container').css('opacity', '1')
+})
+
+$('.pmt-logo').each(function () {
+  $(this).click(function () {
+    let pmtSys = $(this).attr('id')
+    if (pmtSys == 'yandex') {
+      pmtSys = 'tinkoff'
+    }
+    thisPhone.pmtSys = pmtSys
+
+    buySelected()
+  })
+})
 
 // new version actually working
 function removeSelected () {
@@ -361,3 +411,18 @@ function openProductPage (arg) {
 function submitChanges () {
   console.log(newObj)
 }
+
+// $('#buy-selected').click(function () {
+//   let inv = selected()
+//   if (inv.error) {
+//     flashMessage(inv.error)
+//     return
+//   }
+//   let delivery = $('#delivery option:selected')
+//   if (delivery.val() == 'choose address') {
+//     flashMessage('нужно выбрать способ доставки')
+//     return
+//   }
+//   $('.main-message').slideDown(500).css('display', 'flex')
+//   $('.basket-container').css('opacity', '0.2')
+// })

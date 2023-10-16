@@ -213,7 +213,8 @@ def calculate_webOrder(js, products=None):
                         break
                 if f == 0:
                     print(product['discount'], type(product['discount']))
-                    amount += int(product['qty']) * int(product['price'])*(1 - float(product['discount']))*(1 - float(product['promo']))
+                    amount += int(int(product['qty']) * int(product['price'])*(1 - float(product['discount']))*(1 - float(product['promo'])))
+                    # print("the issue: ",  int(product['qty']) * int(product['price'])*(1 - float(product['discount']))*(1 - float(product['promo'])))
                     qty += int(product['qty'])
     total = sum([int(j['количество']) for j in js])
     amount = int(amount)

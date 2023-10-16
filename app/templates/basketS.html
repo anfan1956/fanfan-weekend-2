@@ -3,133 +3,143 @@
 
 <link rel="stylesheet" href="{{url_for('static', filename='/css/basketS.css')}}">
 {{ super() }}
+<div class="main-container">
 
-
-<div class="confirmation-message">
-    <h1>Вы покупаете:
-    </h1>
-    <ul>
-        <li> количество штук: <span id="buy-qty">4</span> </li>
-        <li> на сумму: <span id="buy-amount">1 254 руб</span> </li>
-    </ul>
-    <div class="confirmation-buttons">
-        <button class="conf-button green" id="make-payment">Перейти к оплате</button>
-        <button class="conf-button blue" id="cancel">вернуться в корзину</button>
-    </div>
-</div>
-
-
-
-<div class="basket-product">
-    {% if basket_content %}
-    <h1>Корзина: {{basket_content}}</h1>
-    {% else %}
-    <div id="orders" class="cell-basket">
-    </div>
-    {% endif %}
-</div>
-<div class="housekeeping">
-    <div class="headers">
-        <div class="heading">Доставка</div>
-        <div class="heading">Корзина</div>
-    </div>
-    <div id="addr" name="addr" class="addr">
-        <div class="custom-select">
-            <!-- <select class="delivery" name="delivery" id="delivery" onchange="deliveryAction()"> -->
-            <select class="delivery" name="delivery" id="delivery">
-                <option value="choose address">-- выбрать или добавить адрес доставки --
-                </option>
-                <option value="pickup-18">самовывоз: ТК "Дрим Хаус, магазин "ФАНФАН""</option>
-                <option value="pickup-25">самовывоз: ТК "Крокус Сити Молл", магазин "ФАНФАН"</option>
-                <option value="pickup-27">самовывоз: ТК "Крокус Сити Молл", магазин "WEEKEND"</option>
-                <!-- <option value="new-address">добавить адрес</option> -->
-                {% if addrData %}
-                {% for a in addrData %}
-                <option value="{{a.spotid}}">{{a.address_string}}</option>
-                {% endfor %}
-                {% endif %}
-            </select>
+    <div class="main-message">
+        <div class="buy-message">
+            <h1>Вы покупаете:</h1>
+            <ul>
+                <li> количество штук: <span id="buy-qty">4</span> </li>
+                <li> на сумму: <span id="buy-amount">1 254 руб</span> </li>
+            </ul>
         </div>
-        <div>
-            <h1 class="address-warning">адрес доставки не выбран</h1>
+        <div class="confirmation-buttons">
+            <div class="pmt-wrap">
+                <div>Выберите платежную систему</div>
+                <div class="pmt-sys">
+                    <img id="tinkoff" class="pmt-logo" src="../static/images/tinkoff2.png">
+                    <img id="alfabank" class="pmt-logo" src="../static/images/alfabank2.png">
+                    <img id="yandex" class="pmt-logo" src="../static/images/yandex.png">
+                </div>
+                <button class="cancel-button" id="cancel">вернуться в корзину</button>
+            </div>
+
         </div>
     </div>
-</div>
-{% for d in data %}
-<div class="product">
-    <div class="image">
-        <img class="img" src="/static/images/parent/{{d.модель}}/120/{{d.photo}}">
-    </div>
-    <div class="product-info">
-        <h1>{{d.марка}}</h1>
-        <p class="info">{{d.категория}}</p>
-        <p class="info model">модель: {{d.модель}}</p>
-        <p class="info color">цв.: {{d.цвет}}</p>
-        <p class="info size">размер: {{d.размер}}</p>
-    </div>
-    <div class="checks">
-        <input type="checkbox" class="basket-checkbox">
-        <div> &nbsp;</div>
-        <div style="cursor:pointer"> + &#8593;</div>
-        <div> &nbsp;</div>
-        <div style="cursor:pointer"> - &#8595;</div>
-    </div>
 
-    <div class="product-numbers">
-        <h1 class="num">Цена </h1>
-        {% if d.промо + d.скидка > 0 %}
-        <p class="info-num crossed price">{{'{:,}'.format(d.цена|int)}}</p>
-        {% else %}
-        <p class="info-num price">{{'{:,}'.format(d.цена|int)}}</p>
-        {% endif %}
-        {% if d.скидка > 0 %}
-        <p class="info-num discount">скидка: -{{'{:.0%}'.format(d.скидка)}}</p>
-        {% endif %}
-        {% if d.промо > 0 %}
-        <p class="info-num promo">промо: -{{'{:.0%}'.format(d.промо)}}</p>
-        {% endif %}
-        <p class="info-num">
-            {% if d.промо + d.скидка > 0 %}
-            {{ '{:,}' .format((
-            d.цена * (1 - d.промо)*(1 - d.скидка))|int)}}
+    <div class="basket-container">
+        <div class="basket-product">
+            {% if basket_content %}
+            <h1>Корзина: {{basket_content}}</h1>
+            {% else %}
+            <div id="orders" class="cell-basket">
+            </div>
             {% endif %}
-        </p>
-        <p class="pcs qty">штук: {{d.количество}}</p>
-        <h1 class="num1">Всего: {{
-            '{:,}' .format((
-            d.количество * d.цена * (1 - d.промо)*(1 - d.скидка))|int)}}</h1>
-    </div>
-</div>
-{% endfor %}
-<div class="totals">
-    <div class="in-basket">
-        <h1>В корзине:</h1>
-        <h1><span class="span-totals" id="total"></span></h1>
-    </div>
-    <div class="checked">
-        <div class="total">
-            <h1>Штук:</h1>
-            <h1><span class="span-totals" id="qty"></span></h1>
         </div>
-        <div class="total">
-            <h1>К оплате:</h1>
-            <h1><span class="span-totals" id="toPay"></span></h1>
+        <div class="housekeeping">
+            <div class="headers">
+                <div class="heading">Доставка</div>
+                <div class="heading">Корзина</div>
+            </div>
+            <div id="addr" name="addr" class="addr">
+                <div class="custom-select">
+                    <!-- <select class="delivery" name="delivery" id="delivery" onchange="deliveryAction()"> -->
+                    <select class="delivery" name="delivery" id="delivery">
+                        <option value="choose address">-- выбрать или добавить адрес доставки --
+                        </option>
+                        <option value="pickup-18">самовывоз: ТК "Дрим Хаус, магазин "ФАНФАН""</option>
+                        <option value="pickup-25">самовывоз: ТК "Крокус Сити Молл", магазин "ФАНФАН"</option>
+                        <option value="pickup-27">самовывоз: ТК "Крокус Сити Молл", магазин "WEEKEND"</option>
+                        <!-- <option value="new-address">добавить адрес</option> -->
+                        {% if addrData %}
+                        {% for a in addrData %}
+                        <option value="{{a.spotid}}">{{a.address_string}}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+                <div>
+                    <h1 class="address-warning">адрес доставки не выбран</h1>
+                </div>
+            </div>
+        </div>
+        {% for d in data %}
+        <div class="product">
+            <div class="image">
+                <img class="img" src="/static/images/parent/{{d.модель}}/120/{{d.photo}}">
+            </div>
+            <div class="product-info">
+                <h1>{{d.марка}}</h1>
+                <p class="info">{{d.категория}}</p>
+                <p class="info model">модель: {{d.модель}}</p>
+                <p class="info color">цв.: {{d.цвет}}</p>
+                <p class="info size">размер: {{d.размер}}</p>
+            </div>
+            <div class="checks">
+                <input type="checkbox" class="basket-checkbox">
+                <div> &nbsp;</div>
+                <div style="cursor:pointer"> + &#8593;</div>
+                <div> &nbsp;</div>
+                <div style="cursor:pointer"> - &#8595;</div>
+            </div>
+            <div class="product-numbers">
+                <h1 class="num">Цена </h1>
+                {% if d.промо + d.скидка > 0 %}
+                <p class="info-num crossed price">{{'{:,}'.format(d.цена|int)}}</p>
+                {% else %}
+                <p class="info-num price">{{'{:,}'.format(d.цена|int)}}</p>
+                {% endif %}
+                {% if d.скидка > 0 %}
+                <p class="info-num discount">скидка: -{{'{:.0%}'.format(d.скидка)}}</p>
+                {% endif %}
+                {% if d.промо > 0 %}
+                <p class="info-num promo">промо: -{{'{:.0%}'.format(d.промо)}}</p>
+                {% endif %}
+                <p class="info-num">
+                    {% if d.промо + d.скидка > 0 %}
+                    {{ '{:,}' .format((
+                    d.цена * (1 - d.промо)*(1 - d.скидка))|int)}}
+                    {% endif %}
+                </p>
+                <p class="pcs qty">штук: {{d.количество}}</p>
+                <h1 class="num1">Всего: {{
+                    '{:,}' .format((
+                    d.количество * d.цена * (1 - d.промо)*(1 - d.скидка))|int)}}</h1>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="totals">
+            <div class="in-basket">
+                <h1>В корзине:</h1>
+                <h1><span class="span-totals" id="total"></span></h1>
+            </div>
+            <div class="checked">
+                <div class="total">
+                    <h1>Штук:</h1>
+                    <h1><span class="span-totals" id="qty"></span></h1>
+                </div>
+                <div class="total">
+                    <h1>К оплате:</h1>
+                    <h1><span class="span-totals" id="toPay"></span></h1>
+                </div>
+            </div>
+        </div>
+        <div class="buttons-area">
+            <button class="button blue" type="button" id="select-all" onclick="selectAll()">
+                отметить все &#x2714;
+            </button>
+            <button class="button sand" type="button" id="clear-selected" onclick="clearSelected()">
+                снять &#x2714;
+            </button>
+            <!-- <button class="button green" type="button" id="buy-selected" onclick="buySelected()"> -->
+            <button class="button green" type="button" id="buy-selected" onclick="readyToBuy()">
+                купить &#x2714;
+            </button>
+            <button class="button red" type="button" id="remove-selected" onclick="removeSelected()">
+                удалить &#x2714;
+            </button>
         </div>
     </div>
-</div>
-<div class="buttons-area">
-    <button class="button blue" type="button" id="select-all" onclick="selectAll()">
-        отметить все &#x2714;
-    </button>
-    <button class="button sand" type="button" id="clear-selected" onclick="clearSelected()">
-        снять &#x2714;
-    </button>
-    <button class="button green" type="button" id="buy-selected" onclick="buySelected()">
-        купить &#x2714;
-    </button>
-    <button class="button red" type="button" id="remove-selected" onclick="removeSelected()">
-        удалить &#x2714;
-    </button>
 </div>
 
 

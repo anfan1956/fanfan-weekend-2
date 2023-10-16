@@ -3,9 +3,65 @@
   font-size: 12px;
 }
 
+.basket-container {
+  opacity: 1;
+}
 body {
   padding-bottom: 30rem;
 }
+.buy-message > h1 {
+  font-size: 18px;
+  font-weight: 700;
+}
+.buy-message {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.cancel-button {
+  width: 60%;
+  padding: 1rem 2rem;
+  background-color: var(--greenBack);
+  border: 1px solid var(--greenForgr);
+  border-radius: 4px;
+  box-shadow: 2px 2px 2px 2px lightgrey;
+  cursor: pointer;
+}
+.main-container {
+  position: relative;
+}
+.main-message {
+  display: none;
+  background: var(--neutral);
+  flex-direction: column;
+  position: fixed;
+  gap: 3rem;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  box-shadow: 2px 2px 2px 2px lightgrey;
+  padding: 3rem 2rem 5rem;
+  border: 1px solid var(--greenForgr);
+}
+.pmt-logo {
+  width: 90%;
+  background-color: white;
+  cursor: pointer;
+}
+.pmt-sys {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+}
+.pmt-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
 @media (max-width: 768px) {
   .addr {
     margin: 1rem;

@@ -577,7 +577,7 @@ def basket_actions():
             amounts_equal = True
             if action == 'ON_SITE RESERVATION':
                 orderTotals = calculate_webOrder(basketContent, data)
-                print(f"orderTotals['amount'] from calculate_webOrder: {orderTotals['amount']} ")
+                print(f"orderTotals['amount'] from calculate_webOrder: {orderTotals['amount']} , orderTotal {orderTotal}")
                 amounts_equal = (orderTotals['amount'] == orderTotal)
             if amounts_equal or action == 'ONE_CLICK':
                 sql = f"exec web.reservation_json {order}"
