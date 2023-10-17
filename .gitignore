@@ -17,3 +17,5 @@ main.py
 *test2.py
 *site_settings.py
 scrap/
+*/test.js
+app/static/js/test.js
