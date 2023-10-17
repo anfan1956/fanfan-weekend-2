@@ -1,4 +1,4 @@
-p = p
+p = p //all the products, defined as flask data variable in catalog.html
   .replaceAll('&#39;', '')
   .replaceAll('}, {', '},{')
   .replaceAll('  ', ' ')
@@ -8,6 +8,7 @@ p = p
   .replaceAll('{', '{"')
 
 p = JSON.parse(p)
+console.log(p)
 
 function sort_by_cat () {
   let x = document.getElementById('criteria-select').value

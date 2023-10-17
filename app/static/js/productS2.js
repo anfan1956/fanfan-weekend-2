@@ -164,12 +164,6 @@ function render (color, items) {
       qtyBox.removeClass('filled')
       qtyBox.val('')
     })
-  } else {
-    flashMessage(
-      'авторизуйтесь, чтобы получить промокод, добавлять товар в корзину, или покупать в один клик',
-      false,
-      flashTime
-    )
   }
 }
 

@@ -8,11 +8,12 @@ p = p
   .replaceAll('{', '{"')
 
 p = JSON.parse(p)
+// console.log(p)
 
 function sort_by_cat () {
   let x = document.getElementById('criteria-select').value
-  //   console.log('selected: ' + x)
-  let checklist = ['бренд', 'категория']
+  // console.log('selected: ' + x)
+  let checklist = ['бренд', 'категория', 'цена', 'скидка']
   p = sortData(p, x)
   const criteria = cr_list(x)
   if (checklist.includes(x)) {
@@ -26,8 +27,14 @@ function cr_list (y) {
     criteria = p.map(({ бренд }) => бренд)
   } else if (y == 'категория') {
     criteria = p.map(({ категория }) => категория)
+  } else if (y == 'цена') {
+    criteria = p.map(({ цена }) => цена)
+  } else if (y == 'скидка') {
+    criteria = p.map(({ скидка }) => скидка)
   }
   criteria = [...new Set(criteria)]
+  // console.log(criteria)
+
   return criteria
 }
 
@@ -57,6 +64,30 @@ function sortData (data, byKey) {
       }
       return 0
     })
+  } else if (byKey == 'цена') {
+    sortedData = data.sort(function (a, b) {
+      let x = parseInt(a.цена)
+      let y = parseInt(b.цена)
+      if (x > y) {
+        return 1
+      }
+      if (x < y) {
+        return -1
+      }
+      return 0
+    })
+  } else if (byKey == 'скидка') {
+    sortedData = data.sort(function (a, b) {
+      let x = parseFloat(a.скидка)
+      let y = parseFloat(b.скидка)
+      if (x < y) {
+        return 1
+      }
+      if (x > y) {
+        return -1
+      }
+      return 0
+    })
   } else {
     sortedData = data
   }
@@ -70,7 +101,22 @@ function render (x, y) {
   y.forEach(item => {
     let crit_list = document.createElement('p')
     crit_list.classList.add('criteria')
-    crit_list.innerText = item
+    if (x == 'скидка') {
+      let disc = 'Скидка ' + parseFloat(item * 100).toFixed(0) + '%'
+      crit_list.innerText = disc
+    } else if (x == 'цена') {
+      let price =
+        'Цена ' +
+        parseInt(item).toLocaleString('us', {
+          minimumFractionDigits: 0
+        }) +
+        ' руб.'
+      crit_list.innerText = price
+    } else {
+      crit_list.innerText = item
+    }
+    console.log(x, item, ': sort item')
+
     container.appendChild(crit_list)
 
     let wrapper = document.createElement('div')
@@ -84,6 +130,14 @@ function render (x, y) {
         if (element.категория == item) {
           populate(element, wrapper)
         }
+      } else if (x == 'цена') {
+        if (element.цена == item) {
+          populate(element, wrapper)
+        }
+      } else if (x == 'скидка') {
+        if (element.скидка == item) {
+          populate(element, wrapper)
+        }
       }
     })
   })
@@ -93,7 +147,8 @@ function populate (element, wrapper) {
   let details = [
     'артикул: ' + element.артикул,
     'модель: ' + element.модель,
-    'цена: ' + element.цена
+    'цена: ' + element.цена,
+    'скидка: ' + element.скидка
   ]
   let cell = document.createElement('div')
   let brand = document.createElement('div')
