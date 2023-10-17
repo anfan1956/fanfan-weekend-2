@@ -326,7 +326,7 @@ $('.pmt-logo').each(function () {
     let fin_price
     let arg = Cook.phone
     let final = parseInt(
-      $('#final-price').text().split(' ')[0].replace(',', '')
+      $('#final-price').text().split(' ')[0].replace(',', '').replace(' ', '')
     )
     fin_price = $('#quantity').val() * final
     let styleData = addStyleData(arg)
