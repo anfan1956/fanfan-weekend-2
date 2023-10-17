@@ -107,7 +107,7 @@ function render (x, y) {
     } else if (x == 'цена') {
       let price =
         'Цена ' +
-        parseInt(item).toLocaleString('us', {
+        parseInt(item).toLocaleString('en-US', {
           minimumFractionDigits: 0
         }) +
         ' руб.'

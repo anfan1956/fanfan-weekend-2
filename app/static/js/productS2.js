@@ -274,7 +274,7 @@ $('.basket-buy').click(function () {
       $('#final-price').text().split(' ')[0].replace(',', '')
     )
     fin_price = $('#quantity').val() * final
-    let final_price = fin_price.toLocaleString('us') + ' руб.'
+    let final_price = fin_price.toLocaleString('en-US') + ' руб.'
     $('#final-price').text(final_price)
     $('#pmt-link').click(function () {
       arg = Cook.phone

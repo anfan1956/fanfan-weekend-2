@@ -334,7 +334,15 @@ $('.pmt-logo').each(function () {
     let styleData = addStyleData(arg)
     styleData.qty = $('#quantity').val()
     styleData.total = fin_price
-    thePhone.spotid = $('#delivery').val()
+    let id = $('#delivery').val().split('-')
+    console.log('future spotid id: ', id)
+    if (id[0] == 'spotid') {
+      thePhone.spotid = id[1]
+    }
+    if (id[0] == 'pickup') {
+      thePhone.pickupid = id[1]
+    }
+
     thePhone.phone = arg
     thePhone.orderTotal = fin_price
     thePhone.Session = Cook.Session

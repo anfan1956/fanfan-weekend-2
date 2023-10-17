@@ -451,7 +451,7 @@ function submitChanges () {
 
 function flashConfirmation () {
   let spotid, pickupid
-  let region = 'us'
+  let region = 'en-US'
   let inv = selected()
 
   if (inv.error) {

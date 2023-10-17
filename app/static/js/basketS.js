@@ -37,8 +37,8 @@ function selectAll () {
     item.checked = true
   })
   let totals = calcTotals()
-  let toPay = totals.amount.toLocaleString('us')
-  let pcs = totals.pcs.toLocaleString('us')
+  let toPay = totals.amount.toLocaleString('en-US')
+  let pcs = totals.pcs.toLocaleString('en-US')
   $('#toPay').text(toPay)
   $('#total').text(toPay)
   $('#qty').text(pcs)
@@ -86,8 +86,8 @@ function calcSelected () {
     inv.error = 'ничего не выбрано'
   }
   // console.log(inv)
-  let toPay = amount.toLocaleString('us')
-  pcs = pcs.toLocaleString('us')
+  let toPay = amount.toLocaleString('en-US')
+  pcs = pcs.toLocaleString('en-US')
   $('#toPay').text(toPay)
   $('#qty').text(pcs)
   return inv
@@ -388,7 +388,7 @@ function calcTotals () {
   })
   totals.amount = amount
   totals.pcs = pcs
-  amount = amount.toLocaleString('us')
+  amount = amount.toLocaleString('en-US')
   $('#total').text(amount)
   return totals
 }
