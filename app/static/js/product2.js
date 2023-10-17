@@ -270,7 +270,7 @@ $('.basket-buy').click(function () {
     $('.product-container').css('opacity', '0.2')
     $('#one-click-qty').text('Количество: ' + $('#quantity').val())
     let final = parseInt(
-      $('#final-price').text().split(' ')[0].replace(',', '').replace(' ', '')
+      $('#final-price').text().split(' ')[0].replace(',', '')
     )
     if (product == 'spotid') {
       $('#delivery').val(spotid)
@@ -281,7 +281,7 @@ $('.basket-buy').click(function () {
     fin_price = $('#quantity').val() * final
     console.log('fin_price: ', fin_price)
 
-    let final_price = fin_price.toLocaleString('ru') + ' руб.'
+    let final_price = fin_price.toLocaleString() + ' руб.'
     $('#final-price').text(final_price)
 
     $('#pmt-link').click(function () {
@@ -326,7 +326,7 @@ $('.pmt-logo').each(function () {
     let fin_price
     let arg = Cook.phone
     let final = parseInt(
-      $('#final-price').text().split(' ')[0].replace(',', '').replace(' ', '')
+      $('#final-price').text().split(' ')[0].replace(',', '')
     )
     fin_price = $('#quantity').val() * final
     console.log('from .pmt-logo fin_price', fin_price)
