@@ -329,6 +329,8 @@ $('.pmt-logo').each(function () {
       $('#final-price').text().split(' ')[0].replace(',', '').replace(' ', '')
     )
     fin_price = $('#quantity').val() * final
+    console.log('from .pmt-logo fin_price', fin_price)
+
     let styleData = addStyleData(arg)
     styleData.qty = $('#quantity').val()
     styleData.total = fin_price
