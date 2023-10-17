@@ -270,7 +270,7 @@ $('.basket-buy').click(function () {
     $('.product-container').css('opacity', '0.2')
     $('#one-click-qty').text('Количество: ' + $('#quantity').val())
     let final = parseInt(
-      $('#final-price').text().split(' ')[0].replace(',', '')
+      $('#final-price').text().split(' ')[0].replace(',', '').replace(' ', '')
     )
     if (product == 'spotid') {
       $('#delivery').val(spotid)
@@ -278,8 +278,9 @@ $('.basket-buy').click(function () {
       delSelect(spotid)
     }
 
-    // $().text().split(' ')[0].replace(',', '')
     fin_price = $('#quantity').val() * final
+    console.log('fin_price: ', fin_price)
+
     let final_price = fin_price.toLocaleString('us') + ' руб.'
     $('#final-price').text(final_price)
 
