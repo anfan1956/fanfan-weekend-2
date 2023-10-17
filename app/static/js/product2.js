@@ -263,6 +263,10 @@ $('.image-icons').click(function () {
 
 // one click buy procedure
 $('.basket-buy').click(function () {
+  if (!Cook.phone) {
+    flashMessage('для покупки требуется авторизация', false, flashTime)
+    return false
+  }
   let fin_price
   if (sizeSelected()) {
     $('#current-size').text('размер: ' + size)

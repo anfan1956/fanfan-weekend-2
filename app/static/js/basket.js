@@ -453,7 +453,10 @@ function flashConfirmation () {
   let spotid, pickupid
   let region = 'en-US'
   let inv = selected()
-
+  if (!Cook.phone) {
+    flashMessage('для покупки требуется авторизация')
+    return false
+  }
   if (inv.error) {
     flashMessage('Нужно отметить то, что вы хотите купить', false)
     return

@@ -311,13 +311,16 @@ def product2(styleid):
 
 @app.route('/productS2/<styleid>', methods=['GET', 'POST'])
 def productS2(styleid):
+    dt = dt_time_max()
     phone = request.cookies.get('phone')
     Session = request.cookies.get('Session')
     print(Session)
-    if not phone and not Session:
-        res = make_response(redirect(url_for('register2', menu=menu())))
-        res.set_cookie("currentLocation", request.path)
-        return res
+    if not Session:
+        Session = str(uuid.uuid4())
+    # if not phone and not Session:
+    #     res = make_response(redirect(url_for('productS2', styleid=styleid)))
+    #     res.set_cookie("currentLocation", request.path)
+    #     return res
     sql = f"select web.delivery_addr_js_('{phone}')"
     print(sql)
     addr_list = json.loads(s(sql))
@@ -338,6 +341,7 @@ def productS2(styleid):
     }
     res = make_response(render_template('productS2.html', **content))
     res.set_cookie("currentLocation", request.path)
+    res.set_cookie("Session", Session, expires=dt)
     return res
     # return render_template('productS2.html', **content)
 
