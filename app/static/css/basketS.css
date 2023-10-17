@@ -101,6 +101,10 @@ body {
     background-color: var(--greenForgr);
     color: white;
   }
+  .item-menu {
+    font-family: Roboto;
+    font-size: 18px;
+  }
   .red {
     background-color: var(--redBack);
     color: var(--redForgr);

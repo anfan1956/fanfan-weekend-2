@@ -1,5 +1,8 @@
 * {
-  font-family: "Mulish", sans-serif;
+  font-family: "Mulish", sans-serif, "Roboto;";
+}
+.item-menu {
+  font-family: "Roboto";
 }
 h1 {
   margin: 0.5rem;
@@ -102,6 +105,7 @@ h1 {
   border: 2px black solid;
   margin: 0 auto;
 }
+
 .pmt-logo {
   width: 90%;
   cursor: pointer;

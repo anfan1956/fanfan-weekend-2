@@ -1,6 +1,9 @@
 body {
-  font-family: "Mulish", sans-serif;
+  font-family: "Mulish", sans-serif, "Roboto";
 }
 .card-body {
   font-family: "Mulish", sans-serif;
+}
+.item-menu {
+  font-family: "Roboto";
 }

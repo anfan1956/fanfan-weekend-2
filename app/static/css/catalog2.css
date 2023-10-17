@@ -92,7 +92,10 @@ p {
     width: 130px;
     /* width: 100px; */
   }
-
+  .item-menu {
+    font-size: 18px;
+    font-family: "Roboto";
+  }
   .main-frame {
     padding-top: 1rem;
     padding-bottom: 40rem;
@@ -118,6 +121,9 @@ p {
   * {
     font-size: 18px;
     font-family: Mulish;
+  }
+  .item-menu {
+    font-family: Roboto;
   }
   .brand-title {
     font-family: Roboto;

@@ -1,6 +1,9 @@
 * {
   font-family: Mulish;
 }
+.item-menu {
+  font-family: Roboto;
+}
 a {
   /* color: #fff; */
   text-decoration: none;
@@ -128,6 +131,10 @@ a {
   }
   .info {
     /* font-size: 6px; */
+  }
+  .item-menu {
+    font-size: 18px;
+    font-family: "Roboto";
   }
   .home-header {
     margin-top: 1rem;

@@ -343,7 +343,7 @@ nav.menu > a {
     align-items: center;
     justify-content: baseline;
     gap: 2rem;
-    margin-left: 1.5rem;
+    margin-left: 1rem;
     margin-top: 0;
   }
   .menu-icon {
@@ -422,8 +422,9 @@ nav.menu > a {
     z-index: 100;
   }
   header {
+    font-family: "Roboto";
     /* max-height: 80px; */
-    font-size: 14px;
+    font-size: 18px;
     background: #f8de86;
   }
 }

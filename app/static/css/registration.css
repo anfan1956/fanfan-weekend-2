@@ -1,5 +1,8 @@
 * {
-  font-family: Mulish;
+  font-family: Mulish, Roboto;
+}
+.item-menu {
+  font-family: "Roboto";
 }
 li {
   padding-bottom: 0.2rem;
