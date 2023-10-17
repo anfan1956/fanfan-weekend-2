@@ -281,7 +281,7 @@ $('.basket-buy').click(function () {
     fin_price = $('#quantity').val() * final
     console.log('fin_price: ', fin_price)
 
-    let final_price = fin_price.toLocaleString('us') + ' руб.'
+    let final_price = fin_price.toLocaleString('ru') + ' руб.'
     $('#final-price').text(final_price)
 
     $('#pmt-link').click(function () {
