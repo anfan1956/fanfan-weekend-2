@@ -77,20 +77,15 @@ $(function () {
   water = $('#watermark')
   data = allData.replaceAll('&#39;', '"')
   data = JSON.parse(data)
-  console.log('Data: ', data)
-
   styleid = data.styleid
   items = data.items
-  var sizes = data.sizes.split(',')
-  console.log(data.items)
-  console.log('Sizes: ', sizes)
-
   images = data.images
   photo = data.photo
   Cook = getCookies()
+  // console.log(Cook)
+
   mainColor = getMainColor()
   for (i in items) {
-    renderColorQtys(items[i], sizes)
     if (items[i].color == mainColor) {
       render(mainColor, items[i])
     }
@@ -112,6 +107,7 @@ $(function () {
     window.location.href = '/register2'
   })
   let spotSearch = location.search.split('=')
+  console.log(spotSearch)
 
   product = spotSearch[0].replace('?', '')
   if (product == 'spotid') {
@@ -120,37 +116,6 @@ $(function () {
     $('#delivery option[value=5]').prop('selected', 'selected')
   }
 })
-
-function renderColorQtys (arg, sizes) {
-  console.log('rendering items[i]: ', arg)
-  $('.color-wrap').each(function () {
-    $wrap = $(this)
-    let color = $.trim($(this).text())
-    if (color == arg.color) {
-      let qtys = arg.qtys
-      for (let q in qtys) {
-        let index = sizes.indexOf(qtys[q].size)
-        let quantity = qtys[q].qty.toString()
-        console.log(typeof quantity)
-
-        console.log(qtys[q].size, qtys[q].qty)
-        $wrap
-          .closest('.left')
-          .siblings('.right')
-          .find('.column')
-          .eq(index)
-          .css('background', 'rgb(237, 255, 237)')
-          .css('text-decoration', 'none')
-        $wrap
-          .closest('.left')
-          .siblings('.right')
-          .find('.quantity')
-          .eq(index)
-          .text(quantity)
-      }
-    }
-  })
-}
 
 // procedure pick the color of main image from Flask rendering
 // unless the page was redirected to from basket

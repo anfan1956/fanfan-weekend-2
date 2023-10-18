@@ -126,7 +126,7 @@
                     руб! </span>
             </div>
             {% endif %}
-            {% if data.promo != 0 %}
+            {% if data.promo > 0 %}
             <div class="promo-discount-p">
                 промо: {{ '{:.0%}'.format(data.promo) }}
             </div>
@@ -134,7 +134,7 @@
             <div id="watermark">
                 <img id="main" class="product-img" src="{{parent}}{{ data.styleid }}/800/{{data.photo}}">
             </div>
-            {% if data.discount != 0 %}
+            {% if data.discount > 0 %}
             <div class="discount item-p">
                 - {{ "{:,.0%}".format(data.discount) }}
             </div>
@@ -162,103 +162,98 @@
                 <div class="product-info-section">
                     <div class="container-sizes">
                         <div class="left">
-                            <div class="wrap">Размеры:</div>
+                            <div class="left-color">Цвета:</div>
                         </div>
-                        <div class="right">
-                            {% for size in data.sizes.split(",") %}
-                            <div class="column-sizes">
-                                <div class="sizes">{{size}}</div>
-                            </div>
+                        <div id="colors" class="right">
+                            {% for color in data.colors.split(",") %}
+                            <div class="color">{{ color }}</div>
                             {% endfor %}
                         </div>
                     </div>
-                    <div class="left-color">Цвета:</div>
-                    {% for color in data.colors.split(",") %}
                     <div class="container-sizes">
                         <div class="left">
-                            <div class="color-wrap">
-                                {{ color }}
-                            </div>
+                            <div class="wrap">Размеры:</div>
+                            <div class="wrap">Количество:</div>
                         </div>
                         <div class="right">
                             {% for size in data.sizes.split(",") %}
                             <div class="column">
-                                <div class="quantity">0</div>
+                                <div class="sizes">{{size}}</div>
+                                <div class="quantities">0</div>
                             </div>
                             {% endfor %}
                         </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="product-info-section ">
-                <div class="icons">
-                    {% for photo in data.photos.split(",") %}
-                    <td><img class="image-icons" src="{{parent}}{{ data.styleid }}/800/{{photo}}"></td>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="product-info-section">
-                <div class="cell-ordering">
-                    <div class="basket-section">
-                        <div class="basket-left">
-                            <div class="basket-buttons">
-                                <div class="btn-wrap">
-                                    <input class="product-selected" id="product-selected" autocomplete="off"
-                                        placeholder=" -- Выберите цвет и размер или позвоните  ">
-                                    <div style="display:flex; justify-content:space-around">
-                                        <!-- <label class="for-qty" for="quantity">к-во:</label> -->
-                                        <input class="product-qty" type="number" id="quantity" name="quantity" min="1"
-                                            value="">
-                                    </div>
-                                </div>
 
-                                <div class="buttons-all-wrap">
-                                    <div class="btn-one-wrap">
-                                        <button class="basket-buy">купить в один клик </button>
-                                        <!-- <button class="button-promo">Промокод </button> -->
-                                        <button class="basket-button" type="button" id="addBasket">добавить в
-                                            корзину
-                                        </button>
+                    </div>
+                </div>
+                <div class="product-info-section ">
+                    <div class="icons">
+                        {% for photo in data.photos.split(",") %}
+                        <td><img class="image-icons" src="{{parent}}{{ data.styleid }}/800/{{photo}}"></td>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="product-info-section">
+                    <div class="cell-ordering">
+                        <div class="basket-section">
+                            <div class="basket-left">
+                                <div class="basket-buttons">
+                                    <div class="btn-wrap">
+                                        <input class="product-selected" id="product-selected" autocomplete="off"
+                                            placeholder=" -- Выберите цвет и размер или позвоните  ">
+                                        <div style="display:flex; justify-content:space-around">
+                                            <!-- <label class="for-qty" for="quantity">к-во:</label> -->
+                                            <input class="product-qty" type="number" id="quantity" name="quantity"
+                                                min="1" value="">
+                                        </div>
                                     </div>
-                                    <button class="button-promo2" id="btn-promo2">Авторизация</button>
-                                </div>
-                                <div class="cb2">
-                                    <!-- this on is the call me up basket-button -->
-                                    <a href="javascript:;" onclick="callmeup(13244);"
-                                        class="js-callme-modal-1 callmebutton3" id="callButton">
-                                        Обратный звонок</a>
-                                    <img src="/static/images/phone_4.png" class="phone-icon">
+
+                                    <div class="buttons-all-wrap">
+                                        <div class="btn-one-wrap">
+                                            <button class="basket-buy">купить в один клик </button>
+                                            <!-- <button class="button-promo">Промокод </button> -->
+                                            <button class="basket-button" type="button" id="addBasket">добавить в
+                                                корзину
+                                            </button>
+                                        </div>
+                                        <button class="button-promo2" id="btn-promo2">Авторизация</button>
+                                    </div>
+                                    <div class="cb2">
+                                        <!-- this on is the call me up basket-button -->
+                                        <a href="javascript:;" onclick="callmeup(13244);"
+                                            class="js-callme-modal-1 callmebutton3" id="callButton">
+                                            Обратный звонок</a>
+                                        <img src="/static/images/phone_4.png" class="phone-icon">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="basket-right">
-                            <a href="/basket" id="gotoBasket"><img class="basket-icon" src="/static/images/basket_4.png"
-                                    alt=""></a>
-                            {% if basket_total != 0 %}
-                            <div class="basket-info">
-                                <span style="font-weight: bold;
+                            <div class="basket-right">
+                                <a href="/basket" id="gotoBasket"><img class="basket-icon"
+                                        src="/static/images/basket_4.png" alt=""></a>
+                                {% if basket_total != 0 %}
+                                <div class="basket-info">
+                                    <span style="font-weight: bold;
                                         font-size:1.2em;">
-                                    В корзине:
-                                </span>
-                                <br>
-                                этого товара:
-                                <span class="this-in-basket" id="this-qty">
-                                </span>
-                                <br>
-                                Всего:
-                                <span class="total-in-basket" id="basket-total"> </span>
+                                        В корзине:
+                                    </span>
+                                    <br>
+                                    этого товара:
+                                    <span class="this-in-basket" id="this-qty">
+                                    </span>
+                                    <br>
+                                    Всего:
+                                    <span class="total-in-basket" id="basket-total"> </span>
+                                </div>
+                                {% endif %}
                             </div>
-                            {% endif %}
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>
 </div>
 
 
