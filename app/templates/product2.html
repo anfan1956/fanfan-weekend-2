@@ -172,7 +172,10 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <div class="left-color">Цвета:</div>
+                    <div class="container-sizes">
+                        <div class="left-color">Цвета:</div>
+                        <div class="left-color">Количество:</div>
+                    </div>
                     {% for color in data.colors.split(",") %}
                     <div class="container-sizes">
                         <div class="left">
@@ -183,7 +186,7 @@
                         <div class="right">
                             {% for size in data.sizes.split(",") %}
                             <div class="column">
-                                <div class="quantity">0</div>
+                                <div class="quantity">&nbsp;</div>
                             </div>
                             {% endfor %}
                         </div>

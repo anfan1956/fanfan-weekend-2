@@ -1,22 +1,16 @@
-if (window.matchMedia('(max-width: 768px)').matches) {
-  console.log('switch to different location')
-  let search = location.search
-  let path = location.pathname.split('/')[2]
-  window.location.href = '/productS2/' + path + search
-  console.log(path + ', ' + location.search)
-}
-var data,
-  items,
-  mainColor,
-  photo,
-  images,
-  styleid,
-  water,
-  size,
-  spotid,
-  deliveryData
-var styleid, Cook, thisColor, search, alert_message, alert_general, product
+var data
+$(document).ready(function () {
+  $('.image-icons').on('click', function () {
+    $('#main').attr('src', $(this).attr('src'))
+  })
+  data = allData.replaceAll('&#39;', '"')
+  data = JSON.parse(data)
+  // console.log(data)
+})
+var data, items, mainColor, photo, images, styleid, water, size, deliveryData
+var styleid, Cook, thisColor, search, alert_message, alert_general
 var flashTime = 3000
+var thisPhone = {}
 const parent = '/static/images/parent/'
 alert_message = $('.alert-message')
 alert_general = $('.alert-general')
@@ -33,6 +27,8 @@ if (spot_search.split('=')[0] == '?spotid') {
 }
 
 $('#delivery option').each(function () {
+  console.log('testing default')
+
   $('#delivery').parent().css('background-color', 'var(--redBack)')
   $('.address-warning').css('display', 'block')
   let value = $(this).val()
@@ -45,6 +41,7 @@ $('#delivery option').each(function () {
     $('#delivery').parent().css('background-color', 'var(--greenBack)')
     return false
   } else if ($.isNumeric(value) && value > 0) {
+    console.log(value)
     $('#delivery').val(value)
     $('.address-warning').hide()
     $('#delivery').parent().css('background-color', 'var(--greenBack)')
@@ -60,6 +57,7 @@ $('#delivery').on('change', function () {
   } else if (value[0] == 0) {
     let path = location.pathname
     console.log('path: ', path)
+
     window.location.href = '/delivery?' + path
     console.log(value, ' - will have to run new proc')
   } else {
@@ -75,19 +73,18 @@ $(function () {
   water = $('#watermark')
   data = allData.replaceAll('&#39;', '"')
   data = JSON.parse(data)
-  console.log('Data.main color: ', data.color)
   styleid = data.styleid
   items = data.items
-  var sizes = data.sizes.split(',')
-  // console.log(data.items)
-  // console.log('Sizes: ', sizes)
-
   images = data.images
   photo = data.photo
   Cook = getCookies()
-  mainColor = getMainColor() //the whole purpose of function is to pick color from basket
+  thisPhone['phone'] = Cook.phone
+  thisPhone['Session'] = Cook.Session
+  // console.log(Cook)
+
+  mainColor = getMainColor()
+
   for (i in items) {
-    renderColorQtys(items[i], sizes)
     if (items[i].color == mainColor) {
       render(mainColor, items[i])
     }
@@ -106,45 +103,10 @@ $(function () {
     }
   }
   $('#btn-promo2').on('click', function () {
+    let newPath = window.location.pathname
     window.location.href = '/register2'
   })
-  let spotSearch = location.search.split('=')
-  product = spotSearch[0].replace('?', '')
-  if (product == 'spotid') {
-    spotid = spotSearch[1]
-    console.log('on document read: location.search', product, spotid)
-    $('#delivery option[value=5]').prop('selected', 'selected')
-  }
 })
-
-// this function renders the colors table
-function renderColorQtys (arg, sizes) {
-  $('.color-wrap').each(function () {
-    $wrap = $(this)
-    let color = $.trim($(this).text())
-    if (color == arg.color) {
-      let qtys = arg.qtys
-      for (let q in qtys) {
-        let index = sizes.indexOf(qtys[q].size)
-        let quantity = qtys[q].qty.toString()
-        $wrap
-          .closest('.left')
-          .siblings('.right')
-          .find('.column')
-          .eq(index)
-          .addClass('avail')
-          .css('text-decoration', 'none')
-          .css('cursor', 'pointer')
-        $wrap
-          .closest('.left')
-          .siblings('.right')
-          .find('.quantity')
-          .eq(index)
-          .text(quantity)
-      }
-    }
-  })
-}
 
 // procedure pick the color of main image from Flask rendering
 // unless the page was redirected to from basket
@@ -159,18 +121,12 @@ function getMainColor () {
       }
     }
   }
-  $('.color-wrap').each(function () {
-    let color = $.trim($(this).text())
-    // console.log(color)
-
-    if (color == mainColor) {
-      $(this).closest('.left').addClass('active')
-    }
-  })
   return mainColor
 }
 
 function render (color, items) {
+  console.log(items, 'from render proc')
+
   let columns = $('.column')
   let colors = $('.color')
   let sizes = $('.sizes')
@@ -184,10 +140,11 @@ function render (color, items) {
         // console.log(items.qtys)
         items.qtys.forEach(element => {
           if (element.size == $(this).text()) {
-            // console.log(element.size, $(this).text())
+            // console.log(element.size, $(this).text(), ' - just checking qtys')
 
             columns.eq(index).addClass('col-color')
             qtys.eq(index).text(element.qty)
+            // console.log(element.qty)
           }
         })
       })
@@ -211,56 +168,28 @@ function render (color, items) {
 }
 
 // select size and quantity for "one click" and for "add to basket"
-// this proc have a response in a form of an object {"this": , "total":} with alreadyInBasket proc
+// this proc have a response in a form of an object {"this": , "total":}
 $('.column').click(function () {
-  let selection = $('#product-selected')
+  $('.sizes').removeClass('size_selected')
+  $('.quantities').removeClass('size_selected')
+  let column = $(this)
+  size = column.find('.sizes').text()
+  let qty = column.find('.quantities').text()
+  let color = $('#colors').find('.active').text()
+  let curr_size = $('#product-selected')
   let qtyBox = $('#quantity')
-  selection.removeClass('filled').val('')
-  qtyBox.removeClass('filled').val('')
-  let index, column
-  if ($(this).hasClass('avail')) {
-    $('.column').removeClass('size-selected')
-    $('.left').removeClass('size-selected').removeClass('active')
-    $('.column-sizes').removeClass('size-selected')
-    column = $(this)
-    index = $(this).index()
-    let the_size = column
-      .closest('.product-info-section')
-      .find('.column-sizes')
-      .eq(index)
-    the_size.addClass('size-selected')
-    size = the_size.find('.sizes').text()
-    // console.log('Size: ', size)
-    // console.log('this index is:', index)
-    column.addClass('size-selected')
-    column.closest('.container-sizes').find('.left').addClass('size-selected')
-    let color = $.trim(
-      column.closest('.container-sizes').find('.color-wrap').text()
-    )
-    src_error = '/static/images/error2.png'
-    let src, img
-    $('#main').attr('src', src_error)
-    $('.image-icons').each(function () {
-      src = $(this).attr('src')
-      console.log(src)
-
-      img = src.split('/').slice(-1)[0]
-
-      for (let j in images) {
-        if (images[j].color == color && images[j].img == img) {
-          // console.log(images[j].color)
-          $('#main').attr('src', src).css('display', '')
-          return false
-        }
-      }
-      // console.log(img)
-    })
-
-    // console.log('color: ', color)
-    let text = 'Выбор - цвет: ' + color + ',  размер: ' + size
-    selection.addClass('filled').val(text)
-    qtyBox.addClass('filled').val(1)
+  curr_size.removeClass('filled')
+  curr_size.val('')
+  qtyBox.removeClass('filled')
+  qtyBox.val('')
+  if (column.hasClass('col-color')) {
+    curr_size.val('Выбор: "' + color + '",  размер: ' + size)
+    curr_size.addClass('filled')
+    qtyBox.addClass('filled')
+    $(this).find('.quantities').addClass('size_selected')
+    $(this).find('.sizes').addClass('size_selected')
     thisColor = color
+    qtyBox.val(1)
     let data = getItemData('sizeQuantities')
     // console.log(data, 'from getItemData')
     alreadyInBasket(data)
@@ -294,9 +223,8 @@ $('.color').click(function () {
 $('.image-icons').click(function () {
   let source = $(this).attr('src')
   let thisImage = source.split('/').slice(-1)[0]
-  $('.column').removeClass('size-selected')
-  $('.column-sizes').removeClass('size-selected')
-  $('.left').removeClass('size-selected')
+  $('.sizes').removeClass('size_selected')
+  $('.quantities').removeClass('size_selected')
   for (let i in images) {
     img = images[i].img
     if (img == thisImage) {
@@ -327,13 +255,17 @@ $('.image-icons').click(function () {
 })
 
 // one click buy procedure
+// one click buy procedure
+// one click buy procedure
 $('.basket-buy').click(function () {
-  if (!Cook.phone) {
+  let fin_price
+  let arg = Cook.phone
+  if (arg == undefined) {
     flashMessage('для покупки требуется авторизация', false, flashTime)
     return false
   }
-  let fin_price
   if (sizeSelected()) {
+    console.log('style data:')
     $('#current-size').text('размер: ' + size)
     $('#myModal').css('display', 'block')
     $('.product-container').css('opacity', '0.2')
@@ -341,20 +273,12 @@ $('.basket-buy').click(function () {
     let final = parseInt(
       $('#final-price').text().split(' ')[0].replace(',', '')
     )
-    if (product == 'spotid') {
-      $('#delivery').val(spotid)
-      console.log(spotid, product, ' before addr change')
-      delSelect(spotid)
-    }
-
     fin_price = $('#quantity').val() * final
-    console.log('fin_price: ', fin_price)
-
     let final_price = fin_price.toLocaleString('en-US') + ' руб.'
     $('#final-price').text(final_price)
-
     $('#pmt-link').click(function () {
       arg = Cook.phone
+      console.log('arg - see if phone is definded: ', arg)
       let thePhone = {}
       let inv = []
       if (deliveryData != undefined) {
@@ -376,7 +300,6 @@ $('.basket-buy').click(function () {
       inv[0] = styleData
       inv.unshift(thePhone)
       console.log('inv', inv)
-
       // paymentLink(styleData)
       // paymentLink(inv)
     })
@@ -398,20 +321,10 @@ $('.pmt-logo').each(function () {
       $('#final-price').text().split(' ')[0].replace(',', '')
     )
     fin_price = $('#quantity').val() * final
-    console.log('from .pmt-logo fin_price', fin_price)
-
     let styleData = addStyleData(arg)
     styleData.qty = $('#quantity').val()
     styleData.total = fin_price
-    let id = $('#delivery').val().split('-')
-    console.log('future spotid id: ', id)
-    if (id[0] == 'spotid') {
-      thePhone.spotid = id[1]
-    }
-    if (id[0] == 'pickup') {
-      thePhone.pickupid = id[1]
-    }
-
+    thePhone.spotid = $('#delivery').val()
     thePhone.phone = arg
     thePhone.orderTotal = fin_price
     thePhone.Session = Cook.Session
@@ -434,10 +347,7 @@ $('.pmt-logo').each(function () {
 // add to basket procedure
 $('#addBasket').click(function () {
   if (sizeSelected()) {
-    let current = $('.column.size-selected').find('.quantity').text()
-    console.log(current)
-
-    let max = current - $('#this-qty').text()
+    let max = $('.quantities.size_selected').text() - $('#this-qty').text()
     let qtyAdded = $('#quantity').val()
     if (qtyAdded > max) {
       flashMessage('Превышено максимальное количество', false, flashTime)
@@ -446,11 +356,14 @@ $('#addBasket').click(function () {
     }
     let data = getItemData('insert')
     let qty = data.qty
+    // console.log(qty, ' added to basket')
     promissed = addToBasket(data)
     promissed.done(function (data) {
       if (data.error) {
         flashMessage(data.error)
-        return false
+        // alert_message.text(data.error)
+        // alert_general.css('display', 'flex')
+        return
       } else {
         flashMessage(`в корзину добавлено: ${qtyAdded} ед товара`, true)
         document.querySelector('#this-qty').innerHTML = data.this
@@ -458,12 +371,6 @@ $('#addBasket').click(function () {
       }
     })
   }
-})
-
-// close alert window button
-$('.OK').click(function () {
-  $('.product-container').css('opacity', '1')
-  $('.alert-general').css('display', 'none')
 })
 
 // procedure checks if size is selected for to buy with one click or
@@ -554,15 +461,14 @@ function getCookies () {
 
 function addStyleData (arg) {
   let b_data = new Object()
+  b_data.styleid = styleid
   b_data.color = thisColor
   b_data.size = size
-  b_data.styleid = styleid
   b_data.price = data.price
   b_data.discount = data.discount
   b_data.promo = data.promo
-  b_data.total = data.price * (1 - data.discount) * (1 - data.promo)
+  // b_data.total = data.price * (1 - data.discount) * (1 - data.promo)
   // b_data.phone = arg
-  // b_data.qty = 1
   return b_data
 }
 
@@ -597,6 +503,7 @@ function alreadyInBasket (arg) {
     success: function (data, state) {
       data = data == 'None' ? 0 : data
       // console.log(data)
+
       document.querySelector('#this-qty').innerHTML = data.this
       document.querySelector('#basket-total').innerHTML = data.total
     }

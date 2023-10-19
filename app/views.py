@@ -541,9 +541,10 @@ def basket_actions():
         pmtSys = data[0].get('pmtSys')
         print(f'basket_actions - "procName {action}"')
         phone = data[0].get('phone')
-        orderTotal = int(data[0].get('orderTotal'))
-        print(f'"orderTotal" from data : {orderTotal}')
-        print(action, 'action in ONE_CLICK', action in ['ON_SITE RESERVATION', 'ONE_CLICK'])
+        if action != 'remove':
+            orderTotal = int(data[0].get('orderTotal'))
+            print(f'"orderTotal" from data : {orderTotal}')
+            # print(action, 'action in ONE_CLICK', action in ['ON_SITE RESERVATION', 'ONE_CLICK'])
         if action == 'calculate':
             data = f"'{json.dumps(data)}'"
             sql = f"select web.basket_toPay_json({data})"
@@ -557,7 +558,7 @@ def basket_actions():
         if action in ['remove', 'purchase']:
             data = json.dumps(data)
             data = f"'{data}'"
-            # print(f"after if action '{action}': {data}")
+            print(f"after if action '{action}': {data}")
             sql = f"exec web.basketAction_2 {data}"
             # print(f"sql: {sql}")
             result = s(sql)
