@@ -66,7 +66,11 @@
         {% for d in data %}
         <div class="product">
             <div class="image">
+                {% if d.photo == "None" %}
+                <img class="img error" src="/static/images/error2.png">
+                {% else %}
                 <img class="img" src="/static/images/parent/{{d.модель}}/120/{{d.photo}}">
+                {% endif %}
             </div>
             <div class="product-info">
                 <h1>{{d.марка}}</h1>

@@ -73,7 +73,7 @@ def basketS():
         data = s(sql)
         data = json.loads(data)
         data_0 = data[0]
-        print(data_0)
+        print('Printing basket content: ', data)
         basket_content = data_0.get('корзина')
         # sql = f"select cust.basket_totals_json('{phone}')"
         sql = f"select cust.basket_totals_json('{sqlParams}')"

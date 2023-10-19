@@ -194,6 +194,12 @@ body {
   .img {
     width: 100%;
     cursor: pointer;
+    margin: 0 auto;
+  }
+  .img.error {
+    display: block;
+    width: 50%;
+    margin: auto;
   }
   .in-basket {
     flex: 1;
