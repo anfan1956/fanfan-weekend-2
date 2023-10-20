@@ -288,27 +288,6 @@ $('#delivery').on('change', function () {
   }
 })
 
-// function deliveryAction () {
-//   var value = $('#delivery').val()
-//   console.log(`deliveryAction #delivery.val(): ${value}`)
-//   // if (value == 'new-address') {
-//   if (value == 0) {
-//     window.location.href = '/delivery'
-//   } else if (value == 'choose address') {
-//     $('#delivery').parent().css('background-color', 'var(--redBack)')
-//     $('.address-warning').css('display', 'block')
-//   } else if (value == 'deliverTo') {
-//     $('#delivery').parent().css('background-color', 'var(--blueBack)')
-//     $('.address-warning').css('display', 'none')
-//   } else if ($.isNumeric(value)) {
-//     $('#delivery').parent().css('background-color', 'var(--greenBack)')
-//     $('.address-warning').css('display', 'none')
-//   } else {
-//     $('#delivery').parent().css('background-color', 'var(--sandBack)')
-//     $('.address-warning').css('display', 'none')
-//   }
-// }
-
 function getCookies () {
   let Cookies = {}
   document.cookie.split('; ').forEach(el => {

@@ -5,7 +5,7 @@
 {{ super() }}
 
 
-<div class="confirmation-message">
+<div class="main-message">
     <div class="buy-message">
         <h1>Вы покупаете:</h1>
         <ul>
@@ -104,7 +104,7 @@
                 <button class="button sand" type="button" id="clear-selected" onclick="clearSelected()">
                     снять &#x2714;
                 </button>
-                <button class="button green" type="button" id="buy-selected" onclick="flashConfirmation()">
+                <button class="button green" type="button" id="buy-selected" onclick="readyToBuy()">
                     купить &#x2714;
                 </button>
                 <button class="button red" type="button" id="remove-selected" onclick="removeSelected()">
@@ -142,7 +142,9 @@
         </div>
     </div>
 </div>
-
+<script>
+    var p = '{{data}}'
+</script>
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
     crossorigin="anonymous"></script>
 <script>

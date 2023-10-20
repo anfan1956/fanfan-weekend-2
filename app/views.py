@@ -18,8 +18,6 @@ sms_messages = send_sms_messages()
 @app.route("/home")
 def home():
     content = {"title": "про ФанФан и Weekend", "menu": menu()}
-    # print(content['menu'])
-    # abort(404)
     return render_template('home.html', **content)
 
 

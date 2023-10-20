@@ -59,12 +59,22 @@ h1 {
   flex-direction: column;
   justify-content: start;
 }
-.confirmation-message {
-  width: 40%;
+.main-message {
+  display: none;
+  background: var(--neutral);
   gap: 2rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
   flex-direction: row;
-  padding-left: 0.5rem;
-  padding-right: 2.5rem;
+  box-shadow: 2px 2px 2px 2px lightgrey;
+  padding: 3rem 2rem 5rem;
+  border: 1px solid var(--greenForgr);
+  /* padding-left: 0.5rem;
+  padding-right: 2.5rem; */
+  z-index: 100;
 }
 .confirmation-buttons {
   flex: 4;

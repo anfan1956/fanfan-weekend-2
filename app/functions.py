@@ -204,6 +204,7 @@ def calculate_webOrder(js, products=None):
         # products = json.loads(products)[1:]
         products = products[1:]
         for product in products:
+            print(product)
             product = replace_keys(product, mapping)
             for j in js:
                 f = 0
@@ -212,7 +213,7 @@ def calculate_webOrder(js, products=None):
                         f = 1
                         break
                 if f == 0:
-                    print(product['discount'], type(product['discount']))
+                    # print(product['discount'], type(product['discount']))
                     amount += int(int(product['qty']) * int(product['price'])*(1 - float(product['discount']))*(1 - float(product['promo'])))
                     # print("the issue: ",  int(product['qty']) * int(product['price'])*(1 - float(product['discount']))*(1 - float(product['promo'])))
                     qty += int(product['qty'])
