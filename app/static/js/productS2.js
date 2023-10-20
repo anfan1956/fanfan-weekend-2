@@ -373,7 +373,12 @@ $('.pmt-logo').each(function () {
     let styleData = addStyleData(arg)
     styleData.qty = $('#quantity').val()
     styleData.total = fin_price
-    thePhone.spotid = $('#delivery').val()
+    let delData = $('#delivery').val()
+    if (delData.split('-')[0] == 'pickup') {
+      thePhone.pickupid = delData.split('-')[1]
+    } else {
+      thePhone.spotid = delData.split('-')[0]
+    }
     thePhone.phone = arg
     thePhone.orderTotal = fin_price
     thePhone.Session = Cook.Session
@@ -386,10 +391,8 @@ $('.pmt-logo').each(function () {
     }
     thePhone.procName = 'ONE_CLICK'
     thePhone.pmtSys = pmtSys
-    // if (pmtSys == 'tinkoff') {
     console.log('inv', inv)
     paymentLink(inv)
-    // }
   })
 })
 

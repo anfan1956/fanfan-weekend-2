@@ -21,7 +21,7 @@ thisPhone['Session'] = Cook.Session
 
 // do not delete! To check later!
 $('#delivery > option').each(function () {
-  console.log('delivery > option proc')
+  // console.log('delivery > option proc')
   const $select = document.querySelector('#delivery')
   let search = window.location.search.split('=')
   $option = search.slice(1)[0]
@@ -255,7 +255,7 @@ $('#delivery option').each(function () {
     $('#delivery').parent().css('background-color', 'var(--greenBack)')
     return false
   } else if ($.isNumeric(value) && value > 0) {
-    console.log(value)
+    // console.log(value)
     $('#delivery').val(value)
     $('.address-warning').hide()
     $('#delivery').parent().css('background-color', 'var(--greenBack)')
