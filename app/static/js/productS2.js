@@ -5,7 +5,7 @@ $(document).ready(function () {
   })
   data = allData.replaceAll('&#39;', '"')
   data = JSON.parse(data)
-  // console.log(data)
+  console.log(data)
 })
 var data, items, mainColor, photo, images, styleid, water, size, deliveryData
 var styleid, Cook, thisColor, search, alert_message, alert_general
@@ -27,7 +27,7 @@ if (spot_search.split('=')[0] == '?spotid') {
 }
 
 $('#delivery option').each(function () {
-  console.log('testing default')
+  // console.log('testing default')
 
   $('#delivery').parent().css('background-color', 'var(--redBack)')
   $('.address-warning').css('display', 'block')
@@ -41,7 +41,7 @@ $('#delivery option').each(function () {
     $('#delivery').parent().css('background-color', 'var(--greenBack)')
     return false
   } else if ($.isNumeric(value) && value > 0) {
-    console.log(value)
+    // console.log(value)
     $('#delivery').val(value)
     $('.address-warning').hide()
     $('#delivery').parent().css('background-color', 'var(--greenBack)')
@@ -73,7 +73,7 @@ $(function () {
   water = $('#watermark')
   data = allData.replaceAll('&#39;', '"')
   data = JSON.parse(data)
-  console.log('Data.main color: ', data.color)
+  // console.log('Data.main color: ', data.color)
   styleid = data.styleid
   items = data.items
   var sizes = data.sizes.split(',')
@@ -169,7 +169,7 @@ function getMainColor () {
 }
 
 function render (color, items) {
-  console.log(items, 'from render proc')
+  // console.log(items, 'from render proc')
 
   let columns = $('.column')
   let colors = $('.color')
@@ -272,6 +272,9 @@ $('.column').click(function () {
 $('.image-icons').click(function () {
   let source = $(this).attr('src')
   let thisImage = source.split('/').slice(-1)[0]
+  $('.column').removeClass('size-selected')
+  $('.column-sizes').removeClass('size-selected')
+  $('.left').removeClass('size-selected')
   $('.sizes').removeClass('size_selected')
   $('.quantities').removeClass('size_selected')
   for (let i in images) {
