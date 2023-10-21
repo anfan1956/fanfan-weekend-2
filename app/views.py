@@ -294,7 +294,8 @@ def product2(styleid):
     if this_styleid == 'not available':
         abort(404)
     print(request.path, request.method)
-    sql = f"select web.product_({styleid})"
+    # sql = f"select web.product_({styleid})"
+    sql = f"select web.product2_({styleid})"
     big_data = json.loads(s(sql))
     data = big_data[0]
     content = {
