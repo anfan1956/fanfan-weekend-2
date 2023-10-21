@@ -346,20 +346,21 @@ def productS2(styleid):
     # return render_template('productS2.html', **content)
 
 
+# @app.route('/catalog')
+# def catalog():
+#     articles = art_display('/catalog', 0, False)
+#     brands = sorted({a['бренд'] for a in articles})
+#     cats = sorted({a['категория'] for a in art_display('/catalog', 0)})
+#     content = {"title": "Каталог товаров",
+#                "parent": parent,
+#                "articles": articles,
+#                "brands": brands,
+#                "cats": cats,
+#                "menu": menu()}
+#     return render_template('catalog.html', **content)
+
+
 @app.route('/catalog')
-def catalog():
-    articles = art_display('/catalog', 0, False)
-    brands = sorted({a['бренд'] for a in articles})
-    cats = sorted({a['категория'] for a in art_display('/catalog', 0)})
-    content = {"title": "Каталог товаров",
-               "parent": parent,
-               "articles": articles,
-               "brands": brands,
-               "cats": cats,
-               "menu": menu()}
-    return render_template('catalog.html', **content)
-
-
 @app.route('/catalog2')
 def catalog2():
     articles = art_display('/catalog', 0, False)
