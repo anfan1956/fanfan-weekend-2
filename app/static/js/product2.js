@@ -108,6 +108,7 @@ function renderColorQtys (arg, sizes) {
     let color = $.trim($(this).text())
     if (color == arg.color) {
       let qtys = arg.qtys
+      console.log('renderColorQtys: ', color, qtys)
       for (let q in qtys) {
         let index = sizes.indexOf(qtys[q].size)
         let quantity = qtys[q].qty.toString()

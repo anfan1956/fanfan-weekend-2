@@ -25,7 +25,7 @@ p {
 .sorts-filters {
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  /* width: 100%; */
   margin-top: 0rem;
   position: fixed;
   padding-left: 0.7rem;
