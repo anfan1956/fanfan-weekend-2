@@ -249,14 +249,14 @@ def register2():
     return render_template('register2.html', menu=menu(), form=form())
 
 
-@app.route("/main")
-def main():
-    content = {"title": "Последние поступления",
-               "parent": parent,
-               "articles": art_display('/main', 6),
-               "menu": menu(),
-               "dates": set_dates('/main', 6)}
-    return render_template('main.html', **content)
+# @app.route("/main")
+# def main():
+#     content = {"title": "Последние поступления",
+#                "parent": parent,
+#                "articles": art_display('/main', 6),
+#                "menu": menu(),
+#                "dates": set_dates('/main', 6)}
+#     return render_template('main.html', **content)
 
 
 @app.route("/promo")
@@ -343,21 +343,6 @@ def productS2(styleid):
     res.set_cookie("currentLocation", request.path)
     res.set_cookie("Session", Session, expires=dt)
     return res
-    # return render_template('productS2.html', **content)
-
-
-# @app.route('/catalog')
-# def catalog():
-#     articles = art_display('/catalog', 0, False)
-#     brands = sorted({a['бренд'] for a in articles})
-#     cats = sorted({a['категория'] for a in art_display('/catalog', 0)})
-#     content = {"title": "Каталог товаров",
-#                "parent": parent,
-#                "articles": articles,
-#                "brands": brands,
-#                "cats": cats,
-#                "menu": menu()}
-#     return render_template('catalog.html', **content)
 
 
 @app.route('/catalog')
@@ -380,121 +365,8 @@ def shops():
     phone = '9167834248'
     cookies = dict(request.cookies)
     print(cookies)
-    # if not request.cookies.get('phone'):
-    #     # res = make_response(render_template("shops.html", title="Адреса магазинов", menu=menu()))
-    #     res = make_response(redirect(url_for("shops", title="Адреса магазинов", menu=menu())))
-    #     # res.set_cookie('phone', phone)
-    #     return res, 302
-    # else:
-    #     res = make_response("Value of phone is {}".format(request.cookies.get('phone')))
-    #     print(res)
 
     return render_template("shops.html", title="Адреса магазинов", menu=menu())
-
-
-@app.route("/login2", methods=['POST', 'GET'])
-def login2():
-    print(f'request.method: "{request.method}", request.path: "{request.path}"')
-    content = {"title": "Авторизация", "menu": menu()}
-    if request.method == 'POST':
-        dt = dt_time_max()
-        print(request.form)
-        phone = request.form.get('phone')
-        email = request.form.get('email')
-        emailCode = request.form.get('emailCode')
-        smsInput = request.form.get('smsInput')
-        btn_2 = request.form.get("btn-2")
-        if phone:
-            phone = re.sub(r"(^8)|(\+7)|[\s\-\(\)]", '', phone)
-            if len(phone) != 10:
-                flash("неверный формат телефона", "error")
-                return redirect(request.path)
-            flash("сообщение отправлено", category="success")
-            Session = str(uuid.uuid4())
-            if not smsInput:
-                sql = f"set nocount on; declare @r int; exec @r = web.smsGenerate '{phone}'; select @r"
-                sms_mes = str(s(sql))
-                print(sms_mes)
-                if sms_messages:
-                    sms(phone, sms_mes)
-                res = make_response(render_template('login.html', **content))
-                res.set_cookie('code', 'sms', 3)
-                res.set_cookie('phone', phone, 180)
-                res.set_cookie('Session', Session, 180)
-                res.set_cookie('email', 'email', 0)
-                res.set_cookie('promo', 'promo', 0)
-                return res
-        if smsInput:
-            phone = request.cookies.get('phone')
-            sql = f"select top 1 smsCode from web.sms_log where phone = '{phone}' order by logid desc"
-            sms_msg = str(s(sql))
-            print(sms_msg)
-            if smsInput == sms_msg:
-                Session = request.cookies.get('Session')
-                sql = f"set nocount on; declare @note varchar(max); exec web.promoAllStyles_p {phone}, @note output; " \
-                      f"select @note "
-                result = s(sql)
-                if sms_messages:
-                    sms(phone, result)
-                result = re.findall(r'\d{6}', result)[0]
-                flash('Телефон подтвержден. Промокод отправлен в СМС сообщении', category="success")
-                sql = f"select cust.customer_mail('{phone}')"
-                print(sql)
-                q_result = s(sql)
-                print(q_result)
-                res = make_response(render_template("login.html", **content))
-                res.set_cookie('phone', phone, expires=dt)
-                res.set_cookie('email', q_result, 180)
-                res.set_cookie('code', 'promo', 3)
-                res.set_cookie('promo', result, expires=dt)  # is not finished________________________________________________________
-                res.set_cookie('Session', Session, expires=dt)
-                return res
-            else:
-                flash("неверный код СМС", category='error')
-        if email:
-            print(f"email: {email}")
-            flash("На вашу почту отправлен код подтверждения.", category="success")
-            sql = f"set nocount on; declare @r int; exec @r = web.emailGenerate '{email}'; select @r"
-            code = str(s(sql))
-            print(code)
-            argv = {'code': code, 'To': email}
-            response = fanfan_send_mail(**argv)
-            print(f'"{response}": response to verification email')
-            res = make_response(render_template("login.html", **content))
-            res.set_cookie('code', 'email', 3)
-            res.set_cookie('email', email, 180)
-            return res
-        if emailCode:
-            email = request.cookies.get('email')
-            phone = request.cookies.get('phone')
-            notes = request.cookies.get('notes')
-            notes = 'True' if notes == 'on' else 'False'
-            sql = f"select top 1 emailCode from web.email_log where email = '{email}' order by logid desc"
-            print(f"sql: {sql}")
-            email_msg = str(s(sql))
-            print(email_msg)
-            if email_msg == emailCode:
-                sql = f"exec cust.email_update '{phone}' , '{email}' , '{notes}'"
-                print(sql)
-                result = s(sql)  # ______________________________________________________________________________________
-                print(f"email update result: {result}")  # __________________________________________________________
-                flash("Ваша почта подтверждена", category="success")
-                res = make_response(redirect(request.path))
-                res.set_cookie("email", email, 0)
-                res.set_cookie("code", 'allDone', 3)
-                return res
-            flash("неверный код подтверждения. Почта не зарегистрирована", category='error')
-            res = make_response(redirect(request.path))
-            res.set_cookie("code", 'promo', 3)
-            res.set_cookie("email", email, 3)
-            return res
-        if btn_2:
-            return redirect(url_for("promo"))
-        else:
-            res = make_response(render_template("login.html", **content))
-            res.set_cookie('code', 'promo', 3)
-            return res
-    return render_template("login.html", **content)
 
 
 @app.route('/sortCodeQty', methods=['POST', 'GET'])

@@ -2,7 +2,10 @@
   width: 100%;
   cursor: pointer;
 }
-
+.main-frame {
+  padding-top: 3rem;
+  padding-bottom: 40rem;
+}
 p {
   margin: 0;
   padding: 0.2rem;
@@ -20,14 +23,27 @@ p {
 }
 
 .sorts-filters {
-  display: block;
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   margin-top: 0rem;
   position: fixed;
   padding-left: 0.7rem;
   padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid grey;
+  box-shadow: 2px 2px 2px 2px rgb(230, 230, 230);
   z-index: 100;
-  background-color: white;
+  background-color: var(--mainBack);
+}
+.filters {
+  display: flex;
+  justify-content: right;
+  gap: 1rem;
+  margin-right: 2rem;
+}
+.sorts {
+  margin-left: 1rem;
 }
 
 @media (max-width: 768px) {
@@ -189,10 +205,6 @@ p {
     width: 150px;
   }
 
-  .main-frame {
-    padding-top: 2rem;
-    padding-bottom: 40rem;
-  }
   .wrapper {
     display: grid;
     max-width: 100%;

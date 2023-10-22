@@ -13,9 +13,8 @@ p = p //all the products, defined as flask data variable in catalog.html
   .replaceAll(', ', '", "')
   .replaceAll('}', '"}')
   .replaceAll('{', '{"')
-
 p = JSON.parse(p)
-console.log(p)
+// console.log(p)
 
 $(document).ready(function () {
   $('body').css('opacity', 1)

@@ -5,27 +5,35 @@
 <link rel="stylesheet" href="{{url_for('static', filename='/css/catalog2.css')}}">
 
 <div class="sorts-filters">
-    <select name="sort" id="criteria-select" class="sort-form" onchange="sort_by_cat()">
-        <option value="">-сорт по-</option>
-        <option value="бренд">бренду</option>
-        <option value="категория">категории</option>
-        <option value="цена">цене, вверх</option>
-        <!-- <option value="price-desc">цене, вниз</option> -->
-        <!-- <option value="novelty">по новизне</option> -->
-        <option value="скидка">по скидкам</option>
-    </select>
-    <select name="brand" id="brand" class="filter-form">
-        <option value="brand">-все марки-</option>
-        {% for b in brands %}
-        <option value="{{b}}" class="brands">{{ b }}</option>
-        {% endfor %}
-    </select>
-    <select name="category" id="category" class="filter-form-cat">
-        <option value="category">-все категории-</option>
-        {% for c in cats %}
-        <option class="cats">{{ c }}</option>
-        {% endfor %}
-    </select>
+    <div class="sorts">
+        <select name="sort" id="criteria-select" class="sort-form" onchange="sort_by_cat()">
+            <option value="">-сорт по-</option>
+            <option value="бренд">бренду</option>
+            <option value="категория">категории</option>
+            <option value="цена">цене, вверх</option>
+            <option value="скидка">по скидкам</option>
+            <option value="freshness">новизне</option>
+        </select>
+    </div>
+    <div class="filters">
+        <select name="brand" id="brand" class="filter-form">
+            <option value="0">-все марки-</option>
+            {% for b in brands %}
+            <option value="{{b}}" class="brands">{{ b }}</option>
+            {% endfor %}
+        </select>
+        <select name="category" id="category" class="filter-form-cat">
+            <option value="0">-все категории-</option>
+            {% for c in cats %}
+            <option class="cats">{{ c }}</option>
+            {% endfor %}
+        </select>
+        <select name="gender" id="gender" class="filter-form-gender">
+            <option value="0">-муж/жен-</option>
+            <option class="gen" value="МУЖ">для мужчин</option>
+            <option class="gen" value="ЖЕН">для женщин</option>
+        </select>
+    </div>
 </div>
 <div class="main-frame">
     <div class="container" id="container">
@@ -41,7 +49,9 @@
                         <span class="cat" style="
                         text-transform:lowercase;
                         font-weight:300;
-                        ">{{a.категория}}</span>
+                        ">{{a.категория}}
+                            , {{a.пол}}
+                        </span>
                     </p>
                     <a href="/product2/{{a.модель}}">
                         <img class="image" src="{{parent}}{{ a['модель'] }}/540/{{a.фото}}">

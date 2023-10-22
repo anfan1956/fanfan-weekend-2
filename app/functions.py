@@ -18,12 +18,11 @@ def replace_keys(dct, mapping):
 def menu():
     menu = [
             {"name": "О нас", "url": "/home"},
-            {"name": "Поступления", "url": "/main"},
+            # {"name": "Поступления", "url": "/main"},
             {"name": "Промо", "url": "/promo"},
             # {"name": "Каталог", "url": "/catalog"},
             {"name": "Каталог", "url": "/catalog2"},
             {"name": "Магазины", "url": "/shops"},
-            # {"name": "Логин", "url": "/login2"},
             {"name": "Личный кабинет", "url": "/register2"},
             {"name": "Корзина", "url": "/basket"},
             # {"name": "Корзина", "url": "/basketS"},
@@ -64,9 +63,9 @@ def art_display(route, months, old=True):
     arrivals = []
     match route:
         case '/main':
-            key_filter = ['дата','бренд', 'категория','модель','артикул', 'цена','фото', 'промо_скидка']
+            key_filter = ['дата', 'dates', 'бренд', 'категория', 'пол', 'модель','артикул', 'цена','фото', 'промо_скидка']
         case '/catalog':
-            key_filter = ['дата', 'бренд', 'категория','артикул','модель', 'цена', 'скидка', 'промо_скидка', 'фото']
+            key_filter = ['дата', 'dates', 'бренд', 'категория', 'пол', 'артикул','модель', 'цена', 'скидка', 'промо_скидка', 'фото']
         case _:
             key_filter = False
     if key_filter:
@@ -254,4 +253,5 @@ def use_pmtSys(arg, args):
 
 
 if __name__ == '__main__':
-    print(finish_date())
+    arr = art_display('/catalog', 12, False)
+    print(arr)

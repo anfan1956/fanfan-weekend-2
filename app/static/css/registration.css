@@ -45,6 +45,7 @@ span.area-code {
 #prefs.change {
   background-color: var(--blueBack);
   display: none;
+  cursor: pointer;
 }
 
 .comment {

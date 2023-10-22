@@ -6,18 +6,35 @@ p = p
   .replaceAll(', ', '", "')
   .replaceAll('}', '"}')
   .replaceAll('{', '{"')
-
 p = JSON.parse(p)
-// console.log(p)
+
+function datesMap (obj, criteria, days, дата) {
+  let crit = []
+  let r = new Map()
+  for (let d in obj) {
+    r.set(obj[d][days], obj[d][дата])
+  }
+  for (let s in criteria) {
+    crit.push(r.get(criteria[s]))
+  }
+  return crit
+}
 
 function sort_by_cat () {
   let x = document.getElementById('criteria-select').value
   // console.log('selected: ' + x)
-  let checklist = ['бренд', 'категория', 'цена', 'скидка']
+  let checklist = ['бренд', 'категория', 'цена', 'скидка', 'freshness']
   p = sortData(p, x)
   const criteria = cr_list(x)
   if (checklist.includes(x)) {
-    render(x, criteria)
+    if (x == 'freshness') {
+      let dates = 'dates'
+      let date = 'дата'
+      let theDates = datesMap(p, criteria, dates, date)
+      render(x, theDates)
+    } else {
+      render(x, criteria)
+    }
   }
 }
 
@@ -31,10 +48,10 @@ function cr_list (y) {
     criteria = p.map(({ цена }) => цена)
   } else if (y == 'скидка') {
     criteria = p.map(({ скидка }) => скидка)
+  } else if (y == 'freshness') {
+    criteria = p.map(({ dates, дата }) => dates)
   }
   criteria = [...new Set(criteria)]
-  // console.log(criteria)
-
   return criteria
 }
 
@@ -44,6 +61,7 @@ function sortData (data, byKey) {
     sortedData = data.sort(function (a, b) {
       let x = a.бренд.toLowerCase()
       let y = b.бренд.toLowerCase()
+      // sortOrder(x, y)
       if (x > y) {
         return 1
       }
@@ -88,6 +106,18 @@ function sortData (data, byKey) {
       }
       return 0
     })
+  } else if (byKey == 'freshness') {
+    sortedData = data.sort(function (a, b) {
+      let x = parseInt(a.dates)
+      let y = parseInt(b.dates)
+      if (x < y) {
+        return 1
+      }
+      if (x > y) {
+        return -1
+      }
+      return 0
+    })
   } else {
     sortedData = data
   }
@@ -112,13 +142,13 @@ function render (x, y) {
         }) +
         ' руб.'
       crit_list.innerText = price
+    } else if (x == 'freshness') {
+      let receipt = 'Дата получения: ' + item
+      crit_list.innerText = receipt
     } else {
       crit_list.innerText = item
     }
-    console.log(x, item, ': sort item')
-
     container.appendChild(crit_list)
-
     let wrapper = document.createElement('div')
     wrapper.classList.add('wrapper')
     p.forEach(element => {
@@ -136,6 +166,10 @@ function render (x, y) {
         }
       } else if (x == 'скидка') {
         if (element.скидка == item) {
+          populate(element, wrapper)
+        }
+      } else if (x == 'freshness') {
+        if (element.дата == item) {
           populate(element, wrapper)
         }
       }
@@ -161,7 +195,7 @@ function populate (element, wrapper) {
   brand.innerHTML = `<p class = "brand-title">${element.бренд}, <span style="
     text-transform:lowercase;
     font-weight:300;
-    ">${element.категория}</span> </p>`
+    ">${element.категория}, ${element.пол}</span> </p>`
   // photo.href = '/product/' + element.модель  - original ref
   photo.href = '/product2/' + element.модель
   image.src = parent + element.модель + '/540/' + element.фото
@@ -210,7 +244,7 @@ $(document).ready(function () {
     let criteria = $(this).val()
     $('.brand-wrapper').show()
     $('.criteria').each(function () {
-      if (criteria == 'brand') {
+      if (criteria == '0') {
         return false
       }
       if ($(this).text() != criteria) {
@@ -225,7 +259,7 @@ $(document).ready(function () {
   $('#category').on('change', function () {
     let criteria = $(this).val()
     console.log(criteria)
-    if (criteria == 'category') {
+    if (criteria == '0') {
       $('.criteria').show()
     } else {
       $('.criteria').hide()
@@ -235,10 +269,38 @@ $(document).ready(function () {
       $(this).closest('.cell').show()
     })
     $('.cat').each(function () {
-      if (criteria == 'category') {
+      // console.log($(this).text())
+
+      if (criteria == '0') {
         return false
       }
-      if ($(this).text() != criteria) {
+      let cat = $.trim($(this).text().split(',')[0])
+      if (cat != criteria) {
+        $(this).closest('.cell').hide()
+      } else {
+        $(this).closest('.cell').show()
+      }
+    })
+  })
+
+  $('#gender').on('change', function () {
+    let criteria = $(this).val()
+    console.log(criteria)
+    if (criteria == '0') {
+      $('.criteria').show()
+    } else {
+      $('.criteria').hide()
+    }
+    $('.cell').show()
+    $('.criteria').each(function () {
+      $(this).closest('.cell').show()
+    })
+    $('.cat').each(function () {
+      let cat = $.trim($(this).text().split(',')[1])
+      if (criteria == '0') {
+        return false
+      }
+      if (cat != criteria) {
         $(this).closest('.cell').hide()
       } else {
         $(this).closest('.cell').show()
