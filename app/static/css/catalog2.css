@@ -25,10 +25,18 @@ p {
 .sorts-filters {
   display: flex;
   justify-content: space-between;
-  /* width: 100%; */
-  margin-top: 0rem;
   position: fixed;
+  /* position: sticky; */
+  width: 100%;
+  max-width: 1440px;
+  margin-top: 0rem;
+  margin: 0 auto;
+  gap: 3rem;
+  /* position: absolute; */
+  /* left: 0;
+  right: 0; */
   padding-left: 0.7rem;
+  /* padding-right: 5.7rem; */
   padding-top: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid grey;
