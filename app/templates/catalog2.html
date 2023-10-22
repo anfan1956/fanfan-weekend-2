@@ -7,7 +7,7 @@
 <div class="sorts-filters">
     <div class="sorts">
         <select name="sort" id="criteria-select" class="sort-form" onchange="sort_by_cat()">
-            <option value="">-сорт по-</option>
+            <option value="">сорт</option>
             <option value="бренд">бренду</option>
             <option value="категория">категории</option>
             <option value="цена">цене, вверх</option>
@@ -17,19 +17,19 @@
     </div>
     <div class="filters">
         <select name="brand" id="brand" class="filter-form">
-            <option value="0">-все марки-</option>
+            <option value="0">марки</option>
             {% for b in brands %}
             <option value="{{b}}" class="brands">{{ b }}</option>
             {% endfor %}
         </select>
         <select name="category" id="category" class="filter-form-cat">
-            <option value="0">-все категории-</option>
+            <option value="0">категории</option>
             {% for c in cats %}
             <option class="cats">{{ c }}</option>
             {% endfor %}
         </select>
         <select name="gender" id="gender" class="filter-form-gender">
-            <option value="0">-муж/жен-</option>
+            <option value="0">муж/жен</option>
             <option class="gen" value="МУЖ">для мужчин</option>
             <option class="gen" value="ЖЕН">для женщин</option>
         </select>
