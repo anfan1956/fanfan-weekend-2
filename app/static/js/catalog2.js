@@ -7,6 +7,7 @@ p = p
   .replaceAll('}', '"}')
   .replaceAll('{', '{"')
 p = JSON.parse(p)
+// console.log(p)
 
 function datesMap (obj, criteria, days, дата) {
   let crit = []
@@ -178,25 +179,29 @@ function render (x, y) {
 }
 
 function populate (element, wrapper) {
-  let details = [
-    'артикул: ' + element.артикул,
-    'модель: ' + element.модель,
-    'цена: ' + element.цена,
-    'скидка: ' + element.скидка
-  ]
+  let details = {
+    модель: element.модель,
+    артикул: element.артикул,
+    скидка: element.скидка,
+    промо: element.промо_скидка,
+    цена: element.цена
+  }
+  let discount = parseFloat(element.скидка)
+  let promo = parseFloat(element.промо_скидка)
+  console.log('model, discount, promo: ', element.модель, discount, promo)
+
   let cell = document.createElement('div')
   let brand = document.createElement('div')
-  let item_title = document.createElement('p')
   let photo = document.createElement('a')
   let image = document.createElement('img')
 
   cell.classList.add('cell')
   image.classList.add('image')
+  wrapper.classList.add('wrapper')
   brand.innerHTML = `<p class = "brand-title">${element.бренд}, <span style="
     text-transform:lowercase;
     font-weight:300;
     ">${element.категория}, ${element.пол}</span> </p>`
-  // photo.href = '/product/' + element.модель  - original ref
   photo.href = '/product2/' + element.модель
   image.src = parent + element.модель + '/540/' + element.фото
   container.appendChild(wrapper)
@@ -204,6 +209,7 @@ function populate (element, wrapper) {
   cell.appendChild(brand)
   cell.appendChild(photo)
   photo.appendChild(image)
+
   if (element.скидка > 0) {
     let discount = document.createElement('div')
     discount.classList.add('discount')
@@ -217,15 +223,51 @@ function populate (element, wrapper) {
       ' - ' + formatAsPercent(element.промо_скидка * 100, 0)
     cell.appendChild(promo_discount)
   }
-
+  let details_wrap = document.createElement('div')
+  details_wrap.classList.add('details-wrap')
+  cell.appendChild(details_wrap)
   let detail = document.createElement('div')
   let allDetails = ''
-  details.forEach(item => {
-    const html = `<p class = "details">${item}</p>`
-    allDetails += html
-  })
+  // return false
+  for (let i in details) {
+    let value = details[i]
+    let html
+    if (i == 'промо' || i == 'скидка') {
+      if (value != undefined && value > 0) {
+        value = formatAsPercent(value, 0)
+        html = `<p class = "details">${i}: -${value} </p>`
+        allDetails += html
+      }
+    } else if (i == 'цена') {
+      if (discount + promo == 0) {
+        value = parseInt(value).toLocaleString('en-US', {
+          minimumFractionDigits: 0
+        })
+        html = `<p class = "details">${i}: ${value} руб. </p>`
+        allDetails += html
+      } else {
+        newValue = value * (1 - discount) * (1 - promo)
+        value = parseInt(value).toLocaleString('en-US', {
+          minimumFractionDigits: 0
+        })
+        newValue = parseInt(newValue).toLocaleString('en-US', {
+          minimumFractionDigits: 0
+        })
+        html = `<p class = "details">${i}:&nbsp;<strike style="
+        font-size:inherit;
+        "> ${value} </strike> &nbsp;<span style = "font-size:inherit; color: red;">
+        ${newValue}
+        </span>
+         руб. </p>`
+        allDetails += html
+      }
+    } else {
+      html = `<p class = "details">${i}: ${value} </p>`
+      allDetails += html
+    }
+  }
   detail.innerHTML = allDetails
-  cell.appendChild(detail)
+  details_wrap.appendChild(detail)
 }
 
 function removeAllChildNodes (parent) {
@@ -235,7 +277,7 @@ function removeAllChildNodes (parent) {
 }
 
 function formatAsPercent (num, digs) {
-  return `${parseFloat(num).toFixed(digs)}%`
+  return `${parseFloat(num * 100).toFixed(digs)}%`
 }
 
 $(document).ready(function () {
