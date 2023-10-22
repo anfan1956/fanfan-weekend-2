@@ -213,14 +213,13 @@ function populate (element, wrapper) {
   if (element.скидка > 0) {
     let discount = document.createElement('div')
     discount.classList.add('discount')
-    discount.innerText = ' - ' + formatAsPercent(element.скидка * 100, 0)
+    discount.innerText = ' - ' + formatAsPercent(element.скидка, 0)
     cell.appendChild(discount)
   }
   if (element.промо_скидка > 0) {
     let promo_discount = document.createElement('div')
     promo_discount.classList.add('promo-discount')
-    promo_discount.innerText =
-      ' - ' + formatAsPercent(element.промо_скидка * 100, 0)
+    promo_discount.innerText = ' - ' + formatAsPercent(element.промо_скидка, 0)
     cell.appendChild(promo_discount)
   }
   let details_wrap = document.createElement('div')
