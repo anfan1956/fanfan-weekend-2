@@ -177,9 +177,10 @@ def register2():
                     sql = f"set nocount on; declare @note varchar(max); exec web.promoAllStyles_p {phone}, @note output; select @note"
                     result = s(sql)
                     print(result)
-                    if not requestMail:
-                        if sms_messages:
-                            sms(phone, result)
+                    # пока отключил отправку смв
+                    # if not requestMail:
+                        # if sms_messages:
+                        #     sms(phone, result)
                     promo = re.findall(r'\d{6}', result)[0]
                     sql = f"select cust.customer_mail('{phone}')"
                     q_result = s(sql)
@@ -188,8 +189,8 @@ def register2():
                     prefs = json.loads(s(sql))[0]
                     for p in prefs:
                         response[p] = prefs[p]
-                    sql = f"select cust.customer_mail('{phone}')"
-                    print(sql)
+                    # sql = f"select cust.customer_mail('{phone}')"
+                    # print(sql)
                     response['promo'] = promo
                     response["email"] = q_result
                     response['mode'] = mode

@@ -82,7 +82,7 @@ $(document).ready(function () {
     promissed = registerData(ajaxData)
     promissed.done(function (data, state) {
       if (state == 'success') {
-        console.log(data) //убрать после доработки
+        console.log('btn2 click: ', data) //убрать после доработки
 
         if (!data.error) {
           $('#email').val(data.email).prop('disabled', true)
@@ -91,7 +91,8 @@ $(document).ready(function () {
           $('.item-menu-right').show().text(phoneStr)
           $('#incognito').css('display', 'none')
           if (data.promo) {
-            flMessage += ' На ваш телефон отправлен промокод ' + data.promo
+            // flMessage += ' На ваш телефон отправлен промокод ' + data.promo
+            flMessage += ' Промо-скидки будут учтены автоматически'
           }
           flashMessage(flMessage, true, flashTime)
           getPrefs(data)
