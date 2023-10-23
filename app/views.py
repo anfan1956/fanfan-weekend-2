@@ -720,14 +720,16 @@ def info():
 @app.route('/customer_orders', methods=['GET', 'POST'])
 def customer_orders():
     print(request.method, request.path)
-    phone = request.get_json()
-    print(phone)
-    params = json.dumps(phone)
-    sql = f"select web.customer_orders_json ('{params}')"
+    data = request.get_json()
+    procName = data.get('procName')
+    print(data, procName)
+    params = json.dumps(data)
+    if procName == 'customer_orders_json':
+        sql = f"select web.customer_orders_json ('{params}')"
+    elif procName == 'order_details_json':
+        sql = f"select web.order_details_json('{params}')"
     print(sql)
     res = s(sql)
-    # res = 'testing ...'
-    # res = phone
     return res
 
 

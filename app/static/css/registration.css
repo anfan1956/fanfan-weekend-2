@@ -32,6 +32,9 @@ span.area-code {
   margin-left: 0.2rem;
   /* margin-top: 1rem; */
 }
+.btn-cancel {
+  cursor: pointer;
+}
 .change {
   display: inline;
   width: fit-content;
@@ -70,7 +73,7 @@ span.area-code {
 }
 
 .form-container {
-  background-color: var(--lightblueBack);
+  background-color: var(--mainBack);
   margin-top: 0;
   padding: 1rem auto;
   padding-right: 0.5rem;
@@ -167,7 +170,7 @@ h1.prefs {
   padding-left: 0.5rem;
 }
 table {
-  margin-top: 4rem;
+  margin-top: 2rem;
   width: 100%;
   border-collapse: separate;
   border-spacing: 0.2rem;
@@ -179,14 +182,30 @@ td {
 tr {
   border: 1px solid red;
   background-color: rgb(255, 255, 255);
+}
+tr.table-rows {
   cursor: pointer;
 }
 
 tr:nth-child(even) {
   background-color: #e9e9e9;
 }
-tr:hover {
+tr.table-rows:hover {
   background: aquamarine;
+}
+.order-details {
+  display: none;
+  padding: 3rem;
+  width: 80%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  font-size: 14px;
+  background: var(--greenBack);
+  transform: translate(-50%, -50%);
+  border: solid 1px var(--backLogo);
+  box-shadow: 2px 2px 2px 2px grey;
+  z-index: 10;
 }
 
 @media (max-width: 768px) {
@@ -263,9 +282,6 @@ tr:hover {
 }
 
 @media (min-width: 992px) {
-  * {
-    font-size: 18px;
-  }
   .btns {
     margin-top: 1rem;
   }
@@ -282,6 +298,9 @@ tr:hover {
     display: flex;
     width: 100%;
     justify-content: left;
+  }
+  .order-details {
+    font-size: 12px;
   }
   .phone-group {
     gap: 0;

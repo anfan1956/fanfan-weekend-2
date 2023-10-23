@@ -10,22 +10,22 @@
         wrong number -
             message
             return to 1
-
-    3 - email entered
+            
+            3 - email entered
         wrong - 
-            message
-            return to 2
-
+        message
+        return to 2
+        
     4 - email code is entered
-        wrong 
+    wrong 
             message
             return to 3
-
+            
     5 - preferences updated
-
+    
     if coockie exists then 
     2 - as if sms message is correct
-*/
+    */
 var phone,
   mode,
   flashTime = 2000
@@ -172,29 +172,39 @@ $(document).ready(function () {
 })
 
 $('#history').click(function () {
-  checkOrders()
+  let text = $(this).text()
+  if (text == 'ваши заказы') {
+    checkOrders()
+  } else {
+    $('.orders').empty()
+    $('#history').text('ваши заказы')
+  }
 })
 
 function checkOrders () {
   phone = objCookies().phone
   let phoneData = {
-    phone: phone
+    phone: phone,
+    procName: 'customer_orders_json'
   }
-  console.log('clicked checkOrders, phone: ', phoneData)
+  // console.log('clicked checkOrders, phone: ', phoneData)
   promissed = registerData(phoneData, 'customer_orders')
   promissed.done(function (data, state) {
     if (state == 'success') {
-      console.log(data)
+      // console.log(data)
       ordersTable(data)
     }
   })
 }
-
 function ordersTable (data) {
   let parent = $('.orders')
+  $('#history').text('скрыть заказы')
   parent.empty()
   let html = ''
   html += '<table id = "orders-table" class="orders-table">'
+  let message =
+    'Кликните на строку с номером заказа, чтобы увидеть детали заказа'
+  html += '<caption> <i>' + message + '</i> </caption>'
   html += '<tr class= "tabHeader">'
   let colNames = Object.keys(data[0])
   for (let c in colNames) {
@@ -202,7 +212,7 @@ function ordersTable (data) {
   }
   html += '</tr>'
   for (let d in data) {
-    html += '<tr>'
+    html += '<tr class ="table-rows">'
     let row = Object.values(data[d])
     for (let i in row) {
       html += '<td>' + row[i] + '</td>'
@@ -211,15 +221,63 @@ function ordersTable (data) {
   }
   html += '</table>'
   parent.append(html)
+  $('tr').click(function () {
+    let orderid = $(this).find('td').eq(0).text()
+    orderDetails(orderid)
+  })
+}
 
-  // $('.tabHeader').css({
-  //   border: '1px solid red',
-  //   // 'padding-top': '12px',
-  //   // 'padding-bottom': '32px',
-  //   'text-align': 'left',
-  //   background: 'green',
-  //   color: 'white'
-  // })
+function orderDetails (arg) {
+  let theOrder = arg
+  $('.order-details').css('display', 'block').append(theOrder)
+  $('.auth-login').css('opacity', '.2')
+
+  let orderid = {
+    orderid: arg,
+    phone: phone,
+    procName: 'order_details_json'
+  }
+  console.log(orderid)
+
+  promissed = registerData(orderid, 'customer_orders')
+  promissed.done(function (data, state) {
+    if (state == 'success') {
+      orderDetailsTable(data, orderid.orderid)
+    }
+  })
+}
+
+function orderDetailsTable (data, orderid) {
+  console.log(data)
+  let parent = $('.order-details')
+  parent.empty()
+  let html = ''
+  html += '<table id = "order-details-table" class="order-details-table">'
+  let message = 'Детализация заказа №' + orderid
+  html += '<caption> <i>' + message + '</i> </caption>'
+  html += '<tr class= "tabHeader">'
+  let colNames = Object.keys(data[0])
+  for (let c in colNames) {
+    html += '<th>' + colNames[c] + '</th>'
+  }
+  html += '</tr>'
+  for (let d in data) {
+    html += '<tr class ="table-details-rows">'
+    let row = Object.values(data[d])
+    for (let i in row) {
+      html += '<td>' + row[i] + '</td>'
+    }
+    html += '</tr>'
+  }
+  html += '</table>'
+  parent.append(html)
+  var $button = $('<button class="btn-cancel">Закрыть</button>')
+  $('.order-details').append($button)
+  $button.click(function () {
+    $('.order-details').empty()
+    $('.order-details').css('display', 'none').empty
+    $('.auth-login').css('opacity', '1')
+  })
 }
 
 function getPrefs (arg) {
@@ -273,7 +331,7 @@ function selectConf (mode) {
 }
 
 function registerData (arg, theUrl = 'register2') {
-  console.log(JSON.stringify(arg))
+  // console.log(JSON.stringify(arg))
 
   return $.ajax({
     type: 'POST',
