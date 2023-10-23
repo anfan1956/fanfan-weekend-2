@@ -19,3 +19,4 @@ main.py
 scrap/
 */test.js
 app/static/js/test.js
+app/static/parent/*

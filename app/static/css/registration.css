@@ -135,6 +135,11 @@ h1.prefs {
   padding-top: 1rem;
   padding-left: 2rem;
 }
+.service {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
 .sms-wrap {
   display: flex;
   flex-direction: column;
