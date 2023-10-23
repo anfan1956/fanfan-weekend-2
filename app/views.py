@@ -5,8 +5,9 @@ from app.functions import delivery_data, use_pmtSys
 from app.Payments import pmt_link, order_status_site
 from app.send_sms import sms
 from app.site_settings import send_sms_messages, make_full_payment, parent, pmt_keys
+from app.site_settings import demoMode
 from app.mails import fanfan_send_mail, mail_pmt_link, mail_sales_receipt
-from app.data import sql_query as s, sql_list, sql_fetch_list
+from app.data import sql_query as s, sql_tinkoff_info as st
 from flask import render_template, redirect, request, url_for, make_response, jsonify, flash, abort
 import json, re, uuid
 from random import randint
@@ -702,11 +703,15 @@ def info():
     print(request.method, request.path, "type smth")
     response = {}
     d = request.get_json()
+    print(d)
     key = d.get("TerminalKey")
     bank = pmt_keys().get(key)
     if d.get("Status") == "CONFIRMED":
         d["Bank"] = bank
         json_pars = json.dumps(d)
         sql = f"exec web.order_action_json '[{json_pars}]'"
-        response = s(sql)
+        if demoMode(key):
+            response = st(sql)
+        else:
+            response = s(sql)
     return response

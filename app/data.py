@@ -5,13 +5,16 @@ from app.site_settings import server
 
 PWD = os.environ.get('sql_path')
 # server = '62.181.56.179,41433'
-# server = '10.0.0.7'
+Demo_server = '10.0.0.7'
 # server = '127.0.0.1'
 
 
-def cn():
+def cn(demo=False):
+    Server = server()
+    if demo:
+        Server = Demo_server
     con = cnn('Driver={ODBC Driver 17 for SQL Server};'
-              f'Server={server()};'
+              f'Server={Server};'
               'Database=fanfan;'
               'UID=anfan;'
               f'PWD={PWD};')
@@ -20,6 +23,17 @@ def cn():
 
 def sql_query(args):
     con = cn()
+    cursor = con.cursor()
+    # print(args)
+    cursor.execute(args)
+    result = cursor.fetchone()[0]
+    con.commit()
+    con.close()
+    return result
+
+
+def sql_tinkoff_info(args):
+    con = cn(True)
     cursor = con.cursor()
     # print(args)
     cursor.execute(args)
