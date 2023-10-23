@@ -131,6 +131,14 @@ h1.prefs {
   border: 1px solid var(--greenForgr);
   background-color: var(--greenBack);
 }
+.custOrders {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
 .row {
   padding-top: 1rem;
   padding-left: 2rem;
@@ -146,6 +154,41 @@ h1.prefs {
   gap: 0rem;
   /* padding-top: 1rem; */
 }
+.tabHeader {
+  border: 1px solid red;
+  text-align: left;
+  /* background: var(--menuGreen); */
+  background: #82995b;
+  color: white;
+  /* padding: 1rem; */
+}
+.tabHeader > th {
+  padding: 0.2rem;
+  padding-left: 0.5rem;
+}
+table {
+  margin-top: 4rem;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0.2rem;
+}
+td {
+  padding: 0.2rem;
+}
+
+tr {
+  border: 1px solid red;
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+}
+
+tr:nth-child(even) {
+  background-color: #e9e9e9;
+}
+tr:hover {
+  background: aquamarine;
+}
+
 @media (max-width: 768px) {
   .auth-login {
     font-size: 14px;

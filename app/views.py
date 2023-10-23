@@ -715,3 +715,19 @@ def info():
         else:
             response = s(sql)
     return response
+
+
+@app.route('/customer_orders', methods=['GET', 'POST'])
+def customer_orders():
+    print(request.method, request.path)
+    phone = request.get_json()
+    print(phone)
+    params = json.dumps(phone)
+    sql = f"select web.customer_orders_json ('{params}')"
+    print(sql)
+    res = s(sql)
+    # res = 'testing ...'
+    # res = phone
+    return res
+
+

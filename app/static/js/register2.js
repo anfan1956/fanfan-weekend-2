@@ -171,6 +171,57 @@ $(document).ready(function () {
   })
 })
 
+$('#history').click(function () {
+  checkOrders()
+})
+
+function checkOrders () {
+  phone = objCookies().phone
+  let phoneData = {
+    phone: phone
+  }
+  console.log('clicked checkOrders, phone: ', phoneData)
+  promissed = registerData(phoneData, 'customer_orders')
+  promissed.done(function (data, state) {
+    if (state == 'success') {
+      console.log(data)
+      ordersTable(data)
+    }
+  })
+}
+
+function ordersTable (data) {
+  let parent = $('.orders')
+  parent.empty()
+  let html = ''
+  html += '<table id = "orders-table" class="orders-table">'
+  html += '<tr class= "tabHeader">'
+  let colNames = Object.keys(data[0])
+  for (let c in colNames) {
+    html += '<th>' + colNames[c] + '</th>'
+  }
+  html += '</tr>'
+  for (let d in data) {
+    html += '<tr>'
+    let row = Object.values(data[d])
+    for (let i in row) {
+      html += '<td>' + row[i] + '</td>'
+    }
+    html += '</tr>'
+  }
+  html += '</table>'
+  parent.append(html)
+
+  // $('.tabHeader').css({
+  //   border: '1px solid red',
+  //   // 'padding-top': '12px',
+  //   // 'padding-bottom': '32px',
+  //   'text-align': 'left',
+  //   background: 'green',
+  //   color: 'white'
+  // })
+}
+
 function getPrefs (arg) {
   $('input[type=checkbox]').each(function () {
     var d = arg.length
@@ -221,11 +272,14 @@ function selectConf (mode) {
   }
 }
 
-function registerData (arg) {
+function registerData (arg, theUrl = 'register2') {
+  console.log(JSON.stringify(arg))
+
   return $.ajax({
     type: 'POST',
-    url: 'register2',
+    url: theUrl,
     data: JSON.stringify(arg),
+    // data: arg,
     contentType: 'application/json',
     dataType: 'json'
   })
