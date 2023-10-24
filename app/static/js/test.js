@@ -1,37 +1,17 @@
 let data = [
   {
-    заказ: 79400,
-    дата: '23.10.2023',
-    время: '19:10',
-    'способ доставки': 'доставка',
-    оплачено: '19,125 руб',
-    статус: 'в работе'
-  },
-  {
-    заказ: 79398,
-    дата: '23.10.2023',
-    время: '16:10',
-    'способ доставки': 'самовывоз',
-    оплачено: '51,000 руб',
-    статус: 'в работе'
-  },
-  {
-    заказ: 79396,
-    дата: '23.10.2023',
-    время: '16:10',
-    'способ доставки': 'доставка',
-    оплачено: '31,450 руб',
-    статус: 'в работе'
+    адрес: 'г Москва, Ленинский пр-кт, д 52, кв 430',
+    получатель: 'Федоров Александр Николаевич',
+    'телефон получателя': '9167834248',
+    код: '979645'
   }
 ]
-// console.log(Object.keys(data[0]))
+console.log('информация о доставке')
 let colNames = Object.keys(data[0])
-for (let c in colNames) {
-  console.log(colNames[c])
-}
-for (let d in data) {
-  let row = Object.values(data[d])
-  for (let i in row) {
-    console.log(row[i])
-  }
+let dataValues = Object.values(data[0])
+// for (let c in colNames) {
+//   console.log(colNames[c])
+// }
+for (let d in colNames) {
+  console.log(colNames[d], ': ', dataValues[d])
 }

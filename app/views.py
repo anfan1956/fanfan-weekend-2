@@ -728,6 +728,8 @@ def customer_orders():
         sql = f"select web.customer_orders_json ('{params}')"
     elif procName == 'order_details_json':
         sql = f"select web.order_details_json('{params}')"
+    elif procName == 'order_delivery_json':
+        sql = f"select web.order_delivery_json('{params}')"
     print(sql)
     res = s(sql)
     return res

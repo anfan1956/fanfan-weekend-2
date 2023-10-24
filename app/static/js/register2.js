@@ -237,18 +237,44 @@ function orderDetails (arg) {
     phone: phone,
     procName: 'order_details_json'
   }
-  console.log(orderid)
-
+  // console.log(orderid)
   promissed = registerData(orderid, 'customer_orders')
   promissed.done(function (data, state) {
     if (state == 'success') {
       orderDetailsTable(data, orderid.orderid)
     }
   })
+  orderid.procName = 'order_delivery_json'
+  promissed = registerData(orderid, 'customer_orders')
+  promissed.done(function (data, state) {
+    if (state == 'success') {
+      deliveryDetailsTable(data, orderid.orderid)
+    }
+  })
 }
 
-function orderDetailsTable (data, orderid) {
+function deliveryDetailsTable (data, orderid) {
   console.log(data)
+  let parent = $('.order-details')
+  let html = '<p>информация о доставке</p>'
+  let colNames = Object.keys(data[0])
+  let dataValues = Object.values(data[0])
+  for (let d in colNames) {
+    html += '<p>' + colNames[d] + ': ' + dataValues[d] + '</p>'
+    // console.log(colNames[d], ': ', dataValues[d])
+  }
+  parent.append(html)
+
+  var $button = $('<button class="btn-cancel">Закрыть</button>')
+  $('.order-details').append($button)
+  $button.click(function () {
+    $('.order-details').empty()
+    $('.order-details').css('display', 'none').empty
+    $('.auth-login').css('opacity', '1')
+  })
+}
+function orderDetailsTable (data, orderid) {
+  // console.log(data)
   let parent = $('.order-details')
   parent.empty()
   let html = ''
@@ -271,13 +297,6 @@ function orderDetailsTable (data, orderid) {
   }
   html += '</table>'
   parent.append(html)
-  var $button = $('<button class="btn-cancel">Закрыть</button>')
-  $('.order-details').append($button)
-  $button.click(function () {
-    $('.order-details').empty()
-    $('.order-details').css('display', 'none').empty
-    $('.auth-login').css('opacity', '1')
-  })
 }
 
 function getPrefs (arg) {

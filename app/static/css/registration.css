@@ -35,6 +35,11 @@ span.area-code {
 .btn-cancel {
   cursor: pointer;
 }
+caption {
+  font-size: 18px;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
 .change {
   display: inline;
   width: fit-content;
@@ -191,12 +196,12 @@ tr:nth-child(even) {
   background-color: #e9e9e9;
 }
 tr.table-rows:hover {
-  background: aquamarine;
+  background: var(--blueBack);
 }
 .order-details {
   display: none;
   padding: 3rem;
-  width: 80%;
+  width: 50%;
   position: fixed;
   top: 50%;
   left: 50%;
