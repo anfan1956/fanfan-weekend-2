@@ -13,11 +13,18 @@ def cn(demo=False):
     Server = server()
     if demo:
         Server = Demo_server
+    else:
+        Sever = server()
     con = cnn('Driver={ODBC Driver 17 for SQL Server};'
               f'Server={Server};'
               'Database=fanfan;'
               'UID=anfan;'
               f'PWD={PWD};')
+    if demo:
+        the_Server = 'main'
+    else:
+        the_Server = 'development'
+    print("server for the last sql: ", the_Server)
     return con
 
 
@@ -34,6 +41,7 @@ def sql_query(args):
 
 def sql_tinkoff_info(args):
     con = cn(True)
+
     cursor = con.cursor()
     # print(args)
     cursor.execute(args)
