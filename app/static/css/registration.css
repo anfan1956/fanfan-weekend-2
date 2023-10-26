@@ -231,6 +231,19 @@ tr.table-rows:hover {
     /* margin: 1rem; */
     gap: 1rem;
   }
+  .btn-cancel {
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    width: max-content;
+    color: var(--sandForgr);
+    background: var(--sandBack);
+    border: 1px solid var(--sandForgr);
+    border-radius: 4px;
+    font-weight: 500;
+    box-shadow: 2px 2px 2px 2px rgb(194, 194, 194);
+    margin: auto;
+    margin-bottom: 1rem;
+  }
   .btn {
     display: inline-block;
     width: fit-content;
@@ -247,7 +260,17 @@ tr.table-rows:hover {
     justify-content: space-between;
     gap: 1rem;
   }
-
+  caption {
+    font-size: 14px;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  h1.smartphone {
+    font-size: 16px;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+  }
   h2 {
     font-size: 16px;
   }
@@ -284,6 +307,10 @@ tr.table-rows:hover {
     box-shadow: 2px 2px 2px 2px grey;
     z-index: 10;
   }
+  .p-smartphone {
+    font-size: 12px;
+    padding: 0.3rem;
+  }
   .phone-group {
     font-size: 14px;
     display: flex;
@@ -315,7 +342,7 @@ table {
   /* width: 100%; */
   border-collapse: separate;
   border-spacing: 0.2rem;
-  box-shadow: 2px 2px 2px 2px rgb(197, 197, 197);
+  box-shadow: none;
 }
 
 @media (min-width: 992px) {

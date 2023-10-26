@@ -343,6 +343,12 @@ function detailsCombinedTable2 (data, orderid) {
   }, 0)
   console.log('order total: ', total)
 
+  for (let d in order) {
+    delete order[d].артикул
+    delete order[d].цвет
+    delete order[d].баркод
+  }
+
   html = ''
   html += '<table id = "order-details-table" class="order-details-table">'
   let message = 'Детализация заказа №' + orderid
@@ -368,14 +374,14 @@ function detailsCombinedTable2 (data, orderid) {
   html += '</table>'
   parent.append(html)
   html =
-    '<h1>Сумма заказа: ' +
+    '<h1 class= "smartphone">Сумма: ' +
     parseInt(total).toLocaleString('en-US') +
     ' руб.</h1><br>'
   parent.append(html)
 
   let delivery = data[0].delivery // deliver - second part of json data
   console.log('delivery: ', delivery)
-  html = '<h1>Информация о доставке</h1>'
+  html = '<h1 class = "smartphone">Информация о доставке</h1>'
   colNames = Object.keys(delivery[0])
   let dataValues = Object.values(delivery[0])
   for (let d in colNames) {
@@ -383,7 +389,11 @@ function detailsCombinedTable2 (data, orderid) {
       dataValues[d] = phoneString(dataValues[d])
     }
     html +=
-      '<p><strong>' + colNames[d] + ':&nbsp;</strong> ' + dataValues[d] + '</p>'
+      '<div class = "p-smartphone"><strong>' +
+      colNames[d] +
+      ':&nbsp;</strong> ' +
+      dataValues[d] +
+      '</div>'
     // console.log(colNames[d], ': ', dataValues[d])
   }
   parent.append(html)
