@@ -34,6 +34,13 @@ span.area-code {
 }
 .btn-cancel {
   cursor: pointer;
+  padding: 1rem 2rem;
+  color: var(--sandForgr);
+  background: var(--sandBack);
+  border: 1px solid var(--sandForgr);
+  border-radius: 4px;
+  font-weight: 500;
+  box-shadow: 2px 2px 2px 2px rgb(194, 194, 194);
 }
 caption {
   font-size: 18px;
@@ -179,6 +186,7 @@ table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0.2rem;
+  box-shadow: 2px 2px 2px 2px rgb(197, 197, 197);
 }
 td {
   padding: 0.2rem;
@@ -201,12 +209,13 @@ tr.table-rows:hover {
 .order-details {
   display: none;
   padding: 3rem;
+  flex-direction: column;
   width: 50%;
   position: fixed;
   top: 50%;
   left: 50%;
   font-size: 14px;
-  background: var(--greenBack);
+  background: rgb(244, 250, 244);
   transform: translate(-50%, -50%);
   border: solid 1px var(--backLogo);
   box-shadow: 2px 2px 2px 2px grey;
@@ -215,10 +224,10 @@ tr.table-rows:hover {
 
 @media (max-width: 768px) {
   .auth-login {
-    font-size: 14px;
+    font-size: 12px;
     display: flex;
     flex-direction: column;
-    padding-left: 2rem;
+    padding-left: 0.2rem;
     /* margin: 1rem; */
     gap: 1rem;
   }
@@ -260,7 +269,21 @@ tr.table-rows:hover {
     width: 95%;
     justify-content: space-between;
   }
-
+  .order-details {
+    display: none;
+    flex-wrap: wrap;
+    padding: 0.2rem;
+    width: 90%;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    font-size: 10px;
+    background: rgb(244, 250, 244);
+    transform: translate(-50%, -50%);
+    border: solid 1px var(--backLogo);
+    box-shadow: 2px 2px 2px 2px grey;
+    z-index: 10;
+  }
   .phone-group {
     font-size: 14px;
     display: flex;
@@ -284,6 +307,15 @@ tr.table-rows:hover {
     padding-bottom: 0rem;
     width: 100%;
   }
+}
+table {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+  /* width: 100%; */
+  border-collapse: separate;
+  border-spacing: 0.2rem;
+  box-shadow: 2px 2px 2px 2px rgb(197, 197, 197);
 }
 
 @media (min-width: 992px) {

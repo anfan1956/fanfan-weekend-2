@@ -8,7 +8,7 @@ var data,
   mainColor,
   photo,
   images,
-  styleid,
+  // styleid,
   water,
   size,
   spotid,
@@ -60,7 +60,29 @@ $('#delivery').on('change', function () {
   $('#pmt-link').trigger('click')
 })
 
+Cook = getCookies()
+function phoneCheck (phone) {
+  let arg = {}
+  let action = 'phonesAuthorized'
+  arg.action = action
+  arg.phone = phone
+  console.log(arg, 'arg')
+
+  promissed = checkPhones(arg)
+  promissed.done(function (data) {
+    // console.log('phone data', data)
+    let showButton = data.authorised
+    if (showButton) {
+      $('#avail-global').css('display', 'block')
+    }
+  })
+}
+
 $(function () {
+  if (Cook.phone) {
+    let phone = Cook.phone
+    phoneCheck(phone)
+  }
   search = window.location.search
   water = $('#watermark')
   data = allData.replaceAll('&#39;', '"')
@@ -70,7 +92,6 @@ $(function () {
   var sizes = data.sizes.split(',')
   images = data.images
   photo = data.photo
-  Cook = getCookies()
   mainColor = getMainColor() //the whole purpose of function is to pick color from basket
   for (i in items) {
     renderColorQtys(items[i], sizes)
@@ -100,6 +121,77 @@ $(function () {
     $('#delivery option[value=5]').prop('selected', 'selected')
   }
 })
+$('#product-selected').attr('disabled', 'disabled')
+
+// this function returns all  barcodes to the authorized personnel
+$('#avail-global').click(function () {
+  styleData()
+})
+function styleData () {
+  // $('#info').show()
+  let arg = {
+    phone: Cook.phone,
+    styleid: styleid,
+    action: 'styleInfo'
+  }
+  console.log(arg)
+  promissed = getStyleData(arg)
+  promissed.done(function (data, state) {
+    if (state == 'success') {
+      stylesDataTable(data)
+      $('#info').show()
+    }
+  })
+}
+function stylesDataTable (data) {
+  // console.log('getStyleData on click:', data)
+  let parent = $('#style-data')
+  parent.empty()
+  let html = ''
+  html += '<table id = "orders-table" class="orders-table">'
+  let message =
+    'Наличие модели ' + styleid + ' в магазинах по цветам и размерам'
+  html += '<caption> <i>' + message + '</i> </caption>'
+  html += '<tr class= "tabHeader">'
+  let colNames = Object.keys(data[0])
+  for (let c in colNames) {
+    html += '<th>' + colNames[c] + '</th>'
+  }
+  html += '</tr>'
+  for (let d in data) {
+    html += '<tr class ="table-rows">'
+    let row = Object.values(data[d])
+    for (let i in row) {
+      html += '<td>' + row[i] + '</td>'
+    }
+    html += '</tr>'
+  }
+  html += '</table>'
+  parent.append(html)
+}
+function getStyleData (args) {
+  console.log('arg getStyleData: ', args)
+  return $.ajax({
+    type: 'POST',
+    url: '/hr',
+    data: JSON.stringify(args),
+    contentType: 'application/json',
+    dataType: 'json'
+  })
+}
+
+function checkPhones (arg) {
+  return $.ajax({
+    type: 'POST',
+    url: '/hr',
+    data: JSON.stringify(arg),
+    contentType: 'application/json',
+    dataType: 'json'
+  })
+}
+function closeInfo () {
+  $('#info').hide()
+}
 
 // this function renders the colors table
 function renderColorQtys (arg, sizes) {
@@ -108,7 +200,7 @@ function renderColorQtys (arg, sizes) {
     let color = $.trim($(this).text())
     if (color == arg.color) {
       let qtys = arg.qtys
-      console.log('renderColorQtys: ', color, qtys)
+      // console.log('renderColorQtys: ', color, qtys)
       for (let q in qtys) {
         let index = sizes.indexOf(qtys[q].size)
         let quantity = qtys[q].qty.toString()
@@ -153,6 +245,7 @@ function getMainColor () {
   return mainColor
 }
 
+// this the proc that sets the default image of the page
 function render (color, items) {
   let columns = $('.column')
   let colors = $('.color')
@@ -210,7 +303,11 @@ $('.column').click(function () {
     the_size.addClass('size-selected')
     size = the_size.find('.sizes').text()
     column.addClass('size-selected')
-    column.closest('.container-sizes').find('.left').addClass('size-selected')
+    column
+      .closest('.container-sizes')
+      .find('.left')
+      .addClass('size-selected')
+      .addClass('active')
     let color = $.trim(
       column.closest('.container-sizes').find('.color-wrap').text()
     )
@@ -237,23 +334,43 @@ $('.column').click(function () {
 })
 
 // click on colors section to make color active
-$('.color').click(function () {
-  water.addClass('watermark')
-  $('.sizes').removeClass('size_selected')
-  $('.quantities').removeClass('size_selected')
-  thisColor = $(this).text()
-  items.forEach(function (el) {
-    if (el.color == thisColor) {
-      render(thisColor, el)
-    }
-  })
+$('.left').click(function () {
+  let selection = $('#product-selected')
+  let qtyBox = $('#quantity')
+  selection.removeClass('filled').val('')
+  qtyBox.removeClass('filled').val('')
+  let sizes = $('.right').eq(0)
+  $('.left').removeClass('active').removeClass('size-selected')
+  $(this).addClass('active').addClass('size-selected')
+  let thisSizeIndex = sizes.find('.size-selected').index()
+  if (thisSizeIndex == -1) return false
+  let size = $.trim(sizes.find('.column-sizes').eq(thisSizeIndex).text())
+  console.log(size)
+  $('.column').removeClass('size-selected')
+  let qty = $(this)
+    .closest('.container-sizes')
+    .find('.column')
+    .eq(thisSizeIndex)
+  // qty.css('background', 'red')
+  if (qty.hasClass('avail')) {
+    qty.addClass('size-selected')
+    let color = $.trim($(this).text())
+    let text = 'Выбор - цвет: ' + color + ',  размер: ' + size
+    selection.addClass('filled').val(text)
+    qtyBox.addClass('filled').val(1)
+    thisColor = color
+    let data = getItemData('sizeQuantities')
+    alreadyInBasket(data)
+  } else {
+    $('.column-sizes').removeClass('size-selected')
+  }
+  thisColor = $.trim($(this).text())
   for (let i in images) {
     let color = images[i].color
     let img = images[i].img
     if (color == thisColor) {
       let source = parent + styleid + '/800/' + img
       $('#main').attr('src', source)
-      water.removeClass('watermark')
       break
     }
   }
@@ -261,38 +378,84 @@ $('.color').click(function () {
 
 // change active color and main picture
 $('.image-icons').click(function () {
+  let sizeSelectedIndex
+  let thisColorIndex
   let source = $(this).attr('src')
   let thisImage = source.split('/').slice(-1)[0]
-  $('.column').removeClass('size-selected')
-  $('.column-sizes').removeClass('size-selected')
-  $('.left').removeClass('size-selected')
+  $('.column').removeClass('size-selected') //это оставить
+  $('.left').removeClass('size-selected').removeClass('active')
   for (let i in images) {
     img = images[i].img
     if (img == thisImage) {
-      thisColor = images[i].color
+      thisColorIndex = images[i].color
     }
   }
-  colors = $('.color')
-  colors.removeClass('active')
-  colors.each(function () {
-    if ($(this).text() == thisColor) {
+  let colors = $('.left')
+  colors.each(function (index) {
+    let color = $.trim($(this).text())
+    if (color == thisColorIndex) {
       $(this).addClass('active')
+      thisColorIndex = index
+      console.log(index, ': ', $.trim($(this).text()))
     }
   })
-  items.forEach(function (el) {
-    if (el.color == thisColor) {
-      render(thisColor, el)
-      $('#this-qty').text('')
-      let curr_size = $('#product-selected')
-      let qtyBox = $('#quantity')
-      curr_size.removeClass('filled')
-      curr_size.val('')
-      qtyBox.removeClass('filled')
-      qtyBox.val('')
+  let sizes = $('.column-sizes')
+  sizes.each(function (index) {
+    let size = $.trim($(this).text())
+
+    if ($(this).hasClass('size-selected')) {
+      sizeSelectedIndex = index
+    }
+  })
+  let qtys = $('.right')
+  qtys.removeClass('size-selected').removeClass('active')
+  qtys.each(function (index) {
+    if (index == thisColorIndex) {
+      thisQty = $(this).find('.column').eq(sizeSelectedIndex)
+      if (thisQty.hasClass('avail')) {
+        // $(this).find('.column').eq(sizeSelectedIndex).css('background', 'red')
+        thisQty.addClass('size-selected')
+      } else {
+        sizes.removeClass('size-selected')
+      }
     }
   })
   $('#main').attr('src', source)
-  water.removeClass('watermark')
+  // water.removeClass('watermark')
+})
+
+let sizes = $('.column-sizes')
+sizes.click(function () {
+  let selection = $('#product-selected')
+  let qtyBox = $('#quantity')
+  selection.removeClass('filled').val('')
+  qtyBox.removeClass('filled').val('')
+  let activeColorIndex
+  sizes.removeClass('size-selected')
+  clickedSizeIndex = $(this).index()
+  $('.left').each(function (index) {
+    if ($(this).hasClass('active')) {
+      activeColorIndex = index
+      console.log(activeColorIndex)
+    }
+  })
+  let qtys = $('.right')
+  $('.column').removeClass('size-selected')
+  let qty = qtys.eq(activeColorIndex).find('.column').eq(clickedSizeIndex)
+  if (qty.hasClass('avail')) {
+    $(this).addClass('size-selected')
+    qty.addClass('size-selected')
+  }
+  let size = $.trim($(this).text())
+  let color = $.trim($('.left').eq(activeColorIndex).text())
+  console.log(color)
+
+  let text = 'Выбор - цвет: ' + color + ',  размер: ' + size
+  selection.addClass('filled').val(text)
+  qtyBox.addClass('filled').val(1)
+  thisColor = color
+  let data = getItemData('sizeQuantities')
+  alreadyInBasket(data)
 })
 
 // one click buy procedure
@@ -341,7 +504,6 @@ $('.pmt-logo').each(function () {
     if (id[0] == 'pickup') {
       thePhone.pickupid = id[1]
     }
-
     thePhone.phone = arg
     thePhone.orderTotal = fin_price
     thePhone.Session = Cook.Session
@@ -379,7 +541,7 @@ $('#addBasket').click(function () {
     promissed = addToBasket(data)
     promissed.done(function (data) {
       if (data.error) {
-        flashMessage(data.error)
+        flashMessage(data.error, false, flashTime)
         return false
       } else {
         flashMessage(`в корзину добавлено: ${qtyAdded} ед товара`, true)

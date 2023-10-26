@@ -26,6 +26,13 @@
     if coockie exists then 
     2 - as if sms message is correct
     */
+var screenMode
+if (window.matchMedia('(max-width: 768px)').matches) {
+  screenMode = 'smartphone'
+} else {
+  screenMode = 'desktop'
+}
+
 var phone,
   mode,
   flashTime = 2000
@@ -191,7 +198,15 @@ function checkOrders () {
   promissed = registerData(phoneData, 'customer_orders')
   promissed.done(function (data, state) {
     if (state == 'success') {
-      // console.log(data)
+      console.log(data)
+      if (screenMode == 'smartphone') {
+        for (let d in data) {
+          delete data[d].время
+          let date = data[d].дата
+          date = date.slice(0, 6) + date.slice(-2)
+          data[d].дата = date
+        }
+      }
       ordersTable(data)
     }
   })
@@ -223,44 +238,86 @@ function ordersTable (data) {
   parent.append(html)
   $('tr').click(function () {
     let orderid = $(this).find('td').eq(0).text()
-    orderDetails(orderid)
+    // orderDetails(orderid)
+    orderDetails2(orderid)
   })
 }
 
-function orderDetails (arg) {
+function orderDetails2 (arg) {
   let theOrder = arg
-  $('.order-details').css('display', 'block').append(theOrder)
+  $('.order-details').css('display', 'flex').append(theOrder)
   $('.auth-login').css('opacity', '.2')
-
   let orderid = {
     orderid: arg,
     phone: phone,
-    procName: 'order_details_json'
+    procName: 'order_details_delivery_json'
   }
   // console.log(orderid)
   promissed = registerData(orderid, 'customer_orders')
   promissed.done(function (data, state) {
     if (state == 'success') {
-      orderDetailsTable(data, orderid.orderid)
-    }
-  })
-  orderid.procName = 'order_delivery_json'
-  promissed = registerData(orderid, 'customer_orders')
-  promissed.done(function (data, state) {
-    if (state == 'success') {
-      deliveryDetailsTable(data, orderid.orderid)
+      if (screenMode == 'desktop') {
+        detailsCombinedTable(data, orderid.orderid)
+      } else {
+        detailsCombinedTable2(data, orderid.orderid)
+      }
     }
   })
 }
-
-function deliveryDetailsTable (data, orderid) {
+function detailsCombinedTable (data, orderid) {
   console.log(data)
   let parent = $('.order-details')
-  let html = '<p>информация о доставке</p>'
-  let colNames = Object.keys(data[0])
-  let dataValues = Object.values(data[0])
+  parent.empty()
+  let html = '<p class = "common">ИНФОРМАЦИЯ О ЗАКАЗЕ</p>'
+
+  let order = data[0].order_composition // order - first part of json data
+  console.log('order: ', order)
+  const total = order.reduce((current, order) => {
+    return order.стоимость + current
+  }, 0)
+  console.log('order total: ', total)
+
+  html = ''
+  html += '<table id = "order-details-table" class="order-details-table">'
+  let message = 'Детализация заказа №' + orderid
+  html += '<caption> <i>' + message + '</i> </caption>'
+  html += '<tr class= "tabHeader">'
+  let colNames = Object.keys(order[0])
+  for (let c in colNames) {
+    html += '<th>' + colNames[c] + '</th>'
+  }
+  html += '</tr>'
+  for (let d in order) {
+    html += '<tr class ="table-details-rows">'
+    let row = Object.values(order[d])
+    for (let i in row) {
+      let value = row[i]
+      if (i == [row.length - 1]) {
+        value = parseInt(row[i]).toLocaleString('en-US') + ' руб.'
+      }
+      html += '<td>' + value + '</td>'
+    }
+    html += '</tr>'
+  }
+  html += '</table>'
+  parent.append(html)
+  html =
+    '<h1>Сумма заказа: ' +
+    parseInt(total).toLocaleString('en-US') +
+    ' руб.</h1><br>'
+  parent.append(html)
+
+  let delivery = data[0].delivery // deliver - second part of json data
+  console.log('delivery: ', delivery)
+  html = '<h1>Информация о доставке</h1>'
+  colNames = Object.keys(delivery[0])
+  let dataValues = Object.values(delivery[0])
   for (let d in colNames) {
-    html += '<p>' + colNames[d] + ': ' + dataValues[d] + '</p>'
+    if (colNames[d] == 'телефон получателя') {
+      dataValues[d] = phoneString(dataValues[d])
+    }
+    html +=
+      '<p><strong>' + colNames[d] + ':&nbsp;</strong> ' + dataValues[d] + '</p>'
     // console.log(colNames[d], ': ', dataValues[d])
   }
   parent.append(html)
@@ -273,30 +330,71 @@ function deliveryDetailsTable (data, orderid) {
     $('.auth-login').css('opacity', '1')
   })
 }
-function orderDetailsTable (data, orderid) {
-  // console.log(data)
+function detailsCombinedTable2 (data, orderid) {
+  console.log(data)
   let parent = $('.order-details')
   parent.empty()
-  let html = ''
+  let html = '<p class = "common">ИНФОРМАЦИЯ О ЗАКАЗЕ SM</p>'
+
+  let order = data[0].order_composition // order - first part of json data
+  console.log('order: ', order)
+  const total = order.reduce((current, order) => {
+    return order.стоимость + current
+  }, 0)
+  console.log('order total: ', total)
+
+  html = ''
   html += '<table id = "order-details-table" class="order-details-table">'
   let message = 'Детализация заказа №' + orderid
   html += '<caption> <i>' + message + '</i> </caption>'
   html += '<tr class= "tabHeader">'
-  let colNames = Object.keys(data[0])
+  let colNames = Object.keys(order[0])
   for (let c in colNames) {
     html += '<th>' + colNames[c] + '</th>'
   }
   html += '</tr>'
-  for (let d in data) {
+  for (let d in order) {
     html += '<tr class ="table-details-rows">'
-    let row = Object.values(data[d])
+    let row = Object.values(order[d])
     for (let i in row) {
-      html += '<td>' + row[i] + '</td>'
+      let value = row[i]
+      if (i == [row.length - 1]) {
+        value = parseInt(row[i]).toLocaleString('en-US') + ' руб.'
+      }
+      html += '<td>' + value + '</td>'
     }
     html += '</tr>'
   }
   html += '</table>'
   parent.append(html)
+  html =
+    '<h1>Сумма заказа: ' +
+    parseInt(total).toLocaleString('en-US') +
+    ' руб.</h1><br>'
+  parent.append(html)
+
+  let delivery = data[0].delivery // deliver - second part of json data
+  console.log('delivery: ', delivery)
+  html = '<h1>Информация о доставке</h1>'
+  colNames = Object.keys(delivery[0])
+  let dataValues = Object.values(delivery[0])
+  for (let d in colNames) {
+    if (colNames[d] == 'телефон получателя') {
+      dataValues[d] = phoneString(dataValues[d])
+    }
+    html +=
+      '<p><strong>' + colNames[d] + ':&nbsp;</strong> ' + dataValues[d] + '</p>'
+    // console.log(colNames[d], ': ', dataValues[d])
+  }
+  parent.append(html)
+
+  var $button = $('<button class="btn-cancel">Закрыть</button>')
+  $('.order-details').append($button)
+  $button.click(function () {
+    $('.order-details').empty()
+    $('.order-details').css('display', 'none').empty
+    $('.auth-login').css('opacity', '1')
+  })
 }
 
 function getPrefs (arg) {
@@ -350,8 +448,6 @@ function selectConf (mode) {
 }
 
 function registerData (arg, theUrl = 'register2') {
-  // console.log(JSON.stringify(arg))
-
   return $.ajax({
     type: 'POST',
     url: theUrl,

@@ -70,25 +70,34 @@ thisPhone['phone'] = Cook.phone
 thisPhone['Session'] = Cook.Session
 
 function calcSelected () {
-  let inv = []
-  let selected = {}
+  var inv = []
+  let pcs = 0
   let orderTotal = 0
   let index
   $('.basket-checkbox').each(function () {
     if ($(this).is(':checked')) {
-      let product = {}
       let $parent = $(this).closest('tr')
       index = headers.indexOf('styleid')
       let styleid = $.trim($parent.find('td').eq(index).text())
-      for (pr in p) {
-        if (p[pr].модель == styleid) {
-          product.styleid = p[pr].модель
-          product.color = p[pr].цвет
-          product.size = p[pr].размер
+      index = headers.indexOf('color')
+      let color = $.trim($parent.find('td').eq(index).text())
+      index = headers.indexOf('size')
+      let size = $.trim($parent.find('td').eq(index).text())
+      for (let pr in p) {
+        if (
+          p[pr].модель == styleid &&
+          p[pr].цвет == color &&
+          p[pr].размер == size
+        ) {
+          let product = {}
+          product.styleid = styleid
+          product.color = color
+          product.size = size
           product.price = parseInt(p[pr].цена)
           product.discount = parseFloat(p[pr].скидка)
           product.promo = parseFloat(p[pr].промо)
           product.qty = parseInt($parent.find('input').val())
+          pcs += product.qty
           product.total = parseInt(
             product.price *
               (1 - product.discount) *
@@ -102,8 +111,11 @@ function calcSelected () {
     }
   })
   thisPhone.orderTotal = orderTotal
-  thisPhone.procName = 'ON_SITE RESERVATION'
+  // thisPhone.procName = 'ON_SITE RESERVATION'
   inv.unshift(thisPhone)
+  if (pcs == 0) {
+    inv.error = 'ничего не выбрано'
+  }
   return inv
 }
 
@@ -192,6 +204,9 @@ function buySelected () {
     flashMessage(inv.error, false, flashTime)
     return false
   }
+  let action = 'ON_SITE RESERVATION'
+  inv[0].procName = action
+
   promissed = basketActions(inv)
   promissed.done(function (data, state) {
     if (state == 'success') {
@@ -259,20 +274,17 @@ $('.pmt-logo').each(function () {
 
 function removeSelected () {
   let action = 'remove'
-  thisPhone.procName = action
-  thisPhone.uuid = Cook.Session
-  let inv = selected('hide')
-  console.log(inv)
+  let inv = calcSelected()
+  inv[0].procName = action
+  let orderTotal = inv[0].amount
   if (inv.error) {
     flashMessage('ничего не выбрано')
     return
   }
   promissed = basketActions(inv)
   promissed.done(function (data) {
-    console.log(data)
     if (data.success) {
       flashMessage('товар удален из корзины', true)
-      console.log(data)
       setTimeout(() => {
         location.reload(true)
       }, 1500)
@@ -347,7 +359,7 @@ function getCookies () {
 }
 
 function basketActions (arg) {
-  console.log(arg)
+  // console.log(arg)
   if (arg.error) {
     return arg
   }

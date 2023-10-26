@@ -88,7 +88,7 @@
             </div>
             <div class="product-numbers">
                 <h1 class="num">Цена </h1>
-                {% if d.промо + d.скидка > 0 %}
+                {% if d.промо + d.скидка != 0 %}
                 <p class="info-num crossed price">{{'{:,}'.format(d.цена|int)}}</p>
                 {% else %}
                 <p class="info-num price">{{'{:,}'.format(d.цена|int)}}</p>
@@ -100,15 +100,15 @@
                 <p class="info-num promo">промо: -{{'{:.0%}'.format(d.промо)}}</p>
                 {% endif %}
                 <p class="info-num">
-                    {% if d.промо + d.скидка > 0 %}
+                    {% if d.промо + d.скидка != 0 %}
                     {{ '{:,}' .format((
                     d.цена * (1 - d.промо)*(1 - d.скидка))|int)}}
                     {% endif %}
                 </p>
-                <p class="pcs qty">штук: {{d.количество}}</p>
+                <p class="pcs qty">штук: {{d["в корзине"]}}</p>
                 <h1 class="num1">Всего: {{
                     '{:,}' .format((
-                    d.количество * d.цена * (1 - d.промо)*(1 - d.скидка))|int)}}</h1>
+                    d["в корзине"] * d.цена * (1 - d.промо)*(1 - d.скидка))|int)}}</h1>
             </div>
         </div>
         {% endfor %}

@@ -6,6 +6,10 @@
 
 
 <!-- The Modal -->
+<div class="style-info" id="style-info">
+    <div id="style-data" class="style-data">Test</div>
+    <button type="button" onclick="closeInfo()" id="#close-info" class="close-info">закрыть</button>
+</div>
 <div id="myModal" class="alert">
     <form class="one-click">
         <div class="">
@@ -167,7 +171,7 @@
             </div>
             <div class="container-sizes">
                 <div class="left-color">Цвета:</div>
-                <div class="left-color">Количество:</div>
+                <div class="left-color">Наличие:</div>
             </div>
             {% for color in data.colors.split(",") %}
             <div class="container-sizes">
@@ -190,7 +194,12 @@
             <input class="product-selected" id="product-selected" autocomplete="off"
                 placeholder="Выберите цвет и размер или позвоните">
             <input class="product-qty" type="number" id="quantity" name="quantity" min="1" value="">
+            <button type="button" class="avail-global" id="avail-global">
+                наличие
+            </button>
         </div>
+
+
 
         <div class="buttons-all-wrap">
             <div class="btn-one-wrap">

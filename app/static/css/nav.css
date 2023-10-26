@@ -14,7 +14,7 @@
   --neutral: #ffffff;
   --logoback: #ffeba8;
   --mainBack: #fdfbf4;
-  --menuGreen: #556b2f;
+  --menuGreen: #;
   --promo: #9e12c9;
 }
 * {
@@ -191,6 +191,12 @@ nav.menu > a {
     padding-top: 67px;
   }
   .base-message {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    width: 90%;
+    transform: translate(-50%, -50%);
+    text-align: center;
     display: none;
     position: fixed;
     width: 100%;
@@ -202,7 +208,7 @@ nav.menu > a {
     color: var(--redForgr);
     background-color: var(--redBack);
     border: var(--redForgr) 1px solid;
-    z-index: 100;
+    z-index: 1000;
   }
   header {
     font-size: 12px;
@@ -299,14 +305,21 @@ nav.menu > a {
     background: #e0ffbd;
   }
   .base-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    transform: translate(-50%, -50%);
+    text-align: center;
     display: none;
     margin-top: 1rem;
-    padding: 1rem;
+    padding: 2rem 2rem;
     font-size: 20px;
     font-weight: bold;
     color: var(--redForgr);
     background-color: var(--redBack);
     border: var(--redForgr) 1px solid;
+    z-index: 1000;
   }
   .confirmation-buttons {
     display: flex;

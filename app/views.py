@@ -12,6 +12,16 @@ from flask import render_template, redirect, request, url_for, make_response, js
 import json, re, uuid
 from random import randint
 
+
+def authorized(phone, data):
+    for d in data:
+        return d
+        # if phone == d['phone']:
+        #     return True
+        # else:
+        #     return False
+
+
 parent = parent()
 sms_messages = send_sms_messages()
 
@@ -85,8 +95,10 @@ def basketS():
             content['data'] = data
             if basket_totals:
                 content['totals'] = basket_totals
+            print('\n\n everything not  OK \n\n')
         else:
             content['basket_content'] = basket_content
+            print('\n\n everything OK \n\n')
     return render_template('basketS.html', **content)
 
 
@@ -249,16 +261,6 @@ def register2():
         res.set_cookie("Session", Session, expires=dt)
         return res
     return render_template('register2.html', menu=menu(), form=form())
-
-
-# @app.route("/main")
-# def main():
-#     content = {"title": "Последние поступления",
-#                "parent": parent,
-#                "articles": art_display('/main', 6),
-#                "menu": menu(),
-#                "dates": set_dates('/main', 6)}
-#     return render_template('main.html', **content)
 
 
 @app.route("/promo")
@@ -730,8 +732,36 @@ def customer_orders():
         sql = f"select web.order_details_json('{params}')"
     elif procName == 'order_delivery_json':
         sql = f"select web.order_delivery_json('{params}')"
+    elif procName == 'order_details_delivery_json':
+        sql = f"select web.order_details_delivery_json('{params}')"
     print(sql)
     res = s(sql)
     return res
 
 
+@app.route('/hr', methods=['GET', 'POST'])
+def hr():
+    print(request.method, request.path)
+    data = request.get_json()
+    params = json.dumps(data)
+    action = data.get('action')
+    phone = data.get('phone')
+    print(data)
+    if action == "phonesAuthorized":
+        sql = "select hr.phones_authorised_json()"
+        data = json.loads(s(sql))
+        phones = [d['phone'] for d in data]
+        if phone in phones:
+            res = {"authorised": True}
+        else:
+            res = {"authorised": False}
+    elif action == "styleInfo":
+        sql = f"select inv.style_barcodes_json_('{params}')"
+        print(sql)
+        res = s(sql)
+    else:
+        res = {
+            'error': 'no action defined'
+        }
+
+    return res
