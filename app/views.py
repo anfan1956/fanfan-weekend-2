@@ -130,7 +130,8 @@ def basket():
             'Session': Session
         }
         sqlParams = json.dumps(sqlParams)
-        sql = f"select web.basketContent_json_('{sqlParams}')"
+        # sql = f"select web.basketContent_json_('{sqlParams}')"
+        sql = f"exec web.basketContent_consolidated_json_'{sqlParams}'"
         print(f"sql for basket:  {sql}")
         data = s(sql)
         data = json.loads(data)
@@ -207,12 +208,12 @@ def register2():
                     response['promo'] = promo
                     response["email"] = q_result
                     response['mode'] = mode
-                    Session = str(uuid.uuid4())
                     results = make_response(jsonify(response))
                     results.set_cookie("phone", phone, expires=dt)
                     results.set_cookie("promo", promo, expires=dt)
-                    results.set_cookie("Session", Session, expires=dt)
-
+                    if not Session:
+                        Session = str(uuid.uuid4())
+                        results.set_cookie("Session", Session, expires=dt)
                 else:
                     response['error'] = "wrong code"
                     response['mode'] = 0
@@ -416,6 +417,7 @@ def basket_actions():
         print(data)
         action = data[0].get('procName')
         pmtSys = data[0].get('pmtSys')
+        Session = data[0].get('Session')
         print(f'basket_actions - "procName {action}"')
         phone = data[0].get('phone')
         if action != 'remove':
@@ -476,7 +478,7 @@ def basket_actions():
                 # print(f"result = s(sql) pmtStr parameters: {result}")
                 pmtPars = json.loads(result)[0]
                 print(f"pmtPars after json.loads(result)[0]: {pmtPars}")
-                result = use_pmtSys(pmtSys, pmtPars)
+                result = use_pmtSys(pmtSys, pmtPars, Session)  # _________________________________________________________________________
                 print(result, ":result after use_pmtSys")
                 link = result
                 # link = pmt_link(pmtPars)
@@ -707,11 +709,13 @@ def info():
     d = request.get_json()
     print(d)
     key = d.get("TerminalKey")
+    print(f'printing demoMode key: {key}, demoMode: {demoMode(key)}')
     bank = pmt_keys().get(key)
     if d.get("Status") == "CONFIRMED":
         d["Bank"] = bank
         json_pars = json.dumps(d)
         sql = f"exec web.order_action_json '[{json_pars}]'"
+
         if demoMode(key):
             response = st(sql)
         else:
@@ -763,5 +767,4 @@ def hr():
         res = {
             'error': 'no action defined'
         }
-
     return res

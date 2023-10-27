@@ -283,8 +283,9 @@ def order_status_site(args):
     return s_message
 
 
-def tinkoffInitPars(token):
+def tinkoffInitPars(token, uuid):
     pars = tinkoffPars()
+    orderid = token.get('OrderId').split('-')[0]
     tokenData = {
         "Amount": token["Amount"],
         "OrderId": token["OrderId"],
@@ -296,7 +297,7 @@ def tinkoffInitPars(token):
     Token = hashlib.sha256(encoded).hexdigest()
     interval = token["interval"]
     expiration_time = datetime.now() + timedelta(seconds=interval)
-    success = tin_URLs().get("success")
+    success = tin_URLs().get("success")+orderid + "&uuid=" + uuid
     notification = tin_URLs().get("notification")
     data = {
         "TerminalKey": pars["TerminalKey"],
@@ -318,13 +319,13 @@ def tinkoffInitPars(token):
     return arg
 
 
-def tinkoff_link(arg):
+def tinkoff_link(arg, uuid):
     token = {
         "Amount": arg.get("amount"),
         "interval": arg.get("timeOutSec"),
         "OrderId": arg.get("orderNumber")
     }
-    args = tinkoffInitPars(token)
+    args = tinkoffInitPars(token, uuid)
     print(args)
     response = r.post(tin_url(), **args)
     return response.json()

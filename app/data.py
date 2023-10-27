@@ -9,22 +9,13 @@ Demo_server = '10.0.0.7'
 # server = '127.0.0.1'
 
 
-def cn(demo=False):
+def cn():
     Server = server()
-    if demo:
-        Server = Demo_server
-    else:
-        Sever = server()
     con = cnn('Driver={ODBC Driver 17 for SQL Server};'
               f'Server={Server};'
               'Database=fanfan;'
               'UID=anfan;'
               f'PWD={PWD};')
-    if demo:
-        the_Server = 'main'
-    else:
-        the_Server = 'development'
-    print("server for the last sql: ", the_Server)
     return con
 
 

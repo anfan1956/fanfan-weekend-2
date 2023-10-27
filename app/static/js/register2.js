@@ -26,11 +26,35 @@
     if coockie exists then 
     2 - as if sms message is correct
     */
+
 var screenMode
 if (window.matchMedia('(max-width: 768px)').matches) {
   screenMode = 'smartphone'
 } else {
   screenMode = 'desktop'
+}
+let search = searchParams()
+var orderid = search.orderid
+var uuid = search.uuid
+
+function searchParams () {
+  var params = window.location.search
+  if (params) {
+    params =
+      '{"' +
+      params.replace(/\?/gi, '').replace(/\&/gi, '","').replace(/\=/gi, '":"') +
+      '"}'
+    params = JSON.parse(params)
+  } else {
+    params = {}
+  }
+  return params
+}
+
+function renderPaymentSuccess (orderid) {
+  $('.auth-login').empty()
+  $('.row').empty()
+  orderDetails2(orderid)
 }
 
 var phone,
@@ -38,6 +62,19 @@ var phone,
   flashTime = 2000
 // var data = {}
 $(document).ready(function () {
+  if (orderid != undefined) {
+    let thisSession = objCookies().Session
+    if (uuid == thisSession) {
+      renderPaymentSuccess(orderid)
+      return false
+    } else {
+      flashMessage(
+        'чтобы получить доступ к информации о заказх, пройдите авторизацию',
+        false,
+        flashTime
+      )
+    }
+  }
   phone = objCookies().phone
   if (phone == undefined) {
     mode = 0
@@ -250,7 +287,8 @@ function orderDetails2 (arg) {
   let orderid = {
     orderid: arg,
     phone: phone,
-    procName: 'order_details_delivery_json'
+    procName: 'order_details_delivery_json',
+    Session: objCookies().Session
   }
   // console.log(orderid)
   promissed = registerData(orderid, 'customer_orders')
@@ -265,17 +303,17 @@ function orderDetails2 (arg) {
   })
 }
 function detailsCombinedTable (data, orderid) {
-  console.log(data)
+  // console.log(data)
   let parent = $('.order-details')
   parent.empty()
   let html = '<p class = "common">ИНФОРМАЦИЯ О ЗАКАЗЕ</p>'
 
   let order = data[0].order_composition // order - first part of json data
-  console.log('order: ', order)
+  // console.log('order: ', order)
   const total = order.reduce((current, order) => {
     return order.стоимость + current
   }, 0)
-  console.log('order total: ', total)
+  // console.log('order total: ', total)
 
   html = ''
   html += '<table id = "order-details-table" class="order-details-table">'
@@ -308,7 +346,7 @@ function detailsCombinedTable (data, orderid) {
   parent.append(html)
 
   let delivery = data[0].delivery // deliver - second part of json data
-  console.log('delivery: ', delivery)
+  // console.log('delivery: ', delivery)
   html = '<h1>Информация о доставке</h1>'
   colNames = Object.keys(delivery[0])
   let dataValues = Object.values(delivery[0])
@@ -458,6 +496,8 @@ function selectConf (mode) {
 }
 
 function registerData (arg, theUrl = 'register2') {
+  console.log("from proc 'registerData'", arg, theUrl)
+
   return $.ajax({
     type: 'POST',
     url: theUrl,

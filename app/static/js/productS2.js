@@ -481,10 +481,10 @@ sizes.click(function () {
 $('.basket-buy').click(function () {
   let fin_price
   let arg = Cook.phone
-  if (arg == undefined) {
-    flashMessage('для покупки требуется авторизация', false, flashTime)
-    return false
-  }
+  // if (arg == undefined) {
+  //   flashMessage('для покупки требуется авторизация', false, flashTime)
+  //   return false
+  // }
   if (sizeSelected()) {
     console.log('style data:')
     $('#current-size').text('размер: ' + size)

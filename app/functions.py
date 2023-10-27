@@ -239,10 +239,10 @@ def delivery_data(arg):
     return result
 
 
-def use_pmtSys(arg, args):
+def use_pmtSys(arg, args, uuid):
     match arg:
         case 'tinkoff':
-            link = tinkoff_link(args).get("PaymentURL")
+            link = tinkoff_link(args, uuid).get("PaymentURL")
         case 'alfabank':
             link = pmt_link(args).get('formUrl')
         case default:
