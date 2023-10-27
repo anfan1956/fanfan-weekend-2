@@ -306,7 +306,11 @@ function detailsCombinedTable (data, orderid) {
   // console.log(data)
   let parent = $('.order-details')
   parent.empty()
-  let html = '<p class = "common">ИНФОРМАЦИЯ О ЗАКАЗЕ</p>'
+  let html =
+    '<h1 class = "common">Благодарим за покупку! (хоть и не Jessica :) )</h1>'
+  html += '<p>Сохраните номер заказа и код для получения товара</p>'
+  parent.append(html)
+  // let html = '<p class = "common">ИНФОРМАЦИЯ О ЗАКАЗЕ</p>'
 
   let order = data[0].order_composition // order - first part of json data
   // console.log('order: ', order)

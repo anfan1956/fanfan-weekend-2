@@ -9,8 +9,10 @@ Demo_server = '10.0.0.7'
 # server = '127.0.0.1'
 
 
-def cn():
+def cn(demo=False):
     Server = server()
+    if demo:
+        Server = Demo_server
     con = cnn('Driver={ODBC Driver 17 for SQL Server};'
               f'Server={Server};'
               'Database=fanfan;'
@@ -32,7 +34,7 @@ def sql_query(args):
 
 def sql_tinkoff_info(args):
     con = cn(True)
-
+    print(f'module data.py, sql_tinkoff_info cn(): {con}')
     cursor = con.cursor()
     # print(args)
     cursor.execute(args)

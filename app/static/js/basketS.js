@@ -161,14 +161,14 @@ function buySelected () {
 }
 function readyToBuy () {
   let checked = false
-  if (Cook.phone == undefined) {
-    flashMessage(
-      'Чтобы делать покупки авторизуйтесь в личном кабинете',
-      false,
-      flashTime
-    )
-    return false
-  }
+  // if (Cook.phone == undefined) {
+  //   flashMessage(
+  //     'Чтобы делать покупки авторизуйтесь в личном кабинете',
+  //     false,
+  //     flashTime
+  //   )
+  //   return false
+  // }
   $('.basket-checkbox').each(function () {
     if ($(this).is(':checked')) {
       checked = true

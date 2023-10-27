@@ -184,14 +184,14 @@ function openProductPage (arg) {
 
 function buySelected () {
   let delivery = $('#delivery option:selected')
-  if (Cook.phone == undefined) {
-    flashMessage(
-      'Чтобы делать покупки авторизуйтесь в личном кабинете',
-      true,
-      flashTime
-    )
-    return false
-  }
+  // if (Cook.phone == undefined) {
+  //   flashMessage(
+  //     'Чтобы делать покупки авторизуйтесь в личном кабинете',
+  //     true,
+  //     flashTime
+  //   )
+  //   return false
+  // }
   if ($.isNumeric(delivery.val())) {
     spotid = delivery.val()
     thisPhone.spotid = spotid
@@ -225,14 +225,14 @@ function buySelected () {
 
 function readyToBuy () {
   let checked = false
-  if (Cook.phone == undefined) {
-    flashMessage(
-      'Чтобы делать покупки авторизуйтесь в личном кабинете',
-      false,
-      flashTime
-    )
-    return false
-  }
+  // if (Cook.phone == undefined) {
+  //   flashMessage(
+  //     'Чтобы делать покупки авторизуйтесь в личном кабинете',
+  //     false,
+  //     flashTime
+  //   )
+  //   return false
+  // }
   $('.basket-checkbox').each(function () {
     if ($(this).is(':checked')) {
       checked = true
