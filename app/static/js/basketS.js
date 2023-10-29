@@ -1,4 +1,14 @@
-const basket = JSON.parse(content)
+const b = content
+  .replaceAll('&#39;', '')
+  .replaceAll('}, {', '},{')
+  .replaceAll('  ', ' ')
+  .replaceAll(': ', '": "')
+  .replaceAll(', ', '", "')
+  .replaceAll('}', '"}')
+  .replaceAll('{', '{"')
+
+// JSON.parse(content)
+const basket = JSON.parse(b)
 const flashTime = 3000
 const Cook = getCookies()
 var thisPhone = {}
