@@ -13,6 +13,7 @@ def cn(demo=False):
     Server = server()
     if demo:
         Server = Demo_server
+        print(f"from cn: {Server}")
     con = cnn('Driver={ODBC Driver 17 for SQL Server};'
               f'Server={Server};'
               'Database=fanfan;'

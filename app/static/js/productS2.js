@@ -23,7 +23,7 @@ if (spot_search.split('=')[0] == '?spotid') {
   deliveryData.spotid = spotVal
   // $('#delivery').val(spotVal)
   $('#basket-buy').trigger('click')
-  console.log('sport_search spotVal:', spotVal)
+  // console.log('sport_search spotVal:', spotVal)
 }
 
 $('#delivery option').each(function () {
@@ -35,7 +35,7 @@ $('#delivery option').each(function () {
   let search = window.location.search.split('=')
   $option = search.slice(1)[0]
   if ($.isNumeric($option)) {
-    console.log($option, 'this is the adrr')
+    // console.log($option, 'this is the adrr')
     $('#delivery').val($option)
     $('.address-warning').hide()
     $('#delivery').parent().css('background-color', 'var(--greenBack)')
@@ -56,15 +56,15 @@ $('#delivery').on('change', function () {
     deliveryData.pickup = value[1]
   } else if (value[0] == 0) {
     let path = location.pathname
-    console.log('path: ', path)
+    // console.log('path: ', path)
 
     window.location.href = '/delivery?' + path
-    console.log(value, ' - will have to run new proc')
+    // console.log(value, ' - will have to run new proc')
   } else {
     deliveryData.spotid = value[0]
   }
-  console.log(deliveryData)
-  console.log('spotid' in deliveryData, ' just checking')
+  // console.log(deliveryData)
+  // console.log('spotid' in deliveryData, ' just checking')
   $('#pmt-link').trigger('click')
 })
 
@@ -100,7 +100,7 @@ $(function () {
   water = $('#watermark')
   data = allData.replaceAll('&#39;', '"')
   data = JSON.parse(data)
-  console.log('Data.main color: ', data.color)
+  // console.log('Data.main color: ', data.color)
   styleid = data.styleid
   items = data.items
   var sizes = data.sizes.split(',')
@@ -133,7 +133,7 @@ $(function () {
   product = spotSearch[0].replace('?', '')
   if (product == 'spotid') {
     spotid = spotSearch[1]
-    console.log('on document read: location.search', product, spotid)
+    // console.log('on document read: location.search', product, spotid)
     $('#delivery option[value=5]').prop('selected', 'selected')
   }
 })
@@ -141,7 +141,7 @@ $(function () {
 // this function returns all  barcodes to the authorized personnel
 $('#avail-global').click(function () {
   styleData()
-  console.log('a minute')
+  // console.log('a minute')
 })
 function styleData () {
   let arg = {
@@ -149,7 +149,7 @@ function styleData () {
     styleid: styleid,
     action: 'styleInfo'
   }
-  console.log(arg)
+  // console.log(arg)
   promissed = getStyleData(arg)
   promissed.done(function (data, state) {
     if (state == 'success') {
@@ -185,7 +185,7 @@ function stylesDataTable (data) {
   parent.append(html)
 }
 function getStyleData (args) {
-  console.log('arg getStyleData: ', args)
+  // console.log('arg getStyleData: ', args)
   return $.ajax({
     type: 'POST',
     url: '/hr',
@@ -245,7 +245,7 @@ function getMainColor () {
     // console.log(color)
 
     if (color == mainColor) {
-      console.log(color, mainColor)
+      // console.log(color, mainColor)
       $(this).closest('.left').addClass('active')
     }
   })
@@ -401,7 +401,7 @@ $('.image-icons').click(function () {
     img = images[i].img
     if (img == thisImage) {
       thisColorIndex = images[i].color
-      console.log('thisColorIndex', thisColorIndex)
+      // console.log('thisColorIndex', thisColorIndex)
     }
   }
   let colors = $('.left')
@@ -410,7 +410,7 @@ $('.image-icons').click(function () {
     if (color == thisColorIndex) {
       $(this).addClass('active')
       thisColorIndex = index
-      console.log(index, ': ', $.trim($(this).text()))
+      // console.log(index, ': ', $.trim($(this).text()))
     }
   })
   let sizes = $('.column-sizes')
@@ -572,7 +572,7 @@ $('.pmt-logo').each(function () {
 $('#addBasket').click(function () {
   if (sizeSelected()) {
     let current = $('.column.size-selected').find('.quantity').text()
-    console.log(current)
+    // console.log(current)
     let max = current - $('#this-qty').text()
     let qtyAdded = $('#quantity').val()
     if (qtyAdded > max) {
@@ -696,7 +696,7 @@ function addStyleData (arg) {
 }
 
 function paymentLink (args) {
-  console.log('paymentLink args', args)
+  // console.log('paymentLink args', args)
 
   data_str = JSON.stringify(args)
   $.ajax({
@@ -711,7 +711,7 @@ function paymentLink (args) {
       // console.log(data)
     },
     error: function (err) {
-      console.log(err.responseText, ': error ', err) // <-- printing error message to console
+      // console.log(err.responseText, ': error ', err) // <-- printing error message to console
     }
   })
 }

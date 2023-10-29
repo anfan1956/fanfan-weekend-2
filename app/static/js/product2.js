@@ -66,7 +66,7 @@ function phoneCheck (phone) {
   let action = 'phonesAuthorized'
   arg.action = action
   arg.phone = phone
-  console.log(arg, 'arg')
+  // console.log(arg, 'arg')
 
   promissed = checkPhones(arg)
   promissed.done(function (data) {
@@ -134,7 +134,7 @@ function styleData () {
     styleid: styleid,
     action: 'styleInfo'
   }
-  console.log(arg)
+  // console.log(arg)
   promissed = getStyleData(arg)
   promissed.done(function (data, state) {
     if (state == 'success') {
@@ -170,7 +170,7 @@ function stylesDataTable (data) {
   parent.append(html)
 }
 function getStyleData (args) {
-  console.log('arg getStyleData: ', args)
+  // console.log('arg getStyleData: ', args)
   return $.ajax({
     type: 'POST',
     url: '/hr',
@@ -345,7 +345,7 @@ $('.left').click(function () {
   let thisSizeIndex = sizes.find('.size-selected').index()
   if (thisSizeIndex == -1) return false
   let size = $.trim(sizes.find('.column-sizes').eq(thisSizeIndex).text())
-  console.log(size)
+  // console.log(size)
   $('.column').removeClass('size-selected')
   let qty = $(this)
     .closest('.container-sizes')
@@ -396,7 +396,7 @@ $('.image-icons').click(function () {
     if (color == thisColorIndex) {
       $(this).addClass('active')
       thisColorIndex = index
-      console.log(index, ': ', $.trim($(this).text()))
+      // console.log(index, ': ', $.trim($(this).text()))
     }
   })
   let sizes = $('.column-sizes')
@@ -436,7 +436,7 @@ sizes.click(function () {
   $('.left').each(function (index) {
     if ($(this).hasClass('active')) {
       activeColorIndex = index
-      console.log(activeColorIndex)
+      // console.log(activeColorIndex)
     }
   })
   let qtys = $('.right')
@@ -448,7 +448,7 @@ sizes.click(function () {
   }
   let size = $.trim($(this).text())
   let color = $.trim($('.left').eq(activeColorIndex).text())
-  console.log(color)
+  // console.log(color)
 
   let text = 'Выбор - цвет: ' + color + ',  размер: ' + size
   selection.addClass('filled').val(text)
@@ -546,6 +546,7 @@ $('#addBasket').click(function () {
       } else {
         flashMessage(`в корзину добавлено: ${qtyAdded} ед товара`, true)
         document.querySelector('#this-qty').innerHTML = data.this
+        // console.log('desktop, #this qty: ', data.this)
         document.querySelector('#basket-total').innerHTML = data.total
       }
     })
@@ -662,7 +663,7 @@ function paymentLink (args) {
       window.location.href = data
     },
     error: function (err) {
-      console.log(err.responseText, ': error ', err) // <-- printing error message to console
+      // console.log(err.responseText, ': error ', err) // <-- printing error message to console
     }
   })
 }

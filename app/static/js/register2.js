@@ -235,7 +235,6 @@ function checkOrders () {
   promissed = registerData(phoneData, 'customer_orders')
   promissed.done(function (data, state) {
     if (state == 'success') {
-      console.log(data)
       if (screenMode == 'smartphone') {
         for (let d in data) {
           delete data[d].время
@@ -500,8 +499,6 @@ function selectConf (mode) {
 }
 
 function registerData (arg, theUrl = 'register2') {
-  console.log("from proc 'registerData'", arg, theUrl)
-
   return $.ajax({
     type: 'POST',
     url: theUrl,

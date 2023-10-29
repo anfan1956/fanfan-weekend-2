@@ -24,7 +24,7 @@ def menu():
             {"name": "Каталог", "url": "/catalog2"},
             {"name": "Магазины", "url": "/shops"},
             {"name": "Личный кабинет", "url": "/register2"},
-            {"name": "Корзина", "url": "/basket"},
+            {"name": "Корзина", "url": "/basketS"},
             # {"name": "Корзина", "url": "/basketS"},
             # {"name": "Доставка", "url": "/delivery"} #  В меню не показывать, только по вызову
             ]

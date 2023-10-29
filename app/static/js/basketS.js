@@ -1,150 +1,41 @@
-$(function () {
-  $('.basket-checkbox').click(calcSelected)
-  calcTotals()
-})
-
+const basket = JSON.parse(content)
 const flashTime = 3000
-var pcsSelected
-var totalSelected
-var activeColor = '#b2ffe3'
-var basketIcon = '../static/images/basket.svg'
-var checks = document.querySelectorAll('.basket-checkbox')
-var tr = document.querySelectorAll('tr')
-
-var fields = ['styleid', 'color', 'size', 'price', 'discount', 'promo']
-
-let obj = []
 const Cook = getCookies()
 var thisPhone = {}
 thisPhone['phone'] = Cook.phone
 thisPhone['Session'] = Cook.Session
 
-// do not delete! To check later!
-$('#delivery > option').each(function () {
-  // console.log('delivery > option proc')
-  const $select = document.querySelector('#delivery')
-  let search = window.location.search.split('=')
-  $option = search.slice(1)[0]
-  if ($.isNumeric($option)) {
-    $select.value = $option
-    $('.address-warning').hide()
-    $('#delivery').parent().css('background-color', 'var(--greenBack)')
-  }
+$('.basket-checkbox').on('click', function () {
+  calcSelected()
 })
 
-function selectAll () {
-  checks.forEach(function (item) {
-    item.checked = true
-  })
-  let totals = calcTotals()
-  let toPay = totals.amount.toLocaleString('en-US')
-  let pcs = totals.pcs.toLocaleString('en-US')
-  $('#toPay').text(toPay)
-  $('#total').text(toPay)
-  $('#qty').text(pcs)
-}
-
-function calcSelected () {
-  let inv = []
-  let selected = {}
-  let pcs = 0,
-    amount = 0
-  $('.basket-checkbox').each(function () {
-    if ($(this).is(':checked')) {
-      let product = {}
-      let $parent = $(this).closest('.product')
-      amount += parseInt(
-        $parent.find('.num1').text().split(': ')[1].replaceAll(',', '')
-      )
-      pcs += parseInt($parent.find('.pcs').text().split(': ')[1])
-      product.styleid = $parent.find('.model').text().split(': ')[1]
-      product.color = $parent.find('.color').text().split(': ')[1]
-      product.size = $parent.find('.size').text().split(': ')[1]
-      product.price = parseInt(
-        $parent.find('.price').text().replaceAll(',', '')
-      )
-      discount = $parent.find('.discount').text().split(': -')[1]
-      product.discount =
-        discount != undefined ? discount.replaceAll('%', '') / 100 : 0
-      promo = $parent.find('.promo').text().split(': -')[1]
-      product.promo = promo != undefined ? promo.replaceAll('%', '') / 100 : 0
-      product.qty = $parent.find('.qty').text().split(': ')[1]
-      product.total = parseInt(
-        product.price *
-          (1 - product.discount) *
-          (1 - product.promo) *
-          product.qty
-      )
-      inv.push(product)
+$('.pmt-logo').each(function () {
+  $(this).click(function () {
+    let pmtSys = $(this).attr('id')
+    if (pmtSys == 'yandex') {
+      pmtSys = 'tinkoff'
     }
+    // thisPhone.pmtSys = pmtSys
+    buySelected(pmtSys)
   })
-  selected.amount = amount
-  selected.pcs = pcs
-  inv.unshift(selected)
-  console.log('pcs from calcSelected: ', pcs, 'inv: ', inv)
-  if (pcs == 0) {
-    inv.error = 'ничего не выбрано'
-  }
-  // console.log(inv)
-  let toPay = amount.toLocaleString('en-US')
-  pcs = pcs.toLocaleString('en-US')
-  $('#toPay').text(toPay)
-  $('#qty').text(pcs)
-  return inv
-}
+})
 
-function clearSelected () {
-  checks.forEach(function (item) {
-    item.checked = false
-  })
-  calcSelected()
-}
-
-function openProductPage (arg) {
-  window.location.href = '/product2/' + arg.styleid + '?' + 'color=' + arg.color
-}
-
-// first select the products to buy
-// then pass it to flask with ajax
-// flask runs the "web.basketAction_2" procedure is there a need for the procedure?
-//how to permanently delete product from basket if the product is sold? should be in reservation proc
-// web.reservation_create - the name of the procedure which must be run from oneClick
-// original github file is "web.reservation_create__web.reservation_type.sql"
-// oneClick is sending to def oneClick(): where payment link is requested, creates pmtParams and pass it over
-// to the function pmt_link which creates a link with a retrn url
-// returnUrl = 'http://10.0.0.7:5001/promo?trace?' meaning that when payment is executed, the browser
-// will goto the /promo with parameters and will initialize the "order_status_site" procedure upon load
-
-// !!!!!!! will have to finish delivery logs for the web.reservation_json proc !!
-function buySelected () {
+function buySelected (pmtSys) {
+  let order = calcSelected()
   let delivery = $('#delivery option:selected')
-  if (Cook.phone == undefined) {
-    flashMessage(
-      'Чтобы делать покупки авторизуйтесь в личном кабинете',
-      true,
-      flashTime
-    )
-    return false
-  }
+  order[0].phone = Cook.phone
+  order[0].Session = Cook.Session
+  order[0].pmtSys = pmtSys
   if ($.isNumeric(delivery.val())) {
     spotid = delivery.val()
-    thisPhone.spotid = spotid
+    order[0].spotid = spotid
   } else {
     pickupid = delivery.val().split('-')[1]
-    thisPhone.pickupid = pickupid
+    order[0].pickupid = pickupid
   }
-  let inv = calcSelected()
-  if (inv.error) {
-    flashMessage(inv.error, false, flashTime)
-    return false
-  }
-  let orderTotal = inv[0].amount
-  thisPhone.orderTotal = orderTotal
-  thisPhone.procName = 'ON_SITE RESERVATION'
-  console.log('buySelected thisPhone: ', thisPhone)
-  inv.shift()
-  console.log('buySelected inv: ', inv)
-  promissed = basketActions(inv)
+  order[0].procName = 'ON_SITE RESERVATION'
+  console.log(order, ' - from buySelected')
+  promissed = basketActions(order)
   promissed.done(function (data, state) {
     if (state == 'success') {
       console.log(data)
@@ -159,77 +50,32 @@ function buySelected () {
     console.log(data, state)
   })
 }
-function readyToBuy () {
+
+function removeSelected () {
   let checked = false
-  // if (Cook.phone == undefined) {
-  //   flashMessage(
-  //     'Чтобы делать покупки авторизуйтесь в личном кабинете',
-  //     false,
-  //     flashTime
-  //   )
-  //   return false
-  // }
   $('.basket-checkbox').each(function () {
     if ($(this).is(':checked')) {
       checked = true
     }
   })
   if (checked == false) {
-    flashMessage('Нужно отметить то, что вы хотите купить', false, flashTime)
+    flashMessage('Нужно отметить то, что вы хотите удалить', false, flashTime)
     return false
   }
+
+  let order = calcSelected()
   let delivery = $('#delivery option:selected')
-  if (delivery.val() == 'choose address') {
-    flashMessage('нужно выбрать способ доставки')
-    return
+  order[0].phone = Cook.phone
+  order[0].Session = Cook.Session
+  if ($.isNumeric(delivery.val())) {
+    spotid = delivery.val()
+    order[0].spotid = spotid
+  } else {
+    pickupid = delivery.val().split('-')[1]
+    order[0].pickupid = pickupid
   }
-  $('.main-message').slideDown(500).css('display', 'flex')
-  $('.basket-container').css('opacity', '0.2')
-
-  // $('#toPay').text(toPay)
-  // $('#qty').text(pcs)
-  // let totals = calcTotals()
-  let toPay = $('#toPay').text()
-  console.log(toPay, ' this is toPay')
-
-  let pcs = $('#qty').text()
-  $('#buy-qty').text(pcs)
-  $('#buy-amount').text(toPay)
-}
-
-$('#cancel').click(function () {
-  $('.main-message').slideUp(500).css('display', 'none')
-  $('.basket-container').css('opacity', '1')
-})
-
-$('.pmt-logo').each(function () {
-  $(this).click(function () {
-    let pmtSys = $(this).attr('id')
-    if (pmtSys == 'yandex') {
-      pmtSys = 'tinkoff'
-    }
-    thisPhone.pmtSys = pmtSys
-
-    buySelected()
-  })
-})
-
-// new version actually working
-function removeSelected () {
-  let action = 'remove'
-
-  let inv = calcSelected()
-  let orderTotal = inv[0].amount
-  thisPhone.procName = action
-  thisPhone.uuid = Cook.Session
-  thisPhone.orderTotal = orderTotal
-  inv.shift()
-  console.log(inv)
-  if (inv.error) {
-    flashMessage('ничего не выбрано')
-    return
-  }
-  promissed = basketActions(inv)
+  order[0].procName = 'remove'
+  promissed = basketActions(order)
   promissed.done(function (data) {
     console.log(data)
     if (data.success) {
@@ -255,7 +101,6 @@ $('#delivery option').each(function () {
     $('#delivery').parent().css('background-color', 'var(--greenBack)')
     return false
   } else if ($.isNumeric(value) && value > 0) {
-    // console.log(value)
     $('#delivery').val(value)
     $('.address-warning').hide()
     $('#delivery').parent().css('background-color', 'var(--greenBack)')
@@ -288,6 +133,103 @@ $('#delivery').on('change', function () {
   }
 })
 
+function selectAll (arg) {
+  $('.basket-checkbox').each(function () {
+    $(this).prop('checked', arg)
+  })
+  calcSelected()
+}
+
+function readyToBuy () {
+  let checked = false
+  $('.basket-checkbox').each(function () {
+    if ($(this).is(':checked')) {
+      checked = true
+    }
+  })
+  if (checked == false) {
+    flashMessage('Нужно отметить то, что вы хотите купить', false, flashTime)
+    return false
+  }
+  let delivery = $('#delivery option:selected')
+  if (delivery.val() == 'choose address') {
+    flashMessage('нужно выбрать способ доставки')
+    return
+  }
+  $('.main-message').slideDown(500).css('display', 'flex')
+  $('.basket-container').css('opacity', '0.2')
+
+  let toPay = $('#toPay').text()
+
+  let pcs = $('#qty').text()
+  $('#buy-qty').text(pcs)
+  $('#buy-amount').text(toPay)
+}
+
+function openProductPage (arg) {
+  window.location.href = '/product2/' + arg.styleid + '?' + 'color=' + arg.color
+}
+$('#cancel').click(function () {
+  $('.main-message').slideUp(500).css('display', 'none')
+  $('.basket-container').css('opacity', '1')
+})
+
+function calcSelected () {
+  let inventory = []
+  $('.basket-checkbox').each(function () {
+    if ($(this).is(':checked')) {
+      let product = {}
+      let $parent = $(this).closest('.product')
+      let qty = parseInt($parent.find('.qty').text().split(': ')[1])
+      product.styleid = $parent.find('.model').text().split(': ')[1]
+      product.color = $parent.find('.color').text().split(': ')[1]
+      product.size = $parent.find('.size').text().split(': ')[1]
+      product.qty = qty
+      inventory.push(product)
+    }
+  })
+  let thisOrder = purchaseOrder(inventory)
+
+  var amount = thisOrder.map(o => o.total).reduce((x, y) => x + y, 0)
+  var pcs = thisOrder.map(o => o.qty).reduce((x, y) => x + y, 0)
+
+  let totals = {
+    pcs: pcs,
+    orderTotal: amount
+  }
+  thisOrder.unshift(totals)
+  let toPay = amount.toLocaleString('en-US')
+  pcs = pcs.toLocaleString('en-US')
+  $('#toPay').text(toPay)
+  $('#total').text(toPay)
+  $('#qty').text(pcs)
+  return thisOrder
+}
+
+function purchaseOrder (selection) {
+  let order = []
+  for (let j in selection) {
+    for (let i in basket) {
+      if (
+        basket[i].модель == selection[j].styleid &&
+        basket[i].размер == selection[j].size &&
+        basket[i].цвет == selection[j].color
+      ) {
+        selection[j].price = parseInt(basket[i].цена)
+        selection[j].discount = basket[i].скидка
+        selection[j].promo = basket[i].промо
+        selection[j].total = parseInt(
+          basket[i].цена *
+            (1 - basket[i].скидка) *
+            (1 - basket[i].промо) *
+            selection[j].qty
+        )
+        order.push(selection[j])
+      }
+    }
+  }
+  return order
+}
 function getCookies () {
   let Cookies = {}
   document.cookie.split('; ').forEach(el => {
@@ -299,12 +241,10 @@ function getCookies () {
 }
 
 function basketActions (arg) {
-  console.log(arg)
+  console.log(arg, ' - from basketActions')
   if (arg.error) {
     return arg
   }
-  // do not insert thisPhone in the calling prcedure
-  arg.unshift(thisPhone)
   console.log('basket actions:', arg)
   return $.ajax({
     type: 'POST',
@@ -314,6 +254,19 @@ function basketActions (arg) {
     contentType: 'application/json',
     dataType: 'json'
   })
+}
+
+$('.img').on('click', function () {
+  let page = {}
+  let color = $(this).closest('.product').find('.color').text().split(': ')[1]
+  let styleid = $(this).closest('.product').find('.model').text().split(': ')[1]
+  page.color = color
+  page.styleid = styleid
+  openProductPage(page)
+})
+
+function openProductPage (arg) {
+  window.location.href = '/product2/' + arg.styleid + '?' + 'color=' + arg.color
 }
 
 $(function () {
@@ -354,54 +307,7 @@ $(function () {
   })
 })
 
-// this function iterates throug the rows of a table and returns total
-function calcTotals () {
-  let totals = {}
-  let pcs = 0,
-    amount = 0
-  $('.num1').each(function () {
-    amount += parseInt($(this).text().replaceAll(',', '').split(': ')[1])
-  })
-  $('.pcs').each(function () {
-    pcs += parseInt($(this).text().replaceAll(',', '').split(': ')[1])
-  })
-  totals.amount = amount
-  totals.pcs = pcs
-  amount = amount.toLocaleString('en-US')
-  $('#total').text(amount)
-  return totals
-}
-$('.img').on('click', function () {
-  let page = {}
-  let color = $(this).closest('.product').find('.color').text().split(': ')[1]
-  let styleid = $(this).closest('.product').find('.model').text().split(': ')[1]
-  page.color = color
-  page.styleid = styleid
-  openProductPage(page)
-})
-
-function openProductPage (arg) {
-  console.log(arg)
-  window.location.href = '/product2/' + arg.styleid + '?' + 'color=' + arg.color
-}
-
-// this function is to record changes to basket when + or - is clicked
-// to be created anew
+//this function I did not write
 function submitChanges () {
   console.log(newObj)
 }
-
-// $('#buy-selected').click(function () {
-//   let inv = selected()
-//   if (inv.error) {
-//     flashMessage(inv.error)
-//     return
-//   }
-//   let delivery = $('#delivery option:selected')
-//   if (delivery.val() == 'choose address') {
-//     flashMessage('нужно выбрать способ доставки')
-//     return
-//   }
-//   $('.main-message').slideDown(500).css('display', 'flex')
-//   $('.basket-container').css('opacity', '0.2')
-// })

@@ -380,6 +380,7 @@ def sortcode_qty():
     results = None
     if request.method == 'POST':
         js_string = request.get_json()  # list of dictionaries
+        print(js_string)
         procName = js_string[0].get('procName')
         phone = js_string[0].get('phone')
         print(f"procName:  {procName}")
@@ -715,7 +716,7 @@ def info():
         d["Bank"] = bank
         json_pars = json.dumps(d)
         sql = f"exec web.order_action_json '[{json_pars}]'"
-
+        print(f"sql from '/info route:' {sql}")
         if demoMode(key):
             response = st(sql)
         else:
