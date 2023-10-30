@@ -111,7 +111,13 @@ $(document).ready(function () {
   })
 
   $('#btn1').click(function () {
-    phone = thePhone($('#phone').val())
+    let phone = thePhone($('#phone').val())
+    let properFormat = checkPhoneFormat(phone)
+    if (properFormat == false) {
+      flashMessage('Неверный формат телефона', false, flashTime)
+      $('#phone').val('').focus()
+      return false
+    }
     $('#phone-span').text(phoneString(phone))
     $('#sms-wrap').show()
     $(this).hide()
@@ -119,6 +125,13 @@ $(document).ready(function () {
     ajaxData.mode = 0
     registerData(ajaxData)
   })
+
+  function checkPhoneFormat (phone) {
+    console.log('checkiing phone format', phone)
+    if (isNaN(phone) || phone.length != 10) {
+      return false
+    } else return true
+  }
 
   $('#btn2').click(function () {
     ajaxData.sms_entered = $('#sms-code').val()
@@ -305,9 +318,9 @@ function detailsCombinedTable (data, orderid) {
   // console.log(data)
   let parent = $('.order-details')
   parent.empty()
-  let html =
-    '<h1 class = "common">Благодарим за покупку! (хоть и не Jessica :) )</h1>'
-  html += '<p>Сохраните номер заказа и код для получения товара</p>'
+  let html = '<h1 class = "common">Благодарим за покупку! </h1>'
+  html +=
+    '<h1 style="color: red;">Сохраните номер заказа и код для получения товара!</h1>'
   parent.append(html)
   // let html = '<p class = "common">ИНФОРМАЦИЯ О ЗАКАЗЕ</p>'
 

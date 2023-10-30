@@ -344,28 +344,31 @@ $('.left').click(function () {
   $('.left').removeClass('active').removeClass('size-selected')
   $(this).addClass('active').addClass('size-selected')
   let thisSizeIndex = sizes.find('.size-selected').index()
-  if (thisSizeIndex == -1) return false
-  let size = $.trim(sizes.find('.column-sizes').eq(thisSizeIndex).text())
-  // console.log(size)
-  $('.column').removeClass('size-selected')
-  let qty = $(this)
-    .closest('.container-sizes')
-    .find('.column')
-    .eq(thisSizeIndex)
-  // qty.css('background', 'red')
-  if (qty.hasClass('avail')) {
-    qty.addClass('size-selected')
-    let color = $.trim($(this).text())
-    let text = 'Выбор - цвет: ' + color + ',  размер: ' + size
-    selection.addClass('filled').val(text)
-    qtyBox.addClass('filled').val(1)
-    thisColor = color
-    let data = getItemData('sizeQuantities')
-    alreadyInBasket(data)
-  } else {
-    $('.column-sizes').removeClass('size-selected')
+
+  if (thisSizeIndex != -1) {
+    let size = $.trim(sizes.find('.column-sizes').eq(thisSizeIndex).text())
+    // console.log(size)
+    $('.column').removeClass('size-selected')
+    let qty = $(this)
+      .closest('.container-sizes')
+      .find('.column')
+      .eq(thisSizeIndex)
+    // qty.css('background', 'red')
+    if (qty.hasClass('avail')) {
+      qty.addClass('size-selected')
+      let color = $.trim($(this).text())
+      let text = 'Выбор - цвет: ' + color + ',  размер: ' + size
+      selection.addClass('filled').val(text)
+      qtyBox.addClass('filled').val(1)
+      thisColor = color
+      let data = getItemData('sizeQuantities')
+      alreadyInBasket(data)
+    } else {
+      $('.column-sizes').removeClass('size-selected')
+    }
   }
   thisColor = $.trim($(this).text())
+
   for (let i in images) {
     let color = images[i].color
     let img = images[i].img
