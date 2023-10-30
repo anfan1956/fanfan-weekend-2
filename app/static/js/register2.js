@@ -111,7 +111,7 @@ $(document).ready(function () {
   })
 
   $('#btn1').click(function () {
-    let phone = thePhone($('#phone').val())
+    phone = thePhone($('#phone').val())
     let properFormat = checkPhoneFormat(phone)
     if (properFormat == false) {
       flashMessage('Неверный формат телефона', false, flashTime)
@@ -127,7 +127,7 @@ $(document).ready(function () {
   })
 
   function checkPhoneFormat (phone) {
-    console.log('checkiing phone format', phone)
+    // console.log('checkiing phone format', phone)
     if (isNaN(phone) || phone.length != 10) {
       return false
     } else return true
@@ -136,14 +136,17 @@ $(document).ready(function () {
   $('#btn2').click(function () {
     ajaxData.sms_entered = $('#sms-code').val()
     ajaxData.mode = 2
+    // console.log(ajaxData, ' ajax Data')
+
     promissed = registerData(ajaxData)
     promissed.done(function (data, state) {
       if (state == 'success') {
-        console.log('btn2 click: ', data) //убрать после доработки
+        // console.log('btn2 click: ', data) //убрать после доработки
 
         if (!data.error) {
           $('#email').val(data.email).prop('disabled', true)
           let flMessage = 'Вы авторизованы.'
+          // console.log(phone, ' from btn2.click')
           let phoneStr = phoneString(phone)
           $('.item-menu-right').show().text(phoneStr)
           $('#incognito').css('display', 'none')

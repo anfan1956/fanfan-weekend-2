@@ -78,5 +78,4 @@ function thePhone (arg) {
 function phoneString (arg) {
   let ni = '+7-' + thePhone(arg).replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')
   return ni
-  //   console.log(ni)
 }
