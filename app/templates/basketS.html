@@ -10,7 +10,7 @@
             <h1>Вы покупаете:</h1>
             <ul>
                 <li> количество штук: <span id="buy-qty">4</span> </li>
-                <li> на сумму: <span id="buy-amount">1 254 руб</span> </li>
+                <li> на сумму: <span id="buy-amount">1 руб</span> </li>
             </ul>
         </div>
         <div class="confirmation-buttons">
@@ -26,12 +26,11 @@
 
         </div>
     </div>
-
+    <div class="headers">
+    </div>
     <div class="housekeeping">
-        <div class="headers">
-            <div class="heading">Доставка</div>
-            <div class="basket-heading">Корзина</div>
-        </div>
+
+        <!-- <div class="heading">Доставка</div> -->
         <div id="addr" name="addr" class="addr">
             <div class="custom-select">
                 <!-- <select class="delivery" name="delivery" id="delivery" onchange="deliveryAction()"> -->
@@ -51,6 +50,36 @@
             </div>
             <div>
                 <h1 class="address-warning">адрес доставки не выбран</h1>
+            </div>
+        </div>
+        <div class="totals-wrapper">
+            <div class="totals">
+                <div class="in-basket">
+                    <h1>В корзине: &nbsp;<span class="span-totals" id="total"> </span>&nbsp;руб</h1>
+                </div>
+                <div class="checked">
+                    <div class="total">
+                        <h1>Штук:&nbsp;<span class="span-totals" id="qty"></span></h1>
+                    </div>
+                    <div class="total">
+                        <h1>К оплате:&nbsp;<span class="span-totals" id="toPay"></span> </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons-area">
+                <button class="button blue" type="button" id="select-all" onclick="selectAll(true)">
+                    отметить все &#x2714;
+                </button>
+                <button class="button sand" type="button" id="clear-selected" onclick="selectAll(false)">
+                    снять &#x2714;
+                </button>
+                <!-- <button class="button green" type="button" id="buy-selected" onclick="buySelected()"> -->
+                <button class="button green" type="button" id="buy-selected" onclick="readyToBuy()">
+                    купить &#x2714;
+                </button>
+                <button class="button red" type="button" id="remove-selected" onclick="removeSelected()">
+                    удалить &#x2714;
+                </button>
             </div>
         </div>
     </div>
@@ -114,39 +143,6 @@
                 </div>
             </div>
             {% endfor %}
-        </div>
-        <div class="totals-wrapper">
-            <div class="totals">
-                <div class="in-basket">
-                    <h1>В корзине:</h1>
-                    <h1><span class="span-totals" id="total"></span></h1>
-                </div>
-                <div class="checked">
-                    <div class="total">
-                        <h1>Штук:</h1>
-                        <h1><span class="span-totals" id="qty"></span></h1>
-                    </div>
-                    <div class="total">
-                        <h1>К оплате:</h1>
-                        <h1><span class="span-totals" id="toPay"></span></h1>
-                    </div>
-                </div>
-            </div>
-            <div class="buttons-area">
-                <button class="button blue" type="button" id="select-all" onclick="selectAll(true)">
-                    отметить все &#x2714;
-                </button>
-                <button class="button sand" type="button" id="clear-selected" onclick="selectAll(false)">
-                    снять &#x2714;
-                </button>
-                <!-- <button class="button green" type="button" id="buy-selected" onclick="buySelected()"> -->
-                <button class="button green" type="button" id="buy-selected" onclick="readyToBuy()">
-                    купить &#x2714;
-                </button>
-                <button class="button red" type="button" id="remove-selected" onclick="removeSelected()">
-                    удалить &#x2714;
-                </button>
-            </div>
         </div>
     </div>
 </div>

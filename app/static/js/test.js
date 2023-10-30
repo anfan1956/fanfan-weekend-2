@@ -32,7 +32,9 @@ var inv = [
   }
 ]
 const amount = inv
-  .map(obj => obj.total)
+  .map(item => {
+    return item.price * item.qty
+  })
   .reduce((sum, current) => sum + current, 0)
 
 console.log(amount)

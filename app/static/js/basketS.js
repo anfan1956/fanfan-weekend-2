@@ -14,6 +14,15 @@ const Cook = getCookies()
 var thisPhone = {}
 thisPhone['phone'] = Cook.phone
 thisPhone['Session'] = Cook.Session
+const basketTotal = basket
+  .map(item =>
+    parseInt(
+      item.цена * item['в корзине'] * (1 - item.скидка) * (1 - item.промо)
+    )
+  )
+  .reduce((a, b) => a + b, 0)
+console.log('basket total: ', basketTotal)
+$('#total').text(parseInt(basketTotal).toLocaleString('en-US'))
 
 $('.basket-checkbox').on('click', function () {
   calcSelected()
@@ -208,10 +217,10 @@ function calcSelected () {
     orderTotal: amount
   }
   thisOrder.unshift(totals)
-  let toPay = amount.toLocaleString('en-US')
+  let toPay = amount.toLocaleString('en-US') + ' руб'
   pcs = pcs.toLocaleString('en-US')
   $('#toPay').text(toPay)
-  $('#total').text(toPay)
+  // $('#total').text(toPay)
   $('#qty').text(pcs)
   return thisOrder
 }
