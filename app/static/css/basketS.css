@@ -10,7 +10,7 @@
   opacity: 1;
 }
 .basket-wrapper {
-  padding-top: 9rem;
+  padding-top: 10rem;
   display: flex;
   flex-direction: column;
 }
@@ -339,6 +339,7 @@ h1 {
     display: none;
   }
   .basket-wrapper {
+    padding-top: 9rem;
     flex-direction: row;
     justify-content: space-between;
     gap: 2rem;
@@ -418,7 +419,7 @@ h1 {
     font-size: 18px;
     padding: 0;
     gap: 1rem;
-    border: solid 1px rgb(0, 128, 0, 0.5);
+    border: solid 1px rgb(0, 128, 0, 0.3);
     box-shadow: none;
   }
   .image {

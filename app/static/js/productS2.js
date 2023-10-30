@@ -75,8 +75,15 @@ function phoneCheck (phone) {
   let action = 'phonesAuthorized'
   arg.action = action
   arg.phone = phone
+
   promissed = checkPhones(arg)
-  promissed.done(function (data) {})
+  promissed.done(function (data) {
+    // console.log('phone data', data)
+    let showButton = data.authorised
+    if (showButton) {
+      $('#avail-global').css('display', 'block')
+    }
+  })
 }
 function checkPhones (arg) {
   return $.ajax({

@@ -61,6 +61,7 @@ $('#delivery').on('change', function () {
 })
 
 Cook = getCookies()
+
 function phoneCheck (phone) {
   let arg = {}
   let action = 'phonesAuthorized'
