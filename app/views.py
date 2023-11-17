@@ -10,7 +10,6 @@ from app.mails import fanfan_send_mail, mail_pmt_link, mail_sales_receipt
 from app.data import sql_query as s, sql_tinkoff_info as st
 from flask import render_template, redirect, request, url_for, make_response, jsonify, flash, abort
 import json, re, uuid
-from random import randint
 
 
 def authorized(phone, data):
@@ -56,7 +55,7 @@ def basketS():
     if not phone and not Session:
         res = make_response(redirect(url_for('register2')))
         res.set_cookie("currentLocation", request.path)
-        Session = uuid.uuid4()
+        Session = str(uuid.uuid4())
         res.set_cookie("Session", Session, expires=dt)
 
         return res
@@ -287,10 +286,10 @@ def promo():
 def product2(styleid):
     phone = request.cookies.get('phone')
     Session = request.cookies.get('Session')
-    if not phone and not Session:
-        res = make_response(redirect(url_for('register2', menu=menu())))
-        res.set_cookie("currentLocation", request.path)
-        return res
+    # if not phone and not Session:
+    #     res = make_response(redirect(url_for('register2', menu=menu())))
+    #     res.set_cookie("currentLocation", request.path)
+    #     return res
     sql = f"select web.delivery_addr_js_('{phone}')"
     print(sql)
     addr_list = json.loads(s(sql))

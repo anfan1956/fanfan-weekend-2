@@ -294,6 +294,27 @@ caption {
   border: solid 1px grey;
   font-size: 12px;
 }
+.main-modal {
+  /* display: flex; */
+  display: none;
+  position: fixed;
+  justify-content: center;
+  width: 45%;
+  /* overflow: scroll; */
+  background: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  border: solid 3px var(--greenBack);
+  /* overflow: scroll; */
+  box-shadow: 20px 20px 20px 20px rgb(182, 182, 182, 0.3);
+}
+.modal-img {
+  width: 75%;
+  cursor: pointer;
+  /* overflow: scroll; */
+}
 
 .note {
   font-style: italic;

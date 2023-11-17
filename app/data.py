@@ -9,6 +9,25 @@ Demo_server = '10.0.0.7'
 # server = '127.0.0.1'
 
 
+def active_server(demo=False):
+    if demo:
+        the_server = Demo_server
+    else:
+        the_server = server
+    return the_server
+
+
+def cn_allDB(arg):
+    Server = arg.get("Server")
+    Database = arg.get("Database")
+    con = cnn('Driver={ODBC Driver 17 for SQL Server};'
+              f'Server={Server};'
+              f'Database={Database};'
+              'UID=anfan;'
+              f'PWD={PWD};')
+    return con
+
+
 def cn(demo=False):
     Server = server()
     if demo:
@@ -20,6 +39,17 @@ def cn(demo=False):
               'UID=anfan;'
               f'PWD={PWD};')
     return con
+
+
+def sql_allDB(arg, sql_arg):
+    con = arg
+    cursor = con.cursor()
+    # print(args)
+    cursor.execute(sql_arg)
+    result = cursor.fetchone()[0]
+    con.commit()
+    con.close()
+    return result
 
 
 def sql_query(args):

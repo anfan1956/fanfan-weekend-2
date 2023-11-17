@@ -20,3 +20,6 @@ scrap/
 */test.js
 app/static/js/test.js
 app/static/parent/*
+app/static/images/*
+app/static/js/ttt.js
+*.txt

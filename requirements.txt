@@ -97,3 +97,5 @@ wikipedia==1.4.0
 WTForms==3.0.1
 xlwings==0.30.8
 yarl==1.9.2
+
+xmltodict~=0.13.0
