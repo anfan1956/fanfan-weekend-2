@@ -51,7 +51,7 @@ $(".modal-img").on("click", function () {
     if (images[i].img == srce) {
       let this_source = base + "/" + images[(i + 1) % l].img;
       $(this)
-        .fadeOut(200, function () {
+        .fadeOut(300, function () {
           $(this).attr("src", this_source);
         })
         .fadeIn(500);
