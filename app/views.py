@@ -191,9 +191,9 @@ def register2():
                     result = s(sql)
                     print(result)
                     # пока отключил отправку смв
-                    # if not requestMail:
-                        # if sms_messages:
-                        #     sms(phone, result)
+                    if not requestMail:
+                        if sms_messages:
+                            sms(phone, result)
                     promo = re.findall(r'\d{6}', result)[0]
                     sql = f"select cust.customer_mail('{phone}')"
                     q_result = s(sql)
@@ -285,7 +285,7 @@ def promo():
 @app.route('/product2/<styleid>', methods=['GET', 'POST'])
 def product2(styleid):
     phone = request.cookies.get('phone')
-    Session = request.cookies.get('Session')
+    # Session = request.cookies.get('Session')
     # if not phone and not Session:
     #     res = make_response(redirect(url_for('register2', menu=menu())))
     #     res.set_cookie("currentLocation", request.path)
