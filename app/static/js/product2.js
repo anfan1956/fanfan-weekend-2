@@ -706,7 +706,7 @@ function paymentLink (args) {
     contentType: 'application/json',
     dataType: 'json',
     success: function (data, state) {
-      // window.location.href = data;
+      window.location.href = data
     },
     error: function (err) {
       // console.log(err.responseText, ': error ', err) // <-- printing error message to console
