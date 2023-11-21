@@ -183,18 +183,19 @@ def register2():
                     sql = f"cust.email_delete '{phone}'"
                     results = jsonify(s(sql))
                 sms_entered = data.get('sms_entered')
-                sql = f"select top 1 smsCode from web.sms_log where phone = '{phone}' order by logid desc"
-                sms_msg = str(s(sql))
-                if sms_msg == sms_entered or requestMail:
-                    print(sms_entered, sms_msg, ': just printing, not sms')
-                    sql = f"set nocount on; declare @note varchar(max); exec web.promoAllStyles_p {phone}, @note output; select @note"
-                    result = s(sql)
-                    print(result)
-                    # пока отключил отправку смв
-                    if not requestMail:
-                        if sms_messages:
-                            sms(phone, result)
-                    promo = re.findall(r'\d{6}', result)[0]
+                if sms_entered is not None:
+                    sql = f"select top 1 smsCode from web.sms_log where phone = '{phone}' order by logid desc"
+                    sms_msg = str(s(sql))
+                    if sms_msg == sms_entered or requestMail:
+                        print(sms_entered, sms_msg, ': just printing, not sms')
+                        sql = f"set nocount on; declare @note varchar(max); exec web.promoAllStyles_p {phone}, @note output; select @note"
+                        result = s(sql)
+                        print(result)
+                        # пока отключил отправку смв
+                        if not requestMail:
+                            if sms_messages:
+                                sms(phone, result)
+                        promo = re.findall(r'\d{6}', result)[0]
                     sql = f"select cust.customer_mail('{phone}')"
                     q_result = s(sql)
                     print(q_result)
