@@ -23,3 +23,7 @@ app/static/parent/*
 app/static/images/*
 app/static/js/ttt.js
 *.txt
+!robots.txt
+app/ssl.py
+app/sitemap.py
+app/static/css/test.sql

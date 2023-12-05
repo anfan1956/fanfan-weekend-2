@@ -281,13 +281,19 @@ caption {
   font-size: 12px;
   display: none;
   position: fixed;
-  top: 60%;
+  height: 80vh;
+  /* top: 60%; */
   left: 50%;
+  top: 10%;
+  bottom: 10%;
+  /* left: 0%; */
   min-width: 50%;
   padding: 1rem 2rem;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -0%);
   border: 1px solid var(--blueForgr);
   background: white;
+  overflow-y: scroll;
+  overflow-x: scroll;
   z-index: 100;
 }
 .items-left {
