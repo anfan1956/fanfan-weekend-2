@@ -27,3 +27,5 @@ app/static/js/ttt.js
 app/ssl.py
 app/sitemap.py
 app/static/css/test.sql
+!app/static/images/org_images/*.*   
+app/templates/test.html
