@@ -279,18 +279,18 @@
     {
       "@context": "http://schema.org",
       "@type": "Product",
-      "name": "Название продукта",
-      "description": "Описание продукта",
-      "image": "ссылка на изображение",
+      "name": "{{ data.category }}",
+      <!-- "description": "Описание продукта", -->
+      "image": "{{parent}}{{ data.styleid }}/800/{{data.photo}}",
       "brand": {
         "@type": "Brand",
-        "name": "Название бренда"
+        "name": "{{data.brand}}"
       },
       "offers": {
         "@type": "Offer",
-        "price": "Цена продукта",
-        "priceCurrency": "Валюта",
-        "availability": "Наличие продукта"
+        "price": "{{data.price}}",
+        "priceCurrency": "руб",
+        "availability": "в наличии"
       }
     }
     </script>
