@@ -62,10 +62,17 @@ a:link {
 }
 a.item-menu,
 a.item-menu-right {
+  font-size: inherit;
   color: rgb(214, 214, 214);
+}
+.item-menu2 {
+  display: none;
 }
 .item-menu-right {
   float: right;
+}
+.call-link {
+  display: inline;
 }
 header {
   display: flex;
@@ -111,16 +118,20 @@ header > .top a.menu-icon:hover i {
   align-self: center;
 }
 .menu-left {
-  /* background: inherit; */
   display: flex;
   flex-direction: column;
-  /* width: 70%; */
   align-items: left;
   justify-content: baseline;
   gap: 2rem;
   margin-left: 1.5rem;
   margin-top: 2rem;
 }
+.menu-middle {
+  display: flex;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
 .menu_show {
   left: 0 !important;
 }
@@ -321,6 +332,9 @@ nav.menu > a {
     border: var(--redForgr) 1px solid;
     z-index: 1000;
   }
+  .call-link {
+    display: none;
+  }
   .confirmation-buttons {
     display: flex;
     gap: 4rem;
@@ -347,8 +361,22 @@ nav.menu > a {
   .item-menu {
     font-style: inherit;
   }
+  .item-menu2 {
+    display: inline;
+  }
 
   .menu-left {
+    /* background: inherit; */
+    display: flex;
+    flex-direction: row;
+    /* width: 70%; */
+    align-items: center;
+    justify-content: baseline;
+    gap: 2rem;
+    margin-left: 1rem;
+    margin-top: 0;
+  }
+  .menu-middle {
     /* background: inherit; */
     display: flex;
     flex-direction: row;
