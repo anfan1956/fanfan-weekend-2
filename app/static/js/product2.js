@@ -3,6 +3,8 @@ if (window.matchMedia('(max-width: 768px)').matches) {
   let path = location.pathname.split('/')[2]
   window.location.href = '/productS2/' + path + search
 }
+
+// just deleted the lates push
 var data,
   items,
   mainColor,
